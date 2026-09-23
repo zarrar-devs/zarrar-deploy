@@ -595,13 +595,41 @@ const Hero = forwardRef(function Hero({ revealed = true }, ref) {
           outline: 2px solid var(--ink);
           outline-offset: 3px;
         }
-        @media (max-width: 360px) {
+        @media (max-width: 480px) {
           .hero__link {
-            padding: 0.42em 0.6em;
-            font-size: 0.66rem;
+            padding: 0.4em 0.58em;
+            font-size: 0.64rem;
           }
           .hero__links {
             gap: 6px;
+          }
+          .hero__dropdown-trigger {
+            gap: 0.4em;
+          }
+          .hero__dropdown-icon {
+            width: 7px;
+            height: 7px;
+          }
+          .hero__dropdown-icon span:first-child {
+            width: 7px;
+          }
+          .hero__dropdown-icon span:last-child {
+            height: 7px;
+          }
+          .hero__dropdown-label-full {
+            display: none;
+          }
+          .hero__dropdown-label-short {
+            display: inline;
+          }
+        }
+        @media (max-width: 360px) {
+          .hero__link {
+            padding: 0.36em 0.5em;
+            font-size: 0.6rem;
+          }
+          .hero__links {
+            gap: 5px;
           }
         }
 
@@ -624,6 +652,9 @@ const Hero = forwardRef(function Hero({ revealed = true }, ref) {
           cursor: pointer;
           border: none;
           font: inherit;
+        }
+        .hero__dropdown-label-short {
+          display: none;
         }
         .hero__dropdown-icon {
           position: relative;
@@ -977,9 +1008,15 @@ const Hero = forwardRef(function Hero({ revealed = true }, ref) {
               aria-haspopup="true"
               aria-expanded={dropdownOpen}
               aria-controls={DROPDOWN_ID}
+              aria-label="Who We Serve"
               onClick={toggleDropdown}
             >
-              Who We Serve
+              <span className="hero__dropdown-label-full" aria-hidden="true">
+                Who We Serve
+              </span>
+              <span className="hero__dropdown-label-short" aria-hidden="true">
+                For You
+              </span>
               <span className="hero__dropdown-icon" aria-hidden="true">
                 <span />
                 <span />
