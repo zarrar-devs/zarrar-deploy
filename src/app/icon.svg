@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Zarrar">
+  <title>Zarrar</title>
+  <rect width="512" height="512" rx="116" fill="#0b0b0c"/>
+  <g transform="translate(256 256) scale(1.32) translate(-256 -256)">
+    <path d="M128 132H384V184H128Z" fill="#f2eee3"/>
+    <path d="M128 328H384V380H128Z" fill="#f2eee3"/>
+    <path d="M301 183.5H384L211 328.5H128Z" fill="#bf4f2c"/>
+  </g>
+</svg>

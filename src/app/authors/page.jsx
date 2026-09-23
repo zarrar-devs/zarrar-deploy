@@ -80,23 +80,14 @@ export const metadata = {
     siteName: BRAND,
     title: SOCIAL_TITLE,
     description: DESCRIPTION,
-    images: [
-      {
-        /* The real card someone already designed for this page —
-           correct 1200x630-ish aspect, so it's used as-is instead
-           of a generated one. */
-        url: "/og/authors.png",
-        width: 1734,
-        height: 907,
-        alt: "Zarrar — websites, lead generation and social media for authors",
-      },
-    ],
+    /* Image comes from ./opengraph-image.jsx. It used to point at
+       /og/authors.png, but public/og/ is empty — every share of this
+       page rendered with a broken image. */
   },
   twitter: {
     card: "summary_large_image",
     title: SOCIAL_TITLE,
     description: DESCRIPTION,
-    images: ["/og/authors.png"],
   },
 };
 

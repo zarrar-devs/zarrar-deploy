@@ -50,7 +50,13 @@ const interTight = Inter_Tight({
 
 /* =====================  PERSONA-SPECIFIC  ===================== */
 
-import { SITE_URL, ROUTES, CONTACT_EMAIL } from "@/lib/site";
+import {
+  SITE_URL,
+  ROUTES,
+  CONTACT_EMAIL,
+  organizationSchema,
+  websiteSchema,
+} from "@/lib/site";
 // Domain, route and email now come from src/lib/site.js — this used to
 // hardcode "https://zarrar.com" (wrong TLD) and build PAGE_URL as
 // `${SITE_URL}/for-coaches`, a route that does not exist (the folder
@@ -94,12 +100,6 @@ export const metadata = {
       "max-snippet": -1,
       "max-video-preview": -1,
     },
-  },
-  // VERIFY: paste your real Search Console / Bing Webmaster codes.
-  // Remove any line you don't use — an empty string still gets rendered.
-  verification: {
-    google: "REPLACE_WITH_GOOGLE_SEARCH_CONSOLE_CODE",
-    // bing: "REPLACE_WITH_BING_WEBMASTER_CODE",
   },
   openGraph: {
     type: "website",
@@ -339,27 +339,12 @@ const SERVICE_ID = `${PAGE_URL}#service`;
 const JSON_LD = {
   "@context": "https://schema.org",
   "@graph": [
-    {
-      "@type": "Organization",
-      "@id": ORG_ID,
-      name: "Zarrar",
-      url: SITE_URL,
-      email: CONTACT_EMAIL,
-      logo: `${SITE_URL}/logo.png`, // VERIFY: real logo, min 112×112px
-      sameAs: [
-        // VERIFY: add your real profile URLs, e.g.
-        // "https://www.instagram.com/yourhandle",
-        // "https://www.linkedin.com/company/yourcompany",
-      ],
-    },
-    {
-      "@type": "WebSite",
-      "@id": WEBSITE_ID,
-      url: SITE_URL,
-      name: "Zarrar",
-      inLanguage: "en",
-      publisher: { "@id": ORG_ID },
-    },
+    /* Same Organization / WebSite nodes as every other page, from
+       src/lib/site.js. This page used to declare its own Organization
+       with the same @id but a logo of /logo.png (a file that does not
+       exist) — two conflicting definitions of one entity. */
+    organizationSchema(),
+    websiteSchema(),
     {
       "@type": "WebPage",
       "@id": PAGE_ID,

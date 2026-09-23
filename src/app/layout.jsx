@@ -1,7 +1,14 @@
 import { Space_Grotesk, Bricolage_Grotesque, Inter } from "next/font/google";
 import "./globals.css";
 import PageTransition from "../components/PageTransition";
-import { SITE_URL, BRAND, ORG_DESCRIPTION, ROBOTS, LOCALE } from "@/lib/site";
+import {
+  SITE_URL,
+  BRAND,
+  HOME_TITLE,
+  HOME_DESCRIPTION,
+  ROBOTS,
+  LOCALE,
+} from "@/lib/site";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -24,8 +31,7 @@ const inter = Inter({
   display: "swap",
 });
 
-const DEFAULT_TITLE =
-  "Zarrar — Website Development, Lead Generation & Social Media Agency";
+const DEFAULT_TITLE = HOME_TITLE;
 
 export const metadata = {
   /* metadataBase resolves every relative URL below (canonical, OG
@@ -41,8 +47,7 @@ export const metadata = {
     template: `%s | ${BRAND}`,
   },
 
-  description:
-    "Zarrar builds custom websites and portfolios, and runs lead generation, cold email outreach and social media management for speakers, authors, coaches, real estate agents and founders.",
+  description: HOME_DESCRIPTION,
 
   applicationName: BRAND,
   generator: "Next.js",
@@ -79,7 +84,7 @@ export const metadata = {
     url: "/",
     siteName: BRAND,
     title: DEFAULT_TITLE,
-    description: ORG_DESCRIPTION,
+    description: HOME_DESCRIPTION,
     /* Image comes from src/app/opengraph-image.jsx, generated at build
        time — no more missing /og-image.jpg. */
   },
@@ -87,15 +92,22 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: DEFAULT_TITLE,
-    description: ORG_DESCRIPTION,
+    description: HOME_DESCRIPTION,
   },
 
   robots: ROBOTS,
 
-  /* icon.png / apple-icon.png under src/app/ are picked up
-     automatically by Next's file conventions — no icons: block
-     needed, and nothing pointing at a /favicon.ico that never
-     existed. Both files are your real logo, resized. */
+  /* Search Console "HTML tag" verification. Only rendered when the
+     env var is set, so no placeholder string ever ships. (A DNS
+     "Domain property" in Search Console needs no tag at all.) */
+  verification: process.env.NEXT_PUBLIC_GSC_VERIFICATION
+    ? { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION }
+    : undefined,
+
+  /* Icons come from Next's file conventions in src/app/ — no icons:
+     block needed: favicon.ico (16/32/48), icon.svg, icon.png (192),
+     apple-icon.png (180). The Z monogram, not the 1254px wordmark
+     that used to sit in icon.png and was unreadable at 16px. */
 
   referrer: "origin-when-cross-origin",
 };

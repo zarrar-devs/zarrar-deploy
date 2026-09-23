@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Bricolage_Grotesque, Plus_Jakarta_Sans } from "next/font/google";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -697,6 +697,7 @@ export default function WhyChooseUs() {
     <div
       className={styles.stepsTrackGroup}
       aria-hidden={duplicate ? "true" : undefined}
+      data-nosnippet={duplicate ? "" : undefined}
     >
       {PROCESS_STEPS.map((step, i) => {
         // The duplicated group exists only for the seamless loop, so it
@@ -838,10 +839,15 @@ export default function WhyChooseUs() {
           <span className={styles.quoteLabel}>Our philosophy</span>
 
           <p ref={quoteTextRef} className={styles.quoteText}>
+            {/* The {" "} matters: without a real space between the
+                word spans, the text reads as one glued string
+                ("Abeautifulwebsite…") to Google and screen readers. */}
             {QUOTE_TEXT.split(" ").map((word, i) => (
-              <span className={styles.wordMask} key={`${word}-${i}`}>
-                <span className={styles.word}>{word}</span>
-              </span>
+              <Fragment key={`${word}-${i}`}>
+                <span className={styles.wordMask}>
+                  <span className={styles.word}>{word}</span>
+                </span>{" "}
+              </Fragment>
             ))}
           </p>
 
@@ -871,6 +877,7 @@ export default function WhyChooseUs() {
             ref={marqueeTrackRef}
             className={styles.marqueeTrack}
             aria-hidden="true"
+            data-nosnippet=""
           >
             {Array.from({ length: 2 }).map((_, groupIndex) => (
               <div className={styles.marqueeGroup} key={groupIndex}>

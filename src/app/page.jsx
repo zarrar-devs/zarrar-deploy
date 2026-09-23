@@ -1,7 +1,8 @@
 import App from "../components/App";
 import {
   SITE_URL,
-  BRAND,
+  HOME_TITLE,
+  HOME_DESCRIPTION,
   ORG_DESCRIPTION,
   ROUTES,
   PERSONAS,
@@ -15,12 +16,8 @@ import {
 } from "@/lib/site";
 
 export const metadata = {
-  title: {
-    absolute:
-      "Zarrar — Website Development, Lead Generation & Social Media Agency",
-  },
-  description:
-    "Zarrar builds custom websites and portfolios, and runs lead generation, cold email outreach and social media management for speakers, authors, coaches, real estate agents and founders.",
+  title: { absolute: HOME_TITLE },
+  description: HOME_DESCRIPTION,
   alternates: { canonical: ROUTES.home },
 };
 
@@ -34,7 +31,7 @@ const jsonLd = graph([
     "@type": "WebPage",
     "@id": `${SITE_URL}/#webpage`,
     url: SITE_URL,
-    name: `${BRAND} — Website Development, Lead Generation & Social Media Agency`,
+    name: HOME_TITLE,
     description: ORG_DESCRIPTION,
     isPartOf: { "@id": WEBSITE_ID },
     about: { "@id": ORG_ID },

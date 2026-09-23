@@ -4,7 +4,10 @@ import { SITE_URL, ROUTES } from "@/lib/site";
    the nested coaches/entrepreneurs sitemaps pointed at /for-coaches
    and /for-founders — routes that don't exist. Only real routes go
    here now. */
-const lastModified = new Date();
+/* A fixed date, not new Date(): "now" on every build tells Google every
+   URL changed every time, and it learns to ignore <lastmod> entirely.
+   Bump this when page content really changes. */
+const lastModified = new Date("2026-09-23");
 
 const pages = [
   { path: ROUTES.home, priority: 1.0, changeFrequency: "weekly" },

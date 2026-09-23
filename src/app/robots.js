@@ -11,10 +11,13 @@ export default function robots() {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/_next/static/chunks/"],
+        /* Do NOT disallow /_next/static/ (or its chunks/): those are
+           the JavaScript and CSS files Googlebot needs to render this
+           animated site. Blocking them made Google see a broken page.
+           The old `host:` line is Yandex-only and is gone. */
+        disallow: ["/api/"],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
-    host: SITE_URL,
   };
 }

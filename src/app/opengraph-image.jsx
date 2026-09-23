@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { OgMark } from "@/lib/og-mark";
 import { BRAND } from "@/lib/site";
 
 export const alt =
@@ -23,8 +24,18 @@ export default function OgImage() {
           padding: 72,
         }}
       >
-        <div style={{ ...row, fontSize: 34, fontWeight: 700, letterSpacing: 4 }}>
-          {BRAND.toUpperCase()}
+        <div
+          style={{
+            ...row,
+            alignItems: "center",
+            gap: 20,
+            fontSize: 34,
+            fontWeight: 700,
+            letterSpacing: 4,
+          }}
+        >
+          <OgMark size={56} tile="#232326" />
+          <span>{BRAND.toUpperCase()}</span>
         </div>
         <div
           style={{

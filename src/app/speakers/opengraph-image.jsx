@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { OgMark } from "@/lib/og-mark";
 
 /* Social share card for /for-speakers (used by Open Graph; copy this file to
    twitter-image.jsx too if a platform doesn't pick it up). */
@@ -24,8 +25,11 @@ export default function Image() {
           padding: 72,
         }}
       >
-        <div style={{ ...line, fontSize: 30, fontWeight: 700, color: "#5b3df5" }}>
-          Zarrar for keynote speakers
+        <div
+          style={{ ...line, alignItems: "center", gap: 18, fontSize: 30, fontWeight: 700, color: "#5b3df5" }}
+        >
+          <OgMark size={52} />
+          <span>Zarrar for keynote speakers</span>
         </div>
 
         <div

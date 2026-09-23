@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { OgMark } from "@/lib/og-mark";
 
 /* Social share card for /coaches. This route had no OG image at all —
    every share previously fell back to the site-wide default, which
@@ -25,8 +26,11 @@ export default function Image() {
           padding: 72,
         }}
       >
-        <div style={{ ...line, fontSize: 30, fontWeight: 700, color: "#5b3df5" }}>
-          Zarrar for coaches
+        <div
+          style={{ ...line, alignItems: "center", gap: 18, fontSize: 30, fontWeight: 700, color: "#5b3df5" }}
+        >
+          <OgMark size={52} />
+          <span>Zarrar for coaches</span>
         </div>
 
         <div

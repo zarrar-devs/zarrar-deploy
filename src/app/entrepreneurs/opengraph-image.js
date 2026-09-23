@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { OgMark } from "@/lib/og-mark";
 import { BRAND, SEO } from "./founders-data";
 
 
@@ -22,7 +23,10 @@ export default function Image() {
           padding: 72,
         }}
       >
-        <div style={{ display: "flex", fontSize: 38, fontWeight: 700 }}>{BRAND}</div>
+        <div style={{ display: "flex", alignItems: "center", gap: 20, fontSize: 38, fontWeight: 700 }}>
+          <OgMark size={56} tile="#232326" />
+          <span>{BRAND}</span>
+        </div>
 
         <div
           style={{

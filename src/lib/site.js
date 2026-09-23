@@ -90,6 +90,17 @@ export const PERSONAS = [
 export const ORG_DESCRIPTION =
   "Zarrar is a digital agency building custom websites and portfolios, and running lead generation, cold email outreach and social media management for speakers, authors, coaches, real estate agents and founders.";
 
+/* Homepage title + description — used by layout.jsx, page.jsx, the
+   WebPage JSON-LD and the manifest, so they can never drift apart.
+   Title is under ~60 characters and leads with the keywords people
+   actually search ("website development", "lead generation"); the
+   brand goes last. The old title was 66 characters and got cut off
+   in results. Description is under 160 characters for the same
+   reason (the old one was ~185). */
+export const HOME_TITLE = "Website Development & Lead Generation Agency | Zarrar";
+export const HOME_DESCRIPTION =
+  "Custom websites, lead generation, cold email and social media management for speakers, authors, coaches, real estate agents and founders.";
+
 /* The Organization node. Given a stable @id so every page's JSON-LD
    can reference the same entity instead of declaring a duplicate
    organisation on each URL. */

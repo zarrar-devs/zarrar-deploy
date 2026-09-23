@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { OgMark } from "@/lib/og-mark";
 import { BRAND } from "@/lib/site";
 
 export const alt =
@@ -23,8 +24,11 @@ export default function OgImage() {
           padding: 72,
         }}
       >
-        <div style={{ ...row, fontSize: 30, fontWeight: 700, color: "#5b3df5" }}>
-          {BRAND} — services
+        <div
+          style={{ ...row, alignItems: "center", gap: 18, fontSize: 30, fontWeight: 700, color: "#5b3df5" }}
+        >
+          <OgMark size={52} />
+          <span>{BRAND} — services</span>
         </div>
         <div
           style={{
