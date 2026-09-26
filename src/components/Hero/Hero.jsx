@@ -973,14 +973,17 @@ const Hero = forwardRef(function Hero({ revealed = true }, ref) {
             padding-bottom: 22px;
           }
 
-          .hero__nav {
-            padding-inline: 14px;
-            gap: 10px;
-          }
+        .hero__nav {
+    align-items: center;
+  }
 
-          .hero__mark {
-            font-size: 0.86rem;
-          }
+  .hero__mark {
+    display: inline-flex;
+    align-items: center;
+    height: 40px;
+    line-height: 1;
+    transform: translateY(1px);
+  }
 
           .hero__links {
             gap: 6px;
