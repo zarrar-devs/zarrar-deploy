@@ -1,5 +1,5 @@
 /* =============================================================
-   Zarrar — /for-real-estate-agents  ·  content + structured data
+   Zarrar — /real-estate  ·  content + structured data
    -------------------------------------------------------------
    No "use client" here on purpose: page.js (server) builds the
    JSON-LD from this file, and RealEstate.jsx (client) renders it.
@@ -14,23 +14,25 @@
    - The copy is US/Canada-flavoured (MLS, IDX, zip code, realtor).
    ============================================================= */
 
-export const SITE = "https://zarrar.co";
+import { SITE_URL, CONTACT_EMAIL as SHARED_CONTACT_EMAIL, organizationSchema, websiteSchema, ORG_ID, WEBSITE_ID } from "@/lib/site";
+
+export const SITE = SITE_URL;
 export const PAGE_PATH = "/real-estate";
 export const PAGE_URL = `${SITE}${PAGE_PATH}`;
-export const CONTACT_EMAIL = "hello@zarrar.co";
+export const CONTACT_EMAIL = SHARED_CONTACT_EMAIL;
 
-export const PAGE_TITLE = "Real Estate Agent Websites, Local SEO & Leads | Zarrar";
+export const PAGE_TITLE = "Real Estate Website, Local SEO & Leads | Zarrar";
 /* keep under ~160 characters so Google doesn't cut it off */
 export const PAGE_DESCRIPTION =
-  "Website development, local SEO and outreach for real estate agents, so buyer and seller enquiries come straight to you instead of being shared on portals.";
+  "Website development, local SEO, lead generation, outreach and social media management for real estate agents who want more direct buyer and seller enquiries.";
 
 /* Search patterns buyers and sellers actually type. */
 export const SEARCH_TERMS = [
-  "Realtor in your city",
-  "Real estate agent near me",
-  "Homes for sale in your neighbourhood",
-  "Sell my home in your city",
-  "Buyer's agent near me",
+  "real estate agent near me",
+  "best real estate agent in my area",
+  "homes for sale near me",
+  "sell my house with a real estate agent",
+  "buyer's agent near me",
 ];
 
 export const COMPARE = {
@@ -39,15 +41,15 @@ export const COMPARE = {
     points: [
       "Your profile sits next to ads for other agents on the same listing page.",
       "Enquiries are often shared with whoever else is paying for that zip code.",
-      "Stop paying for placement, and your visibility disappears with it.",
+      "Your visibility can still depend heavily on the portal while your profile is active.",
     ],
   },
   owned: {
     tag: "Owning your pipeline",
     points: [
       "A website that's only about you, with no one else's ad on the page.",
-      "Enquiries come straight to you, and no one else sees them first.",
-      "Local search rankings keep working long after a listing sells.",
+      "Your website gives prospects a direct way to understand your services and contact you without another agent profile beside it.",
+      "Useful local pages can keep attracting relevant searches after an individual listing is gone.",
     ],
   },
 };
@@ -55,18 +57,18 @@ export const COMPARE = {
 export const TIMELINE = [
   {
     num: "Weeks 1–2",
-    title: "Foundation",
-    body: "Website goes live with lead capture on every page, Google Business Profile optimised, and the first geo-farm list built.",
+    title: "Local foundation",
+    body: "The website and enquiry paths go live, local search fundamentals are addressed and the first audience or prospecting segments are mapped.",
   },
   {
     num: "Weeks 3–6",
-    title: "Outreach and content",
-    body: "Geo-targeted outreach and neighbourhood content go out on schedule. First replies and showing requests start coming in direct.",
+    title: "Local content and outreach",
+    body: "Neighbourhood, buyer and seller content starts publishing while targeted outreach goes to the audiences you actually want to win.",
   },
   {
     num: "Weeks 7–12",
-    title: "Local flywheel",
-    body: "Local rankings compound, referrals layer on top of outreach, and enquiries stop routing through a portal at all.",
+    title: "Refine and compound",
+    body: "We use search visibility, enquiries and outreach replies to refine the pages, content and campaigns that are creating the most relevant opportunities.",
   },
 ];
 
@@ -74,30 +76,30 @@ export const TIMELINE = [
 export const SERVICES = [
   {
     id: "web-development",
-    title: "Real estate website development",
-    body: "A website built to showcase listings and sell your brand: mobile-first, fast, and set up to convert visitors who are already deep into a search.",
-    cta: "Build my site",
+    title: "Website development for real estate agents",
+    body: "A custom real estate website that showcases your listings, explains your local expertise and makes it easy for buyers and sellers to enquire.",
+    cta: "Build my real estate website",
     icon: "web",
   },
   {
     id: "local-seo",
     title: "Local SEO and Google Business Profile",
-    body: "We optimise your Google Business Profile and build the local pages that get you found when someone searches for a real estate agent in your city, not only when a portal ad happens to show you.",
-    cta: "Boost my local presence",
+    body: "We improve your local search foundation, including your Google Business Profile where applicable, and build location-focused pages around the searches buyers and sellers actually make.",
+    cta: "Improve my local visibility",
     icon: "pin",
   },
   {
     id: "lead-generation",
     title: "Lead generation and outreach",
-    body: "Geo-targeted outreach to expired listings, FSBOs and past clients, written and sent for you, so new leads arrive with your name already attached.",
-    cta: "Get me leads",
+    body: "We identify the prospect groups that fit your market and outreach strategy, then build and organise a focused list ready for compliant follow-up.",
+    cta: "Build my prospect pipeline",
     icon: "outreach",
   },
   {
     id: "social-media",
-    title: "Social media and video",
-    body: "Listing walkthroughs, neighbourhood content and open-house promotion, planned and posted on schedule to get local eyes on you.",
-    cta: "Run my socials",
+    title: "Social media management for real estate",
+    body: "Listings, market updates, neighbourhood content and property education planned and published consistently so your profile stays useful between transactions.",
+    cta: "Manage my social media",
     icon: "social",
   },
 ];
@@ -106,8 +108,8 @@ export const PLANS = [
   {
     id: "launch",
     name: "Launch",
-    line: "For getting found.",
-    body: "You have the listings but no proper home online. We build one.",
+    line: "For building your local presence.",
+    body: "Your listings deserve a focused website and local search foundation that are built around your market, not only a portal profile.",
     includes: [
       "Custom real estate website with lead capture on every page",
       "Local SEO and Google Business Profile setup",
@@ -118,25 +120,25 @@ export const PLANS = [
   {
     id: "presence",
     name: "Presence",
-    line: "For looking established.",
-    body: "Everything in Launch, plus the accounts that make you look like a serious local agent.",
+    line: "For staying visible locally.",
+    body: "Everything in Launch, plus social media management that keeps your listings, market knowledge and local expertise visible.",
     includes: [
       "Everything in Launch",
       "Social media management: listings, neighbourhood content and replies",
-      "Instagram handle set up and built out",
+      "Social profiles set up and optimised on the agreed channels",
       "Custom email domain (you@yourname.com)",
     ],
   },
   {
     id: "growth",
-    name: "Reborn",
-    line: "For bringing in clients.",
-    body: "The full engine. We build the presence, then go and get the listings.",
+    name: "Growth",
+    line: "For building a direct pipeline.",
+    body: "The full system: website, local SEO, social media and lead generation working together around your market.",
     includes: [
       "Everything in Presence",
       "Outreach to expired listings, FSBOs and past clients",
       "Instant lead alerts and follow-up sequences",
-      "Showing requests and booked calls in your calendar",
+      "Enquiry alerts and follow-up workflow for buyer and seller leads",
     ],
     featured: true,
   },
@@ -148,19 +150,19 @@ const planName = (id) => PLANS.find((p) => p.id === id)?.name ?? id;
 export const FAQS = [
   {
     q: "I'm already on Zillow and Realtor.com. Do I still need my own website?",
-    a: "Yes. A portal lead is often shared with other agents paying for the same zip code, and your profile sits next to their ads. A website that's only about you keeps enquiries yours alone, and it's the one piece of online property you fully control.",
+    a: "A portal can be useful, but your own website gives buyers and sellers a place to evaluate your services, market knowledge, listings and contact options without competing profiles on the same page.",
   },
   {
     q: "Can my real estate website show live MLS listings?",
-    a: "In most markets, yes, through an IDX feed tied to your MLS access. We set that up as part of the build. The exact setup depends on your board and brokerage, so we confirm what's available for your MLS before we start.",
+    a: "Where an MLS/IDX feed is available and your brokerage permits it, the site can display live listing data. We confirm the feed, board and brokerage requirements before building it.",
   },
   {
-    q: "How fast will I hear about a new lead?",
-    a: "Speed matters more here than in almost any other business, because a lead that waits often goes with whoever answers first. We set up instant notifications so you can respond right away, and outreach follow-up runs on a schedule that doesn't let anyone go cold.",
+    q: "How quickly can a new buyer or seller reach me?",
+    a: "We set up clear enquiry notifications and follow-up workflows so buyer and seller enquiries are easy to see and act on. Response time still depends on your team and market.",
   },
   {
-    q: "What is local SEO for real estate agents?",
-    a: "Mainly your Google Business Profile (categories, photos, posts and reviews), plus location-specific pages on your website that match how people actually search, like “realtor in your city” or “homes for sale in your neighbourhood”. It's what gets you found before a portal ad does.",
+    q: "What does local SEO do for a real estate agent?",
+    a: "It helps your business become easier to understand and discover in local search. That can include an accurate Google Business Profile where applicable, useful location-focused website pages, clear business information and content that matches the searches buyers and sellers make in your market."
   },
   {
     q: "Is cold outreach to expired listings and FSBOs allowed?",
@@ -168,11 +170,11 @@ export const FAQS = [
   },
   {
     q: "Which plan is right for me, and is social media included?",
-    a: `Start with ${planName("launch")} if you need a proper website and local SEO. ${planName("presence")} adds social media management, an Instagram build-out and a custom email domain. ${planName("growth")} adds outreach and booked calls. Social media is part of ${planName("presence")} and ${planName("growth")}, sized to your market once we know your patch. Book a call for a quote.`,
+    a: `Start with ${planName("launch")} if you need the website and local-search foundation. ${planName("presence")} adds social media management and a professional email domain. ${planName("growth")} adds lead generation and outreach. The scope can be tailored to your market once we understand your patch, audience and goals.`,
   },
   {
     q: "How long before I see new enquiries?",
-    a: "The website and Google Business Profile updates are usually live within the first couple of weeks. Outreach replies and showing requests typically start in the weeks after campaigns go out, while local rankings build over a few months. Timing depends on your market, price point and how competitive your area is.",
+    a: "The website and core local-search setup can be prepared in the first few weeks. Outreach responses can begin after a campaign launches, while local search visibility usually takes longer and depends on your market, competition, content and overall authority."
   },
 ];
 
@@ -182,13 +184,12 @@ export function buildJsonLd() {
   return {
     "@context": "https://schema.org",
     "@graph": [
-      {
-        "@type": "ProfessionalService",
-        "@id": `${SITE}/#business`,
-        name: "Zarrar",
-        url: SITE,
-        areaServed: "Worldwide",
-      },
+      /* The ONE shared Organization + WebSite entity from src/lib/site.js
+         (same @id on every page). This page used to declare its own thin
+         "ProfessionalService" with a different @id (#business), so Google
+         saw two businesses named Zarrar. */
+      organizationSchema(),
+      websiteSchema(),
       {
         "@type": "WebPage",
         "@id": `${PAGE_URL}#webpage`,
@@ -196,7 +197,7 @@ export function buildJsonLd() {
         name: PAGE_TITLE,
         description: PAGE_DESCRIPTION,
         inLanguage: "en",
-        isPartOf: { "@id": `${SITE}/#business` },
+        isPartOf: { "@id": WEBSITE_ID },
         about: { "@id": `${PAGE_URL}#service` },
         breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },
       },
@@ -211,10 +212,10 @@ export function buildJsonLd() {
       {
         "@type": "Service",
         "@id": `${PAGE_URL}#service`,
-        name: "Websites, local SEO and lead generation for real estate agents",
+        name: "Real estate website development, local SEO, lead generation, cold outreach and social media management",
         serviceType:
-          "Real estate website development, local SEO, lead generation and social media management",
-        provider: { "@id": `${SITE}/#business` },
+          ["Real estate website development", "Local SEO", "Lead generation for real estate agents", "Cold outreach for real estate agents", "Social media management for real estate agents"],
+        provider: { "@id": ORG_ID },
         areaServed: "Worldwide",
         audience: { "@type": "Audience", audienceType: "Real estate agents" },
         hasOfferCatalog: {
@@ -234,15 +235,6 @@ export function buildJsonLd() {
             })),
           ],
         },
-      },
-      {
-        "@type": "FAQPage",
-        "@id": `${PAGE_URL}#faq`,
-        mainEntity: FAQS.map((f) => ({
-          "@type": "Question",
-          name: f.q,
-          acceptedAnswer: { "@type": "Answer", text: f.a },
-        })),
       },
     ],
   };

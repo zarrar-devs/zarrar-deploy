@@ -1,10 +1,10 @@
 import { ImageResponse } from "next/og";
 import { OgMark } from "@/lib/og-mark";
 
-/* Social share card for /for-real-estate-agents (used by Open Graph; copy this
+/* Social share card for /real-estate (used by Open Graph; copy this
    file to twitter-image.jsx too if a platform doesn't pick it up). */
 
-export const alt = "Zarrar for real estate agents: own your pipeline, not just your listings";
+export const alt = "Zarrar for real estate agents: website development, local SEO, lead generation and social media";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -43,14 +43,14 @@ export default function Image() {
             textTransform: "uppercase",
           }}
         >
-          <div style={line}>Own your</div>
-          <div style={{ ...line, color: "#5b3df5" }}>pipeline.</div>
-          <div style={line}>Not just your</div>
-          <div style={line}>listings.</div>
+          <div style={line}>Get found</div>
+          <div style={{ ...line, color: "#5b3df5" }}>locally.</div>
+          <div style={line}>Turn visits into</div>
+          <div style={line}>enquiries.</div>
         </div>
 
         <div style={{ ...line, fontSize: 28, color: "#565144" }}>
-          Websites, local SEO and lead generation
+          Website, local SEO, lead generation and social media for real estate agents
         </div>
       </div>
     ),

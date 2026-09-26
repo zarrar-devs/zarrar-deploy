@@ -31,21 +31,13 @@ const interTight = Inter_Tight({
 });
 
 const SOCIAL_TITLE =
-  "Own your pipeline. Not just your listings. | Zarrar for Real Estate Agents";
+  "Real estate websites, local SEO and lead generation | Zarrar";
 
 export const metadata = {
   metadataBase: new URL(SITE),
   /* absolute: stops a root-layout title template from doubling "| Zarrar" */
   title: { absolute: PAGE_TITLE },
   description: PAGE_DESCRIPTION,
-  keywords: [
-    "real estate agent website",
-    "real estate local SEO",
-    "Google Business Profile for realtors",
-    "real estate lead generation",
-    "realtor website development",
-    "real estate social media management",
-  ],
   alternates: { canonical: PAGE_PATH },
   openGraph: {
     title: SOCIAL_TITLE,

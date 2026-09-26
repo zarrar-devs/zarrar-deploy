@@ -24,25 +24,38 @@
    schema in page.jsx renders identically once this import works.
    ============================================================= */
 
+import { ROUTES } from "@/lib/site";
+
 export const SERVICES = [
   {
     id: "web-development",
-    title: "Website Development & Portfolio Design",
-    body: "A fast, custom website that doubles as your portfolio and says what you do in the first five seconds. Designed from scratch, optimized for search engines, and handed over so you can update it yourself.",
+    href: ROUTES.webDevelopment,
+    title: "Website Development",
+    body: "A custom business or portfolio website that explains your offer, builds credibility and gives visitors a clear next step. We handle the design, development, technical SEO and handover.",
     cta: "Build my website",
     icon: "web",
   },
   {
     id: "lead-generation",
-    title: "Lead Generation & Cold Email Outreach",
-    body: "We find the people who already need what you sell, write cold emails that get replies, and manage the follow-up. You get booked calls, not a spreadsheet of contacts.",
+    href: ROUTES.leadGeneration,
+    title: "Lead Generation",
+    body: "We research the people and companies that fit your ideal customer profile, qualify them against clear criteria and organise a focused prospect list ready for outreach or sales follow-up.",
     cta: "Get me leads",
     icon: "outreach",
   },
   {
+    id: "cold-email-outreach",
+    href: ROUTES.coldEmail,
+    title: "Cold Email Outreach",
+    body: "Targeted cold email outreach built around one audience and one clear offer, with sending setup, personalised copy, follow-up and reply handling designed to start relevant sales conversations.",
+    cta: "Start my outreach",
+    icon: "outreach",
+  },
+  {
     id: "social-media",
+    href: ROUTES.socialMedia,
     title: "Social Media Management",
-    body: "Content planned around your offers, shot and edited by us, and posted on schedule. We handle comments and DMs so your social media builds trust instead of just filling a calendar.",
+    body: "A consistent social media system built around your expertise and offers: content planning, captions, publishing and routine replies so your profiles stay active, useful and easy to understand.",
     cta: "Manage my social media",
     icon: "social",
   },
@@ -52,11 +65,11 @@ export const PLANS = [
   {
     id: "launch",
     name: "Launch",
-    line: "For getting found.",
-    body: "You have the work but no proper home online. We build one.",
+    line: "For getting your website live.",
+    body: "You have a real offer but your website does not explain it clearly. We build the online foundation.",
     includes: [
       "Custom website, designed and built from scratch",
-      "On-page SEO and Google Business setup",
+      "On-page SEO and technical search setup",
       "Copy written for your offer, not filler text",
       "Handover and training so you can edit it",
     ],
@@ -64,25 +77,25 @@ export const PLANS = [
   {
     id: "presence",
     name: "Presence",
-    line: "For looking established.",
-    body: "Everything in Launch, plus the accounts that make you look like a real operation.",
+    line: "For staying visible.",
+    body: "Everything in Launch, plus ongoing social media management and a professional email setup.",
     includes: [
       "Everything in Launch",
       "Social media management, posting and replies",
-      "Instagram handle set up and built out",
+      "Social profiles set up and optimised on the agreed channels",
       "Custom email domain (you@yourname.com)",
     ],
   },
   {
     id: "growth",
-    name: "Reborn",
-    line: "For bringing in clients.",
-    body: "The full engine. We build the presence, then go and get the work.",
+    name: "Growth",
+    line: "For connecting the system.",
+    body: "The complete system: a clear website, social media management, lead generation and cold email outreach working together around one offer and audience.",
     includes: [
       "Everything in Presence",
-      "Portfolio site that closes on your behalf",
+      "Conversion-focused website and enquiry path",
       "Cold outreach campaigns, written and sent",
-      "Lead generation and booked calls in your calendar",
+      "Lead generation and outreach built around your target audience",
     ],
     featured: true,
   },

@@ -1,7 +1,7 @@
 "use client";
 
 /* =============================================================
-   Zarrar — /for-coaches  ·  motion layer
+   Zarrar — /coaches  ·  motion layer
    -------------------------------------------------------------
    Renders nothing. It only animates the server-rendered markup
    inside `.coaches-page`, so all content stays in the HTML.

@@ -1,5 +1,5 @@
 /* =============================================================
-   Zarrar — /for-coaches            (app/for-coaches/page.jsx)
+   Zarrar — /coaches            (app/coaches/page.jsx)
    -------------------------------------------------------------
    This is a SERVER component on purpose (no "use client"):
    - metadata + JSON-LD live in the same file as the content
@@ -22,7 +22,7 @@
    specific part must be the bulk of each page — different
    title, H1, intro, pain points and FAQ answers every time.
 
-   Lines marked VERIFY are claims I added — confirm they're true.
+   Keep the service claims below aligned with what Zarrar actually delivers.
    ============================================================= */
 
 import { Fragment } from "react";
@@ -58,8 +58,8 @@ import {
   websiteSchema,
 } from "@/lib/site";
 // Domain, route and email now come from src/lib/site.js — this used to
-// hardcode "https://zarrar.com" (wrong TLD) and build PAGE_URL as
-// `${SITE_URL}/for-coaches`, a route that does not exist (the folder
+// hardcode an old domain and build PAGE_URL as
+// `${SITE_URL}/coaches`, a route that does not exist (the folder
 // is /coaches). zarrar.co is now the official domain.
 const PAGE_URL = `${SITE_URL}${ROUTES.coaches}`;
 // Swap for a Calendly / Cal.com link if you have one.
@@ -69,11 +69,11 @@ const CONTACT_HREF = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
 
 // Title ≈ 60 chars, description ≈ 155 chars: what Google shows before truncating.
 // Primary keyword leads the title (front-loading helps both CTR and relevance).
-const PAGE_TITLE = "Coach Website Design, SEO & Lead Generation | Zarrar";
+const PAGE_TITLE = "Coach Website Design, Lead Generation & Outreach | Zarrar";
 const PAGE_DESC =
-  "We design coaching websites, run on-page SEO and social media, and send outreach that books discovery calls. Start with a site or go all-in on lead generation.";
-const SOCIAL_TITLE = "Fill your calendar with coaching clients | Zarrar";
-// Next.js auto-detects app/for-coaches/opengraph-image.(jpg|png|gif) and
+  "Website development, lead generation, cold email outreach and social media for coaches seeking a stronger online presence and more qualified enquiries.";
+const SOCIAL_TITLE = "Online presence and lead generation for coaches | Zarrar";
+// Next.js auto-detects app/coaches/opengraph-image.(jpg|png|gif) and
 // twitter-image.(jpg|png|gif) and injects them into the metadata below —
 // add those files (1200×630) instead of hardcoding an `images` array here,
 // or you'll end up with duplicate/conflicting OG tags.
@@ -108,16 +108,14 @@ export const metadata = {
     title: SOCIAL_TITLE,
     description: PAGE_DESC,
     locale: "en_US",
-    // Add app/for-coaches/opengraph-image.png (1200×630) — Next injects it
+    // Add app/coaches/opengraph-image.png (1200×630) — Next injects it
     // into `images` automatically, no need to list it here.
   },
   twitter: {
     card: "summary_large_image",
     title: SOCIAL_TITLE,
     description: PAGE_DESC,
-    // VERIFY: your real handle, e.g. "@zarrar"
-    // site: "@yourhandle",
-    // creator: "@yourhandle",
+    
   },
 };
 
@@ -129,49 +127,49 @@ export const viewport = {
 
 const PAIN_POINTS = [
   {
-    title: "Referrals dried up",
-    line: "You built your coaching practice on word of mouth, and the pipeline has gone quiet.",
+    title: "Your offer is hard to understand quickly",
+    line: "A visitor should know who you coach, what problem you solve and what they can do next without hunting through five pages.",
   },
   {
-    title: "Followers don't convert",
-    line: "The Instagram numbers look fine. Discovery calls booked from it? Not so much.",
+    title: "Your audience sees content, but not a clear next step",
+    line: "Posts can build attention, but your profile still needs a path from useful content to your website, enquiry form or discovery call.",
   },
   {
-    title: "The website just sits there",
-    line: "It's live and it looks fine, but it sends you close to zero enquiries a month.",
+    title: "Your pipeline depends too heavily on referrals",
+    line: "Referrals are valuable, but a coaching business is easier to grow when you also have a repeatable way to find and contact people who fit the offer.",
   },
 ];
 
 const TIMELINE = [
   {
     num: "Weeks 1–2",
-    title: "Foundation",
-    body: "Your coaching website goes live with a booking flow connected, socials are set up properly, and the outreach list is built.",
+    title: "Position and build",
+    body: "We clarify the coaching offer, build the core website and booking path, and prepare the first audience and prospecting segments.",
   },
   {
     num: "Weeks 3–6",
-    title: "Outreach starts",
-    body: "Cold outreach and content go out on schedule. First replies and discovery calls start landing.",
+    title: "Publish and reach out",
+    body: "The website is live, social content starts publishing and targeted outreach begins with one clear audience and one clear offer.",
   },
   {
     num: "Weeks 7–12",
-    title: "Rhythm",
-    body: "A steady flow of calls from outreach and search, plus a social presence that keeps building on its own.",
+    title: "Learn and improve",
+    body: "We use real enquiries, replies and engagement to refine the message, content and outreach rather than guessing what the market wants.",
   },
 ];
 
 const FAQS = [
   {
-    q: "Does a coaching business actually need a website?",
-    a: "Yes. Even when most of your clients come from referrals or social media, people check your website before they book a call. It's also the one place you fully own: Instagram reach can change overnight, a website you control doesn't.",
+    q: "What should a coach's website actually do?",
+    a: "It should make your niche and offer obvious, show enough proof to build trust, answer the key questions a prospect has before a call, and give them one clear next step such as booking a discovery call or sending an enquiry.",
   },
   {
     q: "What should a coach's website include?",
     a: "A clear statement of who you help and how, a way to book a call without emailing back and forth, some proof you know what you're doing, and enough on-page SEO that people searching for a coach like you can actually find you.",
   },
   {
-    q: "How much do a coaching website and lead generation cost?",
-    a: "It depends on where you start. Launch covers the website, Presence adds social media management and a custom email domain, and Growth adds cold outreach and lead generation. Tell us about your niche and goals and we'll recommend the plan that fits.",
+    q: "What is included in your coaching marketing service?",
+    a: "The work can include website development, on-page SEO, lead generation, cold email outreach and social media management. You can start with one channel or combine them so the website, prospecting and content all support the same offer.",
   },
   {
     q: "Is social media management worth it if I'm not a content creator?",
@@ -179,20 +177,19 @@ const FAQS = [
   },
   {
     q: "Can you get me coaching leads without me doing outreach myself?",
-    a: "Yes. We write the outreach, send it, and manage replies and follow-up. You get booked calls on your calendar, not a spreadsheet of contacts to chase.",
+    a: "Yes. We can handle the prospect research, outreach and follow-up so you do not have to manage the campaign yourself. The goal is to create more relevant conversations, not hand you another spreadsheet to chase."
   },
   {
     q: "How long before I see booked discovery calls?",
-    a: "The website and socials are usually live within the first couple of weeks. Outreach replies and the first calls typically start in the following few weeks once campaigns are running. It depends on your niche and offer, but you're not waiting months for movement.",
+    a: "Website launch, outreach and social publishing happen on different schedules. Search visibility and outreach results depend on your niche, offer, audience and campaign quality, so we set expectations around the work rather than promise a fixed result.",
   },
   {
     q: "What's the difference between the Launch, Presence and Growth plans?",
-    a: "Each plan includes everything in the one before it. Launch is the website and on-page SEO. Presence adds social media management, an Instagram handle and a custom email domain. Growth adds cold outreach campaigns and lead generation, with booked calls in your calendar.",
+    a: "Each plan adds to the one before it. Launch is the website and search foundation. Presence adds social media management and a professional email domain. Growth connects the website and social presence to lead generation and cold email outreach."
   },
   {
-    // VERIFY: confirm you're happy to say this about niches.
-    q: "Do you work with every type of coach?",
-    a: "We work with independent coaches and coaching businesses across niches, from life and career coaching to business, executive and health coaching. If you sell 1:1 or group programs and want more qualified enquiries, this page is for you. Not sure your niche fits? Send us a message and we'll tell you honestly.",
+    q: "Who is this service for?",
+    a: "We work with independent coaches and coaching businesses across niches, including life, career, business, executive and other specialist coaching offers. The key is having a clear audience, a real coaching offer and a reason for a prospect to start a conversation.",
   },
 ];
 
@@ -261,24 +258,31 @@ function PlusIcon() {
 
 const SERVICES = [
   {
-    id: "lead-generation",
-    title: "Lead generation for coaches",
-    body: "We find people already looking for a coach like you, write the cold outreach that gets replies, and manage the follow-up, so discovery calls land in your calendar on their own.",
-    cta: "Get me leads",
-    icon: <OutreachIcon />,
-  },
-  {
     id: "web-development",
-    title: "Website design for coaches",
-    body: "A coaching website built around one job: turning a visitor into a booked call. Fast, on-brand, and set up to rank for the people searching for you.",
-    cta: "Build my site",
+    title: "Website development for coaches",
+    body: "A custom coaching website that makes your niche, offer, proof and next step obvious, with technical SEO and a clear enquiry or booking path.",
+    cta: "Build my website",
     icon: <WebIcon />,
   },
   {
+    id: "lead-generation",
+    title: "Lead generation for coaches",
+    body: "We research the people and businesses that fit your ideal client profile, qualify the list and organise a focused pipeline ready for targeted outreach or sales follow-up.",
+    cta: "Build my lead list",
+    icon: <OutreachIcon />,
+  },
+  {
+    id: "cold-email-outreach",
+    title: "Cold email outreach for coaches",
+    body: "We prepare the sending setup, write a focused campaign and manage follow-up around prospects who fit your coaching audience, so outreach runs consistently without becoming your daily job.",
+    cta: "Start my outreach",
+    icon: <OutreachIcon />,
+  },
+  {
     id: "social-media",
-    title: "Social media for coaches",
-    body: "Content planned around your offer, posted on schedule, with comments and DMs handled, so the account builds trust instead of just racking up likes.",
-    cta: "Run my socials",
+    title: "Social media management for coaches",
+    body: "We turn your coaching expertise into a consistent content system, publish it for you and handle routine replies so your social presence stays active while you coach.",
+    cta: "Manage my social media",
     icon: <SocialIcon />,
   },
 ];
@@ -287,11 +291,11 @@ const PLANS = [
   {
     id: "launch",
     name: "Launch",
-    line: "For getting found.",
-    body: "You have the coaching but no proper home online. We build one.",
+    line: "For building your online presence.",
+    body: "You have a coaching offer but the website and message are not doing enough of the selling. We build the foundation.",
     includes: [
-      "Custom coaching website with a booking flow connected", // VERIFY
-      "On-page SEO and Google Business setup",
+      "Custom coaching website with a clear enquiry or booking flow connected",
+      "On-page SEO and local search setup where relevant",
       "Copy written for your offer, not filler text",
       "Handover and training so you can edit it",
     ],
@@ -299,36 +303,33 @@ const PLANS = [
   {
     id: "presence",
     name: "Presence",
-    line: "For looking established.",
-    body: "Everything in Launch, plus the accounts that make you look like a real operation.",
+    line: "For staying visible.",
+    body: "Everything in Launch, plus social media management that keeps your expertise in front of the people you want to attract.",
     includes: [
       "Everything in Launch",
       "Social media management, posting and replies",
-      "Instagram handle set up and built out",
+      "Social profiles set up and optimised on the agreed channels",
       "Custom email domain (you@yourname.com)",
     ],
   },
   {
     id: "growth",
-    name: "Reborn",
-    line: "For bringing in clients.",
-    body: "The full engine. We build the presence, then go and get the work.",
+    name: "Growth",
+    line: "For building a repeatable pipeline.",
+    body: "The full system: website, social presence, lead generation and cold outreach working together around the same coaching offer.",
     includes: [
       "Everything in Presence",
-      // VERIFY: replaced "Portfolio site that closes on your behalf" (a coach has no portfolio).
-      "A results and testimonials page that builds trust before the first call",
+      "A results and testimonials page that presents your real proof before the first call",
       "Cold outreach campaigns, written and sent",
-      "Lead generation and booked calls in your calendar",
+      "Lead generation and prospect follow-up built around your target audience",
     ],
     featured: true,
   },
 ];
 
 /* ---------------- Structured data (one @graph) ----------------
-   If your homepage / root layout already outputs Organization and
-   WebSite JSON-LD, delete those two nodes and keep the @id refs.
-   The Organization node below has `logo` and `sameAs` placeholders —
-   fill them in (see the VERIFY comments) instead of leaving them empty. */
+   The shared Organization and WebSite entities come from src/lib/site.js
+   so every page uses the same business identity and @id values. */
 
 const ORG_ID = `${SITE_URL}/#organization`;
 const WEBSITE_ID = `${SITE_URL}/#website`;
@@ -368,8 +369,8 @@ const JSON_LD = {
     {
       "@type": "Service",
       "@id": SERVICE_ID,
-      name: "Website, lead generation and social media management for coaches",
-      serviceType: "Digital marketing for coaches",
+      name: "Website development, lead generation, cold email outreach and social media management for coaches",
+      serviceType: ["Website development for coaches", "Lead generation for coaches", "Cold email outreach for coaches", "Social media management for coaches"],
       description: PAGE_DESC,
       url: PAGE_URL,
       provider: { "@id": ORG_ID },
@@ -398,15 +399,6 @@ const JSON_LD = {
           },
         ],
       },
-    },
-    {
-      "@type": "FAQPage",
-      "@id": `${PAGE_URL}#faq`,
-      mainEntity: FAQS.map((f) => ({
-        "@type": "Question",
-        name: f.q,
-        acceptedAnswer: { "@type": "Answer", text: f.a },
-      })),
     },
   ],
 };
@@ -483,29 +475,26 @@ export default function ForCoachesPage() {
 
           <section className="hero" id="top">
             <h1 className="hero-heading">
-              <span className="hero-l1">Fill your calendar</span>{" "}
-              <span className="hero-l2">with coaching clients.</span>
+              <span className="hero-l1">Coach website design,</span>{" "}
+              <span className="hero-l2">lead generation and social media that work together.</span>
             </h1>
+
+            <p className="hero-sub">
+              We build coaching websites that explain who you help and what you offer, manage the social media that keeps your expertise visible, and run targeted lead generation and cold email outreach to reach people who fit your coaching offer.
+            </p>
 
             <div className="hero-rule" aria-hidden="true" />
 
-            <div className="hero-foot">
-              <p className="hero-sub">
-                A coaching website that ranks on Google, social media that keeps
-                posting, and outreach that lands discovery calls, so growing your
-                coaching business stops depending on referrals alone.
-              </p>
-              <div className="hero-actions">
-                <a className="btn btn-solid magnetic" href="#plans">See the plans</a>
-                <a className="btn btn-ghost" href="#how">How it works</a>
-              </div>
+            <div className="hero-actions">
+              <a className="btn btn-solid magnetic" href="#plans">See the plans</a>
+              <a className="btn btn-ghost" href="#how">How it works</a>
             </div>
           </section>
 
           <section className="problem" id="problem" aria-labelledby="problem-title">
             <div className="section-head">
               <h2 id="problem-title">Why coaches struggle to get clients online</h2>
-              <p>Most coaches hit the same wall before they fix it for good.</p>
+              <p>A strong coaching offer still needs a clear website, consistent visibility and a practical way to reach the right prospects.</p>
             </div>
 
             <ul className="problem-list">
@@ -526,8 +515,8 @@ export default function ForCoachesPage() {
 
           <section className="services" id="services" aria-labelledby="services-title">
             <div className="section-head">
-              <h2 id="services-title">Website, lead generation and social media for coaches</h2>
-              <p>Three pieces that work together. Pick one, or run all three.</p>
+              <h2 id="services-title">Website development, lead generation, cold email outreach and social media for coaches</h2>
+              <p>Build the online presence first, then add the prospecting and content systems that help it bring in work.</p>
             </div>
 
             <div className="services-grid">
@@ -546,8 +535,8 @@ export default function ForCoachesPage() {
 
           <section className="case-study" id="how" aria-labelledby="case-title">
             <div className="section-head">
-              <h2 id="case-title">What your first 90 days look like</h2>
-              <p>A rough shape of how the pieces come online, in order.</p>
+              <h2 id="case-title">How we build your coaching website and outreach system</h2>
+              <p>A practical sequence for getting the website, outreach and social presence working together.</p>
             </div>
 
             <ol className="case-steps">
@@ -567,8 +556,8 @@ export default function ForCoachesPage() {
 
           <section className="plans" id="plans" aria-labelledby="plans-title">
             <div className="section-head">
-              <h2 id="plans-title">Coaching website and lead generation plans</h2>
-              <p>Each plan builds on the one before it. Move up whenever you&apos;re ready.</p>
+              <h2 id="plans-title">Choose the coaching marketing support you need</h2>
+              <p>Start with the part you need now, then add the channels that support your next stage of growth.</p>
             </div>
 
             <div className="plans-grid">
@@ -616,9 +605,9 @@ export default function ForCoachesPage() {
           </section>
 
           <section className="closing" id="contact" aria-labelledby="contact-title">
-            <h2 id="contact-title">Ready to stop chasing referrals?</h2>
+            <h2 id="contact-title">Ready for an online presence that helps your coaching business grow?</h2>
             <p className="closing-sub">
-              Tell us about your coaching business and we&apos;ll recommend where to start.
+              Tell us about your coaching offer, niche and current pipeline. We&apos;ll show you whether the first step should be your website, lead generation, cold email outreach or social media management.
             </p>
             <a className="btn btn-solid btn-lg magnetic" href={CONTACT_HREF}>
               SAY HELLO

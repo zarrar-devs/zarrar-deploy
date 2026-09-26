@@ -4,9 +4,13 @@
   swap the font-family stacks below for those variables so this section
   matches the rest of the site exactly.
 
-  --color-accent is the single "punch" color the scroll journey snaps
-  through (white -> black -> accent -> black). Swap it for your brand
-  color.
+  --color-accent is the single "punch" color the philosophy panel snaps
+  to on scroll (black -> accent, back to black on scroll-up). Set to
+  pure white for the black/white look — the panel becomes a white
+  card with black text. Swap it for a brand color if you want a tint
+  instead of true white; every other use of this variable (the CTA
+  button, its icon circle, the marquee dot, the closing-panel glow)
+  will follow automatically.
   --font-serif is used only for the pull-quote; point it at a loaded
   premium editorial serif (Playfair Display, Canela, GT Sectra) via
   next/font if you have one.
@@ -20,7 +24,7 @@
   position: relative;
   width: 100%;
   --color-ink: #0a0a0a;
-  --color-accent: #C0FF4A;
+  --color-accent: #ffffff;
   --font-serif: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
   --font-mono: "IBM Plex Mono", "JetBrains Mono", ui-monospace,
     SFMono-Regular, Menlo, Consolas, monospace;
@@ -108,10 +112,23 @@
   color: var(--stage1-fg);
 }
 
-/* Glues a discipline name to its chip so the two always wrap as one
-  unit — without this, the chip could land alone at the start of the
-  next line, orphaned from the word it's illustrating. */
+/* Wraps a whole discipline name ("social media management") plus its
+  trailing .chipGroupTail (see below). On desktop this stays nowrap so
+  the entire phrase+icon reads as one glued unit, same as always. On
+  mobile (see the @media block near the bottom) this switches to
+  `white-space: normal` so the phrase can wrap between its own words —
+  .chipGroupTail is what actually keeps the icon from ever landing on
+  a line by itself. */
 .chipGroup {
+  white-space: nowrap;
+}
+
+/* The last word of the discipline name + its icon, e.g. "management"
+  + the chip. This unit is ALWAYS nowrap, on every screen size — it's
+  what guarantees the icon can never end up alone on its own line: if
+  it doesn't fit on the current line, this whole word+icon pair moves
+  to the next line together. */
+.chipGroupTail {
   display: inline-flex;
   align-items: center;
   white-space: nowrap;
@@ -155,6 +172,7 @@
 
 .stepsLabel {
   display: block;
+  margin: 0;
   font-family: var(--font-sans);
   font-weight: 600;
   font-size: 0.8rem;
@@ -263,6 +281,13 @@
   display: flex;
   flex-shrink: 0;
   gap: clamp(16px, 2vw, 24px);
+  /* The real group renders as an <ol> (see WhyChooseUs.jsx) so screen
+    readers can announce step position — reset the browser's default
+    list margin/padding/marker so it stays visually identical to the
+    plain div it used to be. */
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 /* Card gets its own lift + shadow on hover. Auto-scroll comes to a full
@@ -409,9 +434,53 @@
   text-align: center;
 }
 
+.quoteCtaRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+}
+
+.quoteServiceLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid rgba(10, 10, 10, 0.16);
+  border-radius: 999px;
+  color: inherit;
+  font-family: var(--font-sans);
+  font-size: 0.84rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 180ms ease, border-color 180ms ease;
+}
+
+.quoteServiceLink:hover {
+  transform: translateY(-2px);
+  border-color: currentColor;
+}
+
+.marqueeCtaLinks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 18px;
+  margin: 22px auto 0;
+}
+
+.marqueeCtaLinks a {
+  color: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .quoteLabel {
   display: inline-block;
-  margin-bottom: clamp(20px, 3vw, 32px);
+  margin: 0 0 clamp(20px, 3vw, 32px);
   font-family: var(--font-sans);
   font-weight: 600;
   font-size: 0.8rem;
@@ -682,8 +751,8 @@
 
 /* ---------- "Start a Project" — premium color-invert hover ----------
   On hover a dark disc grows from the icon's position until it fills
-  the whole pill (button flips from dark-text-on-lime to
-  lime-text-on-dark), a soft glossy sheen sweeps across on top of that,
+  the whole pill (button flips from black-text-on-white to
+  white-text-on-black), a soft glossy sheen sweeps across on top of that,
   and the arrow springs forward with a slight rotate. Everything runs
   on transform/opacity so it stays smooth, and the button sets its own
   local stacking context (position + z-index) so the layering below is
@@ -715,7 +784,11 @@
   font-family: var(--font-sans);
   font-weight: 700;
   font-size: clamp(0.8rem, 1.6vw, 0.95rem);
-  box-shadow: 0 0 0 0 rgba(192, 255, 74, 0);
+  /* These shadows are hand-matched to --color-accent above (they can't
+    reference the variable directly inside rgba()) — if you change the
+    accent color again, update these three rgba() values to match, or
+    the hover glow will go back to being the old lime green. */
+  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 0.45s ease;
 }
@@ -723,12 +796,12 @@
 .ctaButton:hover,
 .ctaButton:focus-visible {
   transform: translateY(-3px);
-  box-shadow: 0 16px 36px -12px rgba(192, 255, 74, 0.55);
+  box-shadow: 0 16px 36px -12px rgba(255, 255, 255, 0.4);
 }
 
 .ctaButton:active {
   transform: translateY(-1px) scale(0.96);
-  box-shadow: 0 8px 20px -10px rgba(192, 255, 74, 0.45);
+  box-shadow: 0 8px 20px -10px rgba(255, 255, 255, 0.32);
 }
 
 .ctaButton:focus-visible {
@@ -892,47 +965,6 @@
   }
 }
 
-@media (max-width: 640px) {
-  .stage1 {
-    padding-top: 56px;
-  }
-}
-
-@media (max-width: 420px) {
-  /* Label + the three prev/pause/next controls were tight enough on
-    very narrow phones (≤420px) to risk crowding — letting the row wrap
-    keeps both pieces fully tappable instead of squeezing them. */
-  .stepsHeader {
-    flex-wrap: wrap;
-  }
-
-  .marqueeHeading {
-    font-size: 1.45rem;
-  }
-
-  .marqueeItem {
-    font-size: 1.5rem;
-  }
-
-  /* Both CTA pills get one more explicit trim on very narrow phones —
-    the fluid clamp() ranges already bottom out near here, but pinning
-    an exact size removes any doubt at the width the complaint was
-    actually about. */
-  .processButton {
-    --process-icon-size: 20px;
-    gap: 7px;
-    font-size: 0.76rem;
-    padding: 7px 14px 7px 7px;
-  }
-
-  .ctaButton {
-    --cta-icon-size: 19px;
-    gap: 6px;
-    font-size: 0.78rem;
-    padding: 8px 8px 8px 14px;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .marqueeTrack {
     transform: none !important;
@@ -977,5 +1009,362 @@
 
   .ctaButton::after {
     display: none;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   PHONE EXPERIENCE — no auto-moving carousels.
+   Phones get a quiet, vertically readable process list and a compact CTA.
+   Desktop keeps the animated stream exactly as designed.
+   ------------------------------------------------------------------------- */
+@media (max-width: 767.98px) {
+  .stage1 {
+    padding: 72px 10px 64px;
+  }
+
+  .stage1Content {
+    max-width: 760px;
+  }
+
+  .kicker {
+    max-width: 35ch;
+    margin-bottom: 18px;
+    font-size: 0.88rem;
+    line-height: 1.55;
+  }
+
+  .statement {
+    width: 100%;
+    max-width: 390px;
+    margin-inline: auto;
+    font-size: clamp(1.68rem, 7.6vw, 2.5rem);
+    line-height: 1.18;
+    letter-spacing: -0.028em;
+    text-wrap: balance;
+  }
+
+  .wordMask {
+    margin-right: 0.16em;
+  }
+
+  .chip {
+    border-radius: 0.32em;
+  }
+
+  /* BUG FIX: multi-word service names ("cold email outreach", "social
+    media management"...) used to glue the WHOLE phrase + icon into one
+    unbreakable nowrap unit. Fine on desktop, but on narrow phones that
+    whole block didn't fit on one line and ran past the right edge of
+    the statement — that was the misaligned/clipped "social media
+    management" line.
+    Letting the phrase wrap on its own (below) isn't enough by itself —
+    text immediately followed by an inline icon can still line-break
+    right between them even with no space there, which is what made the
+    icon land alone on its own line the first time this was tried. The
+    real fix is .chipGroupTail above, which keeps just the last word +
+    icon permanently glued (on every screen size); this override only
+    lets the REST of the phrase (e.g. "social media") wrap normally
+    ahead of it. */
+  .chipGroup {
+    white-space: normal;
+  }
+
+  .stepsSection {
+    margin-top: 48px;
+  }
+
+  .stepsHeader {
+    margin-bottom: 16px;
+  }
+
+  .stepsControls {
+    display: none;
+  }
+
+  .stepsLabel {
+    font-size: 0.74rem;
+    letter-spacing: 0.14em;
+  }
+
+  .stepsCarousel {
+    width: 100%;
+  }
+
+  .stepsViewport {
+    overflow: visible;
+    margin: 0;
+    padding: 0;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .stepsTrack {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transform: none !important;
+  }
+
+  .stepsTrackGroup {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .stepsTrackGroup[aria-hidden="true"] {
+    display: none;
+  }
+
+  .stepCard {
+    width: 100%;
+    min-height: 0;
+    gap: 11px;
+    padding: 18px;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px -18px rgba(10, 10, 10, 0.5);
+    user-select: text;
+    transform: none !important;
+  }
+
+  .stepCard:hover {
+    box-shadow: 0 8px 24px -18px rgba(10, 10, 10, 0.5);
+  }
+
+  .stepNumber {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+  }
+
+  .stepTitle {
+    font-size: 1.2rem;
+  }
+
+  .stepDesc {
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+
+  .stepOutcome {
+    padding-top: 12px;
+  }
+
+  .stepsCursor {
+    display: none;
+  }
+
+  .quoteStage {
+    padding: 68px 18px 64px;
+    /* BUG FIX: the black<->white scroll-snap for this panel is
+      desktop-only (see the `if (!getIsMobile())` guard in
+      WhyChooseUs.jsx) — on phones the animation never runs, so this
+      panel was stuck on its plain CSS resting color, which is white
+      (var(--color-accent)). Stage 1 and Stage 3 are already dark on
+      mobile, so force the same look here instead of leaving a bright
+      white panel sandwiched between two black ones. */
+    background-color: #0a0a0a;
+    color: #ffffff;
+  }
+
+  .quoteInner {
+    max-width: 720px;
+  }
+
+  .quoteLabel {
+    margin-bottom: 18px;
+    font-size: 0.74rem;
+    letter-spacing: 0.14em;
+  }
+
+  .quoteText {
+    margin-bottom: 30px;
+    font-size: clamp(1.65rem, 8vw, 2.5rem);
+    line-height: 1.2;
+  }
+
+  .quoteCtaRow {
+    width: 100%;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .processButton,
+  .quoteServiceLink {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* BUG FIX (contd.): both pills were styled for a white panel
+    (black pill / near-black border). Flip them so they still show up
+    against the new dark .quoteStage background above instead of
+    disappearing into it. */
+  .processButton {
+    background-color: #ffffff;
+    color: #0a0a0a;
+  }
+
+  .processButtonIcon {
+    background-color: #0a0a0a;
+    color: #ffffff;
+  }
+
+  .quoteServiceLink {
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+
+  .marqueeSection {
+    padding-bottom: 64px;
+  }
+
+  .marqueeViewport {
+    display: none;
+  }
+
+  .marqueeCtaContent {
+    max-width: 720px;
+    margin-top: 0;
+    padding: 54px 18px 0;
+  }
+
+  .marqueeHeading {
+    font-size: clamp(1.6rem, 7.2vw, 2.35rem);
+    line-height: 1.12;
+  }
+
+  .marqueeSub {
+    margin-bottom: 24px;
+    font-size: 0.98rem;
+    line-height: 1.6;
+  }
+
+  .marqueeServices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin-bottom: 24px;
+    padding: 8px 0;
+  }
+
+  .marqueeServiceItem {
+    min-height: 54px;
+    padding: 8px 4px;
+    font-size: 0.78rem;
+    line-height: 1.3;
+    justify-content: flex-start;
+  }
+
+  .marqueeServiceIcon {
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+  }
+
+  .marqueeCtaLinks {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 12px;
+    margin: 20px 0 0;
+  }
+
+  .marqueeCtaLinks a {
+    padding: 7px 0;
+    font-size: 0.8rem;
+    line-height: 1.35;
+    text-underline-offset: 4px;
+  }
+
+  .marqueeCtaActions {
+    gap: 14px;
+    margin-top: 28px;
+  }
+
+  .ctaButton {
+    width: 100%;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 20px;
+    min-height: 52px;
+  }
+
+  .marqueeContactLink {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+/* Everything for very narrow phones (≤420px) lives in this one block —
+  it used to be split across two separate max-width:420px queries
+  earlier in the file, which made it easy to miss one when editing the
+  other. Nothing here changes what actually renders, just where it's
+  declared. */
+@media (max-width: 420px) {
+  .stage1 {
+    padding-inline: 8px;
+  }
+
+  .statement {
+    font-size: 1.68rem;
+    line-height: 1.18;
+  }
+
+  /* Label + the three prev/pause/next controls were tight enough on
+    very narrow phones to risk crowding — letting the row wrap keeps
+    both pieces fully tappable instead of squeezing them. Moot on
+    touch devices (the controls are hidden there, see the 767.98px
+    block above), but keeps desktop-narrow / resized windows tidy. */
+  .stepsHeader {
+    flex-wrap: wrap;
+  }
+
+  .stepCard {
+    padding: 16px;
+  }
+
+  .quoteStage {
+    padding-inline: 14px;
+  }
+
+  /* Both CTA pills get one more explicit trim on very narrow phones —
+    the fluid clamp() ranges already bottom out near here, but pinning
+    an exact size removes any doubt at the width the complaint was
+    actually about. */
+  .processButton {
+    --process-icon-size: 20px;
+    gap: 7px;
+    font-size: 0.76rem;
+    padding: 7px 14px 7px 7px;
+  }
+
+  .ctaButton {
+    --cta-icon-size: 19px;
+    gap: 6px;
+    font-size: 0.78rem;
+    padding: 8px 8px 8px 14px;
+  }
+
+  .marqueeHeading {
+    font-size: 1.45rem;
+  }
+
+  .marqueeItem {
+    font-size: 1.5rem;
+  }
+
+  .marqueeCtaContent {
+    padding-inline: 14px;
+  }
+
+  .marqueeServices,
+  .marqueeCtaLinks {
+    grid-template-columns: 1fr;
+  }
+
+  .marqueeServiceItem {
+    min-height: 48px;
   }
 }

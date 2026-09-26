@@ -43,9 +43,13 @@ const jsonLd = graph([
     name: "Who Zarrar builds for",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Services", url: url(ROUTES.services) },
+      { "@type": "ListItem", position: 2, name: "Web Development", url: url(ROUTES.webDevelopment) },
+      { "@type": "ListItem", position: 3, name: "Lead Generation", url: url(ROUTES.leadGeneration) },
+      { "@type": "ListItem", position: 4, name: "Cold Email Outreach", url: url(ROUTES.coldEmail) },
+      { "@type": "ListItem", position: 5, name: "Social Media Management", url: url(ROUTES.socialMedia) },
       ...PERSONAS.map((p, i) => ({
         "@type": "ListItem",
-        position: i + 2,
+        position: i + 6,
         name: p.label,
         url: url(p.href),
       })),

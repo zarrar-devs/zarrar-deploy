@@ -68,20 +68,20 @@ export function SocialIcon() {
    stops being true. */
 export const PROMISES = [
   {
-    title: "Custom-coded",
-    line: "Every site is designed and built from scratch, not dropped into a template.",
+    title: "Custom-built",
+    line: "Your author website is designed around your books, audience, writing and next career goal instead of a generic template.",
   },
   {
     title: "Search-ready",
-    line: "Clean markup, a sitemap and structured data are in place from launch day.",
+    line: "The site is structured so your name, books, subjects and important pages are easy for people and search engines to understand.",
   },
   {
-    title: "Researched outreach",
-    line: "Pitches go to agents, hosts and reviewers who already cover your genre.",
+    title: "Targeted outreach",
+    line: "We research relevant agents, hosts, booksellers, reviewers or media contacts instead of sending the same pitch to everyone.",
   },
   {
-    title: "Handed over properly",
-    line: "You get training so you can edit your own site without calling a developer.",
+    title: "Built to hand over",
+    line: "You get a maintainable site and a clear handover so you can make routine changes without needing a developer for every edit.",
   },
 ];
 
@@ -90,39 +90,45 @@ export const PROMISES = [
    { quote: "…", name: "Real Name", role: "Author of Title", url: "https://…" } */
 export const TESTIMONIALS = [];
 
-/* Example author categories — replace or trim to match the
-   real author's actual genre and body of work. */
+/* Broad author categories used as audience examples; keep only the
+   categories that reflect the markets Zarrar genuinely serves. */
 export const GENRES = [
-  { title: "Fiction & novelists", line: "A site that sells the story before the sample chapter does." },
-  { title: "Nonfiction & memoir", line: "Credibility and a clear pitch, ready for press and podcasts." },
-  { title: "Self-published authors", line: "Everything a publisher would handle, minus the publisher." },
-  { title: "Poets & essayists", line: "A home for the work between magazine credits and readings." },
-  { title: "Ghostwriters & co-authors", line: "A portfolio that lets the work speak without naming names." },
-  { title: "Nonfiction experts", line: "Turn a body of expertise into speaking, media and book deals." },
+  { title: "Fiction authors", line: "A polished home for books, reviews, events, press and the next release." },
+  { title: "Nonfiction & memoir", line: "A platform that makes your expertise, story and media angles easy to understand." },
+  { title: "Self-published authors", line: "A professional author platform that connects books, readers, reviews, events and outreach." },
+  { title: "Poets & essayists", line: "A focused portfolio for your work, publications, readings and future projects." },
+  { title: "Ghostwriters & co-authors", line: "A private or public portfolio that communicates the work and the services you want to be known for." },
+  { title: "Authors building a wider platform", line: "Use the website, content and outreach system to support speaking, media, partnerships and future books." },
 ];
 
-/* Three services only: premium website development, lead
-   generation + outreach, and social media management. */
+/* Four clear services: website development, lead generation, cold email outreach and social media management. */
 export const CHAPTERS = [
   {
     numeral: "I",
-    title: "Premium website development",
-    body: "A custom-built author site, not a template — synopsis, reviews, buy links, events and a press kit, designed and coded to sell the book and to rank for your name and your genre.",
-    cta: "Build my site",
+    title: "Website development for authors",
+    body: "A custom author website with book pages, synopsis, reviews, buy links, events, press information and a clear path for readers or media to contact you.",
+    cta: "Build my author website",
     icon: <BookIcon />,
   },
   {
     numeral: "II",
-    title: "Lead generation & outreach",
-    body: "We build the list of literary agents, podcast hosts, bookshops and press already covering your genre, then run the cold outreach and follow-up that turns that list into conversations and bookings.",
-    cta: "Get me covered",
+    title: "Lead generation for authors",
+    body: "We research agents, podcast hosts, booksellers, reviewers and media contacts relevant to your work, then organise a focused prospect list around your goals.",
+    cta: "Build my prospect list",
     icon: <OutreachIcon />,
   },
   {
     numeral: "III",
-    title: "Social media management",
-    body: "Content planned and posted from your writing, readings and reviews, plus replies handled day to day — so you stay visible between book launches without doing the posting yourself.",
-    cta: "Run my socials",
+    title: "Cold email outreach for authors",
+    body: "We write and manage targeted email outreach to relevant agents, hosts, booksellers, reviewers or media contacts, with follow-up built around the right pitch.",
+    cta: "Start my outreach",
+    icon: <OutreachIcon />,
+  },
+  {
+    numeral: "IV",
+    title: "Social media management for authors",
+    body: "We build a practical content system from your writing, readings, reviews, interviews and book news, publish it consistently and handle routine replies.",
+    cta: "Manage my social media",
     icon: <SocialIcon />,
   },
 ];
@@ -141,14 +147,14 @@ export const TIMELINE = [
   {
     when: "Weeks 7–12",
     title: "Momentum",
-    body: "Replies from outreach start to build up, the site keeps gaining ground in search, and social keeps you visible between releases.",
+    body: "We use outreach replies, search behaviour and social engagement to improve the next campaign and content while the website keeps your work easy to discover between releases.",
   },
 ];
 
 export const FAQS = [
   {
-    q: "Do I need an author website if my books are already listed on Amazon?",
-    a: "Amazon sells the book you already have. A site sells you — synopsis, reviews, backlist, press kit and the SEO that gets you found — for the agents, press and readers deciding whether to follow your next one.",
+    q: "Why do I need an author website if my books are already on Amazon?",
+    a: "Amazon can sell the book. Your own website gives readers, agents, media and event organisers one place to understand your work, explore your backlist and contact you directly." ,
   },
   {
     q: "What's actually included in a premium author website?",
@@ -159,7 +165,7 @@ export const FAQS = [
     a: "Ranking takes ongoing work, not a one-time setup, and nobody can promise a position. What we do guarantee is the technical foundation: clean semantic markup, fast performance, a proper sitemap and structured data for your books and bio. Content and links then build on top of that.",
   },
   {
-    q: "Can lead generation and outreach really get me agents, press and podcast bookings?",
+    q: "Can lead generation and outreach help me find relevant agents, press and podcast opportunities?",
     a: "We research and build the list of agents, hosts, bookshops and reviewers already covering your genre, then send the outreach and follow-up. Whether someone says yes depends on your book and timing, so we can't promise placements, but you'll have a real, targeted list in front of the right people instead of hoping to be discovered.",
   },
   {
@@ -167,8 +173,8 @@ export const FAQS = [
     a: "We handle it day to day — planning the content calendar, writing and posting from your work and reviews, and responding to comments and messages, so it runs without needing your time.",
   },
   {
-    q: "How long before I see results?",
-    a: "The website is usually ready within the first couple of weeks. Outreach replies and social growth typically build over the following weeks once campaigns are running — timing depends on your genre and release calendar.",
+    q: "How long does it take to build an author website and start outreach?",
+    a: "The website is usually ready within the first couple of weeks. Outreach and social publishing can begin as the core platform is prepared, while responses and visibility build over time depending on your genre, audience and release calendar.",
   },
 ];
 
@@ -178,8 +184,8 @@ export const EDITIONS = [
   {
     id: "paperback",
     name: "Paperback",
-    line: "For getting found.",
-    body: "You've got the book, but no real home for it online. We design and build one, SEO included.",
+    line: "For building the author platform.",
+    body: "You have the book, but the online presence is fragmented. We build one focused home for your writing, books, press and contact path.",
     includes: [
       "Premium author website, custom-designed and built from scratch",
       "Book pages with buy links, reviews and press kit",
@@ -190,8 +196,8 @@ export const EDITIONS = [
   {
     id: "hardcover",
     name: "Hardcover",
-    line: "For staying visible.",
-    body: "Everything in Paperback, plus a social media presence that runs without you.",
+    line: "For staying visible between releases.",
+    body: "Everything in Paperback, plus social media management that keeps the work circulating while you write the next book.",
     includes: [
       "Everything in Paperback",
       "Social media management — content, posting and replies",
@@ -202,8 +208,8 @@ export const EDITIONS = [
   {
     id: "reborn",
     name: "Reborn",
-    line: "For selling more books.",
-    body: "The full engine. We build the presence, keep it visible, then go after the readers and the press.",
+    line: "For connecting the platform to new opportunities.",
+    body: "The complete system: website, social media, lead generation and cold email outreach built around the readers, media and professional opportunities you want next.",
     includes: [
       "Everything in Hardcover",
       "Lead generation: a built list of agents, press and podcasts in your genre",

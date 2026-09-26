@@ -4,7 +4,7 @@
    WHY THIS FILE EXISTS:
    Before this, the real domain was written out by hand in 10+
    files and three of them disagreed with each other
-   ("your-domain.com", "zarrar.com", "zarrar.co"). Canonical
+   (old placeholder origins and zarrar.co). Canonical
    tags, sitemap entries and JSON-LD @ids built from a wrong or
    inconsistent domain are the single fastest way to lose
    rankings — Google treats them as pointing at a different site.
@@ -25,18 +25,23 @@ export const CONTACT_EMAIL = "hello@zarrar.co";
 export const LOCALE = "en_US";
 
 /* Routes — these MUST match the actual folder names under src/app.
-   Previously the metadata claimed /for-speakers, /for-coaches,
-   /for-authors, /for-founders and /for-real-estate-agents, none of
+   Previously the metadata claimed /speakers, /coaches,
+   /authors, /entrepreneurs and /real-estate, none of
    which exist as routes: every canonical URL on the site pointed at
    a 404. These are the real ones. */
 export const ROUTES = {
   home: "/",
   services: "/services",
+  contact: "/contact",
   speakers: "/speakers",
   realEstate: "/real-estate",
   authors: "/authors",
   coaches: "/coaches",
   entrepreneurs: "/entrepreneurs",
+  webDevelopment: "/web-development",
+  leadGeneration: "/lead-generation",
+  coldEmail: "/cold-email-outreach",
+  socialMedia: "/social-media-management",
 };
 
 export const url = (path = "/") =>
@@ -53,22 +58,26 @@ export const SAME_AS = [];
    consistency across every page. */
 export const SERVICES = [
   {
-    name: "Website & Portfolio Development",
+    name: "Website Development",
+    href: ROUTES.webDevelopment,
     description:
       "Custom-coded websites and portfolio sites — designed, built and technically optimised for search from day one.",
   },
   {
     name: "Lead Generation",
+    href: ROUTES.leadGeneration,
     description:
       "Researched, verified prospect lists and a booking pipeline built around the people who actually buy from you.",
   },
   {
     name: "Cold Email Outreach",
+    href: ROUTES.coldEmail,
     description:
       "Authenticated sending domains (SPF, DKIM, DMARC), written campaigns and managed follow-up that land in the inbox.",
   },
   {
     name: "Social Media Management",
+    href: ROUTES.socialMedia,
     description:
       "Content planning, posting and community replies handled day to day so you stay visible without doing it yourself.",
   },
@@ -88,7 +97,7 @@ export const PERSONAS = [
 /* Reused verbatim in Organization schema on every page so the
    entity description Google sees is identical site-wide. */
 export const ORG_DESCRIPTION =
-  "Zarrar is a digital agency building custom websites and portfolios, and running lead generation, cold email outreach and social media management for speakers, authors, coaches, real estate agents and founders.";
+  "Zarrar is a digital agency providing website development, lead generation, cold email outreach and social media management for founders, speakers, coaches, authors, real estate agents and service businesses.";
 
 /* Homepage title + description — used by layout.jsx, page.jsx, the
    WebPage JSON-LD and the manifest, so they can never drift apart.
@@ -99,7 +108,7 @@ export const ORG_DESCRIPTION =
    reason (the old one was ~185). */
 export const HOME_TITLE = "Website Development & Lead Generation Agency | Zarrar";
 export const HOME_DESCRIPTION =
-  "Custom websites, lead generation, cold email and social media management for speakers, authors, coaches, real estate agents and founders.";
+  "Web development, lead generation, cold email outreach and social media management for founders, speakers, coaches, authors, real estate agents and service firms.";
 
 /* The Organization node. Given a stable @id so every page's JSON-LD
    can reference the same entity instead of declaring a duplicate
@@ -116,6 +125,11 @@ export function organizationSchema() {
     url: SITE_URL,
     description: ORG_DESCRIPTION,
     email: CONTACT_EMAIL,
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "sales",
+      email: CONTACT_EMAIL,
+    },
     logo: {
       "@type": "ImageObject",
       url: `${SITE_URL}/logo/zarrar-512.png`,
@@ -174,17 +188,6 @@ export function breadcrumbSchema(path, label) {
   };
 }
 
-export function faqSchema(faqs, path) {
-  return {
-    "@type": "FAQPage",
-    "@id": `${url(path)}#faq`,
-    mainEntity: faqs.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
-  };
-}
 
 /* Wraps nodes into one @graph — one <script> tag per page instead of
    three or four competing ones, which is what Google prefers and

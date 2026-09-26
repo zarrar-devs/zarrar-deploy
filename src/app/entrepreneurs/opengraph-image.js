@@ -3,7 +3,7 @@ import { OgMark } from "@/lib/og-mark";
 import { BRAND, SEO } from "./founders-data";
 
 
-export const alt = `${SEO.h1} ${BRAND}: websites, email marketing and social media for founders and CEOs`;
+export const alt = `${SEO.h1} ${BRAND}: website development, lead generation, cold email outreach and social media for founders and CEOs`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -42,7 +42,7 @@ export default function Image() {
         </div>
 
         <div style={{ display: "flex", fontSize: 30, color: "#a8a8a8" }}>
-          Websites, email marketing and social media for founders and CEOs
+          Founder websites, lead generation, cold email outreach and social media management
         </div>
       </div>
     ),

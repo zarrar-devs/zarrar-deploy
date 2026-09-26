@@ -1,7 +1,7 @@
 "use client";
 
 /* =============================================================
-   Zarrar — /for-speakers
+   Zarrar — /speakers
    -------------------------------------------------------------
    Content + JSON-LD live in speakers-data.js.
    Metadata, fonts and the JSON-LD <script> live in page.js.
@@ -115,7 +115,7 @@ function Speakers() {
   const [contactOpen, setContactOpen] = useState(false);
   const [contactPlan, setContactPlan] = useState(null);
 
-  // Opens the contact modal. Pass a plan name (e.g. "Reborn") when the
+  // Opens the contact modal. Pass a plan name (e.g. "Growth") when the
   // click came from a specific plan's CTA, or leave it out for a
   // generic contact click (nav, service cards).
   const openContact = (plan = null) => {
@@ -569,24 +569,21 @@ function Speakers() {
       <main id="main" tabIndex={-1}>
         <section className="hero" id="top" aria-labelledby="hero-title">
           <p className="hero-eyebrow">
-            Websites, outreach and social media for keynote speakers
+            For keynote speakers who want a stronger online presence, relevant event contacts and a clearer booking path.
           </p>
 
           <h1 className="hero-heading" id="hero-title">
-            <span className="hero-line">Book more</span>{" "}
-            <span className="hero-line">stages.</span>{" "}
-            <span className="hero-line hero-line--accent">Chase fewer</span>{" "}
-            <span className="hero-line hero-line--accent">emails.</span>
+            <span className="hero-line">Build a stronger</span>{" "}
+            <span className="hero-line">speaker presence.</span>{" "}
+            <span className="hero-line hero-line--accent">Reach the right</span>{" "}
+            <span className="hero-line hero-line--accent">organisers.</span>
           </h1>
 
           <div className="hero-rule" aria-hidden="true" />
 
           <div className="hero-foot">
             <p className="hero-sub">
-              Speaker website development, cold-email outreach to event
-              organisers and social media management, so your topics, reel
-              and past talks do the pitching and you spend your time on
-              stage instead of in your inbox.
+              We build your speaker website, research relevant event prospects, run targeted cold email outreach and manage social media so organisers can quickly understand your topics, proof and booking options.
             </p>
             <div className="hero-actions">
               <a className="btn btn-solid magnetic" href="#plans">
@@ -618,8 +615,7 @@ function Speakers() {
           <div className="section-head">
             <h2 id="topics-title">Everything an organiser needs, on one page</h2>
             <p>
-              This is what your speaker website includes, so a program
-              committee can shortlist you without a single follow-up email.
+              Your speaker website should answer the organiser's first questions before they need to email you.
             </p>
           </div>
 
@@ -635,8 +631,8 @@ function Speakers() {
 
         <section className="services" id="services" aria-labelledby="services-title">
           <div className="section-head">
-            <h2 id="services-title">Built to get keynote speakers booked</h2>
-            <p>Three services that work together. Pick one, or run all three.</p>
+            <h2 id="services-title">Speaker website development, lead generation, cold email outreach and social media</h2>
+            <p>Build the speaker platform first, then connect it to the prospecting and content systems that help organisers discover and trust you.</p>
           </div>
 
           <div className="services-grid">
@@ -664,8 +660,8 @@ function Speakers() {
 
         <section className="case-study" id="process" aria-labelledby="case-title">
           <div className="section-head">
-            <h2 id="case-title">What the first 90 days look like</h2>
-            <p>A rough shape of how the pieces come online, in order.</p>
+            <h2 id="case-title">How we build your speaker booking system</h2>
+            <p>The work is staged so your website, event outreach and social content support the same speaking goals.</p>
           </div>
 
           <ol className="case-steps">
@@ -685,7 +681,7 @@ function Speakers() {
 
         <section className="plans" id="plans" aria-labelledby="plans-title">
           <div className="section-head">
-            <h2 id="plans-title">Pick a starting point</h2>
+            <h2 id="plans-title">Choose the support your speaking business needs</h2>
             <p>
               Each plan builds on the one before it. Move up whenever
               you&apos;re ready.
@@ -762,7 +758,7 @@ function Speakers() {
         </section>
 
         <section className="closing" id="contact" aria-labelledby="contact-title">
-          <h2 id="contact-title">Ready to get booked?</h2>
+          <h2 id="contact-title">Ready to make it easier for organisers to book you?</h2>
           <a
             className="btn btn-solid btn-lg magnetic"
             href={`mailto:${CONTACT_EMAIL}?subject=Speaker%20website%20and%20outreach%20enquiry`}

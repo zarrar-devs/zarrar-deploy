@@ -263,6 +263,89 @@ html {
   }
 }
 
+@media (max-width: 640px) {
+  .preloader__frame {
+    top: 14px;
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
+  }
+
+  .stage {
+    padding: 18px 16px calc(72px + env(safe-area-inset-bottom));
+  }
+
+  .sk-nav-row {
+    padding-bottom: 16px;
+    margin-bottom: 52px;
+  }
+
+  .sk--nav {
+    width: 76px;
+    height: 12px;
+  }
+
+  .sk--menu {
+    width: 24px;
+    height: 12px;
+  }
+
+  .sk--headline {
+    height: 38px;
+    margin-bottom: 12px;
+  }
+
+  .sk--headline.w1 {
+    width: 92%;
+  }
+
+  .sk--headline.w2 {
+    width: 72%;
+  }
+
+  .sk--sub.w1 {
+    width: 82%;
+    margin-top: 20px;
+  }
+
+  .sk--sub.w2 {
+    width: 64%;
+  }
+
+  .sk-actions {
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .sk--pill {
+    width: 118px;
+    height: 42px;
+  }
+
+  .sk--linkbar {
+    width: 86px;
+  }
+
+  .preloader__label {
+    left: 16px;
+    bottom: calc(54px + env(safe-area-inset-bottom));
+    font-size: 0.76rem;
+  }
+
+  .preloader__counter {
+    left: auto;
+    right: 16px;
+    bottom: calc(30px + env(safe-area-inset-bottom));
+    font-size: clamp(2.8rem, 14vw, 4.8rem);
+  }
+
+  .preloader__progress {
+    left: 16px;
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .preloader__bg,
   .preloader__panel,

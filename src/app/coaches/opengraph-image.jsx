@@ -5,7 +5,7 @@ import { OgMark } from "@/lib/og-mark";
    every share previously fell back to the site-wide default, which
    named none of the coaching-specific messaging. */
 
-export const alt = "Zarrar for coaches: a website and pipeline that books discovery calls";
+export const alt = "Zarrar for coaches: website development, lead generation, cold email outreach and social media";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -44,12 +44,12 @@ export default function Image() {
             textTransform: "uppercase",
           }}
         >
-          <div style={line}>More calls</div>
-          <div style={{ ...line, color: "#5b3df5" }}>booked.</div>
+          <div style={line}>Build a stronger</div>
+          <div style={{ ...line, color: "#5b3df5" }}>coaching presence.</div>
         </div>
 
         <div style={{ ...line, fontSize: 28, color: "#565144" }}>
-          Website, SEO and lead generation for coaches
+          Website, lead generation, cold email outreach and social media for coaches
         </div>
       </div>
     ),

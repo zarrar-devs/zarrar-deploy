@@ -1,6 +1,7 @@
-import { Space_Grotesk, Bricolage_Grotesque, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import PageTransition from "../components/PageTransition";
+import SiteFooter from "../components/SiteFooter/SiteFooter";
 import {
   SITE_URL,
   BRAND,
@@ -9,20 +10,6 @@ import {
   ROBOTS,
   LOCALE,
 } from "@/lib/site";
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-space-grotesk",
-  display: "swap",
-});
-
-const bricolageGrotesque = Bricolage_Grotesque({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-bricolage",
-  display: "swap",
-});
 
 const inter = Inter({
   subsets: ["latin"],
@@ -36,7 +23,7 @@ const DEFAULT_TITLE = HOME_TITLE;
 export const metadata = {
   /* metadataBase resolves every relative URL below (canonical, OG
      image, icons) against the real production origin. This was
-     "https://your-domain.com" — a placeholder left in from the
+     an old placeholder origin — now replaced by the production origin
      converter — so every canonical tag and OG image URL on the site
      pointed at a domain that isn't yours. Now zarrar.co is official,
      src/lib/site.js is the one place that knows it. */
@@ -52,23 +39,6 @@ export const metadata = {
   applicationName: BRAND,
   generator: "Next.js",
   category: "Marketing services",
-
-  keywords: [
-    "web development agency",
-    "custom website development",
-    "portfolio website design",
-    "lead generation agency",
-    "cold email outreach",
-    "cold email agency",
-    "social media management",
-    "SEO services",
-    "website for speakers",
-    "website for authors",
-    "website for coaches",
-    "real estate agent website",
-    "founder personal website",
-    "Zarrar",
-  ],
 
   authors: [{ name: BRAND, url: SITE_URL }],
   creator: BRAND,
@@ -124,16 +94,15 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="en"
-      className={`${spaceGrotesk.variable} ${bricolageGrotesque.variable} ${inter.variable}`}
-    >
+    <html lang="en" className={inter.variable}>
       <body>
         <a href="#main-content" className="skip-link">
           Skip to content
         </a>
         <PageTransition>
           <div id="main-content">{children}</div>
+          {/* Server-rendered links to every page — see SiteFooter.jsx */}
+          <SiteFooter />
         </PageTransition>
       </body>
     </html>

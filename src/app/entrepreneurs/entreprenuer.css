@@ -1,5 +1,5 @@
 /* =========================================================
-   /for-founders — black and white
+   /entrepreneurs — black and white
 
    Every class is prefixed `fd-` so this file can't collide with
    Coaches.css (which has unscoped .btn / .nav / .hero rules).
@@ -414,11 +414,12 @@
   display: grid;
   gap: clamp(2.5rem, 6vw, 4rem);
   grid-template-columns: minmax(0, 1fr);
-  align-items: center;
+  align-items: start;
 }
 
 @media (min-width: 960px) {
   .fd-hero-grid { grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr); }
+  .fd-serp-fig { margin-top: 0.4rem; }
 }
 
 .fd-crumbs { margin-bottom: clamp(1.25rem, 3vw, 2rem); }
@@ -449,10 +450,10 @@
 
 .fd-hero-sub {
   margin: 0 0 clamp(1.5rem, 3.5vw, 2.25rem);
-  max-width: 46ch;
+  max-width: 50ch;
   color: var(--ash);
   font-size: clamp(1.1rem, 1.02rem + 0.4vw, 1.3rem);
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 .fd-hero-actions {
@@ -873,6 +874,12 @@
 }
 .fd-plan.is-featured .fd-plan-name { padding-right: 7.5rem; }
 
+@media (min-width: 640px) and (max-width: 899px) {
+  .fd-plans-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fd-plan { border-top: 0; border-left: 1px solid var(--line-light); }
+  .fd-plan:nth-child(2n + 1) { border-left: 0; }
+}
+
 @media (min-width: 900px) {
   .fd-plans-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .fd-plan { border-top: 0; border-left: 1px solid var(--line-light); }
@@ -1037,4 +1044,20 @@
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ---------- Small-screen tightening (< 400px) ---------- */
+/* clamp() minimums above already scale everything down, but a few
+   fixed-size elements (buttons, chips, the burger) stay too wide for
+   very narrow phones unless nudged individually here. */
+@media (max-width: 400px) {
+  .fd-wrap { padding-inline: 1rem; }
+  .fd-hero-title { letter-spacing: -0.03em; }
+  .fd-btn { padding: 0.75rem 1.4rem; font-size: 0.92rem; }
+  .fd-btn-lg { padding: 0.9rem 1.8rem; font-size: 1.02rem; }
+  .fd-serp-bar { padding: 0.55rem 0.9rem; }
+  .fd-serp-title { font-size: 1.02rem; }
+  .fd-svc { padding: 1.35rem; border-radius: 1.5rem; }
+  .fd-plan-flag { position: static; display: inline-block; margin-bottom: 0.5rem; }
+  .fd-plan.is-featured .fd-plan-name { padding-right: 0; }
 }

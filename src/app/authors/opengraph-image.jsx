@@ -6,7 +6,7 @@ import { OgMark } from "@/lib/og-mark";
    at /og/authors.png, which was never in public/ — broken preview on
    every share.) */
 
-export const alt = "Zarrar for authors: you wrote the book, we build its audience";
+export const alt = "Zarrar for authors: website development, lead generation, cold email outreach and social media";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -45,14 +45,14 @@ export default function Image() {
             textTransform: "uppercase",
           }}
         >
-          <div style={line}>You wrote</div>
-          <div style={line}>the book.</div>
-          <div style={{ ...line, color: "#5b3df5" }}>We build its</div>
-          <div style={{ ...line, color: "#5b3df5" }}>audience.</div>
+          <div style={line}>Build a home</div>
+          <div style={line}>for your books.</div>
+          <div style={{ ...line, color: "#5b3df5" }}>Reach the right</div>
+          <div style={{ ...line, color: "#5b3df5" }}>people.</div>
         </div>
 
         <div style={{ ...line, fontSize: 28, color: "#565144" }}>
-          Website, outreach and social media for authors
+          Website, lead generation, cold email outreach and social media for authors
         </div>
       </div>
     ),

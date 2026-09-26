@@ -1,5 +1,5 @@
 /* =============================================================
-   Zarrar — /for-speakers  ·  content + structured data
+   Zarrar — /speakers  ·  content + structured data
    -------------------------------------------------------------
    No "use client" here on purpose: page.js (server) builds the
    JSON-LD from this file, and Speakers.jsx (client) renders it.
@@ -12,15 +12,17 @@
      each one matches how you actually work.
    ============================================================= */
 
-export const SITE = "https://zarrar.co";
+import { SITE_URL, CONTACT_EMAIL as SHARED_CONTACT_EMAIL, organizationSchema, websiteSchema, ORG_ID, WEBSITE_ID } from "@/lib/site";
+
+export const SITE = SITE_URL;
 export const PAGE_PATH = "/speakers";
 export const PAGE_URL = `${SITE}${PAGE_PATH}`;
-export const CONTACT_EMAIL = "hello@zarrar.co";
+export const CONTACT_EMAIL = SHARED_CONTACT_EMAIL;
 
-export const PAGE_TITLE = "Website & Booking Leads for Keynote Speakers | Zarrar";
+export const PAGE_TITLE = "Speaker Website, Lead Generation & Outreach | Zarrar";
 /* keep under ~160 characters so Google doesn't cut it off */
 export const PAGE_DESCRIPTION =
-  "Speaker websites, cold-email outreach to event organisers and social media for keynote speakers, built to get you shortlisted and booked.";
+  "Website development, lead generation, cold email outreach and social media for keynote speakers who want a stronger online presence and more event opportunities.";
 
 /* Real past engagements only. Leave empty and the strip is hidden. */
 export const AS_SEEN_AT = [];
@@ -29,27 +31,27 @@ export const AS_SEEN_AT = [];
 export const PAGE_PARTS = [
   {
     title: "Talk topics",
-    line: "Each keynote framed around the problem it solves, so an organiser can match it to their theme in seconds.",
+    line: "Clear keynote topics organised around the problems, audiences and outcomes an event organiser is trying to deliver.",
   },
   {
     title: "Speaker reel",
-    line: "A short showreel and clips from past talks: the fastest way to show you can hold a room.",
+    line: "A focused reel and selected clips that help an organiser understand your delivery, subject matter and stage presence quickly.",
   },
   {
     title: "One-sheet and bio",
-    line: "A speaker one-sheet and a bio written for organisers, ready to forward to a program committee.",
+    line: "A speaker one-sheet, short bio and booking information written so an organiser can forward the details internally.",
   },
   {
     title: "Past engagements",
-    line: "Real stages, testimonials and logos, so booking you feels like the safe choice.",
+    line: "Real stages, clients, testimonials and media proof presented clearly instead of buried in a long biography.",
   },
   {
     title: "Booking enquiry form",
-    line: "A clear way to check availability, with the details organisers need in a single message.",
+    line: "A straightforward enquiry path for availability, event type, date, location and the details you need before a call.",
   },
   {
     title: "Fees and logistics",
-    line: "Fee range, travel and tech needs up front, so fewer emails go back and forth.",
+    line: "Clear guidance on fees, travel, AV and event requirements so organisers know what working with you involves.",
   },
 ];
 
@@ -57,17 +59,17 @@ export const TIMELINE = [
   {
     num: "Weeks 1–2",
     title: "Foundation",
-    body: "Speaker page live with topics, reel and one-sheet in place. Outreach list of relevant events and organisers built.",
+    body: "Speaker website live with your topics, reel, proof and booking path in place; the first list of relevant events and organisers is researched.",
   },
   {
     num: "Weeks 3–6",
-    title: "Outreach and content",
-    body: "Outreach to program committees and organisers goes out on schedule. Social content starts recycling clips from past talks.",
+    title: "Event outreach and content",
+    body: "Targeted outreach to relevant organisers begins, while social content turns your talks, clips and ideas into useful proof between speaking dates.",
   },
   {
     num: "Weeks 7–12",
-    title: "Momentum",
-    body: "Shortlist mentions and inbound enquiries start layering on top of outreach, and the reel keeps pitching on its own.",
+    title: "Refine and repeat",
+    body: "Replies, objections and organiser feedback shape the next campaigns, while the website and content continue working between events.",
   },
 ];
 
@@ -75,23 +77,30 @@ export const TIMELINE = [
 export const SERVICES = [
   {
     id: "web-development",
-    title: "Speaker website development",
-    body: "A speaker page that does the pitching for you: topics, reel, one-sheet and booking details in one place an organiser can screenshot and forward internally.",
-    cta: "Build my site",
+    title: "Website development for speakers",
+    body: "A custom speaker website that makes your topics, proof, reel and booking process easy for organisers to understand and share internally.",
+    cta: "Build my speaker website",
     icon: "web",
   },
   {
     id: "lead-generation",
-    title: "Lead generation and event outreach",
-    body: "We find event organisers and program committees already booking speakers on your topics, and send the outreach and follow-up that gets you onto the shortlist.",
-    cta: "Get me booked",
+    title: "Lead generation for speakers",
+    body: "We research conferences, corporate events, summits and program teams that fit your topics, audience and preferred event type, then organise the prospects for outreach.",
+    cta: "Build my event list",
+    icon: "outreach",
+  },
+  {
+    id: "cold-email-outreach",
+    title: "Cold email outreach to event organisers",
+    body: "We write and send targeted email campaigns to relevant organisers and program teams, then manage follow-up so your outreach stays consistent without sounding generic.",
+    cta: "Start my event outreach",
     icon: "outreach",
   },
   {
     id: "social-media",
-    title: "Social media management",
-    body: "Clips and takeaways from your past talks, planned and posted on schedule, so you stay visible between conference seasons and not only during them.",
-    cta: "Run my socials",
+    title: "Social media management for speakers",
+    body: "We turn your talks, clips, ideas and event appearances into a consistent social presence that keeps you visible between speaking opportunities.",
+    cta: "Manage my social media",
     icon: "social",
   },
 ];
@@ -100,11 +109,11 @@ export const PLANS = [
   {
     id: "launch",
     name: "Launch",
-    line: "For getting found.",
-    body: "You have the talks but no proper home online. We build one.",
+    line: "For building your speaker presence.",
+    body: "You have strong talks but no focused online destination for organisers, bureaus and event teams. We build it.",
     includes: [
       "Custom speaker website with topics, reel and booking form",
-      "On-page SEO and Google Business setup",
+      "On-page SEO and search console setup",
       "Bio and copy written for organisers, not filler text",
       "Handover and training so you can edit it",
     ],
@@ -112,25 +121,25 @@ export const PLANS = [
   {
     id: "presence",
     name: "Presence",
-    line: "For looking established.",
-    body: "Everything in Launch, plus the accounts that make you look like a working speaker.",
+    line: "For staying visible between events.",
+    body: "Everything in Launch, plus consistent social content and the professional profile that keeps your work visible between events.",
     includes: [
       "Everything in Launch",
       "Social media management: posting and replies",
-      "Instagram handle set up and built out",
+      "Social profiles set up and optimised on the agreed channels",
       "Custom email domain (you@yourname.com)",
     ],
   },
   {
     id: "growth",
-    name: "Reborn",
-    line: "For getting booked.",
-    body: "The full engine. We build the presence, then go and get the stages.",
+    name: "Growth",
+    line: "For building a repeatable booking pipeline.",
+    body: "The full system: speaker website, social content, lead generation and event outreach working together.",
     includes: [
       "Everything in Presence",
       "Outreach to event organisers, written and sent",
       "Follow-ups and reply handling",
-      "Enquiries and booked calls in your calendar",
+      "Enquiry and booking follow-up organised around your speaking calendar",
     ],
     featured: true,
   },
@@ -141,32 +150,32 @@ const planName = (id) => PLANS.find((p) => p.id === id)?.name ?? id;
 
 export const FAQS = [
   {
-    q: "Do keynote speakers really need their own website?",
-    a: "Yes. A bureau listing or a LinkedIn profile rarely gives an organiser everything in one place. A speaker website puts your topics, reel, past engagements, fee range and booking form on one page, so they can make the call without a back-and-forth. Organisers usually research a speaker online before they reply to anyone.",
+    q: "Why should a keynote speaker have a website?",
+    a: "A bureau listing or LinkedIn profile can be useful, but a speaker website gives organisers one place to review your topics, reel, past engagements, bio, logistics and booking path before they contact you." ,
   },
   {
     q: "What should a speaker website include?",
     a: "A clear list of talk topics, a short reel or clips from past talks, real past engagements and testimonials, a one-sheet, a way to check availability or request a booking, and enough SEO that people searching for a speaker on your topic can actually find you.",
   },
   {
-    q: "Can you help me get booked for more events, not just look good online?",
-    a: "Yes, that's the outreach side. We find program committees and event organisers who already book speakers on your topics, then send the outreach and follow-up that gets you onto their shortlist.",
+    q: "Can you help with lead generation and outreach to event organisers?",
+    a: "Yes. We research organisers and programs that fit your topics, build the prospect list, write the outreach and manage follow-up. Whether an organiser replies or books a speaker depends on your fit, timing and the event calendar."
   },
   {
     q: "How does cold email outreach to event organisers work?",
-    a: "We build a targeted list of conferences, summits and corporate events that fit your topics, write the emails, send them on a schedule and follow up. Replies and booked calls land in your calendar, so your time goes to conversations with organisers who are interested.",
+    a: "We build a targeted list of conferences, summits and corporate events that fit your topics, write the emails, send them on a schedule and follow up. The aim is to create relevant organiser conversations while you spend your time preparing to speak.",
   },
   {
     q: "Is social media worth it between speaking seasons?",
     a: "It's what keeps you visible between seasons. Clips, takeaways and behind-the-scenes content from past talks give organisers a reason to remember you months after they first saw you, not just during conference season.",
   },
   {
-    q: "Which plan is right for me?",
-    a: `Start with ${planName("launch")} if you have no proper speaker website yet. Choose ${planName("presence")} if you also want social media and a professional email domain. Choose ${planName("growth")} if you want us to run outreach to organisers and put booked calls in your calendar. You can move up whenever you're ready.`,
+    q: "Which speaker plan is right for me?",
+    a: `Start with ${planName("launch")} if you need the speaker website and search foundation. Choose ${planName("presence")} if you also want social media management and a professional email domain. Choose ${planName("growth")} if you want lead generation and event outreach added to the system. You can move up whenever you're ready.`,
   },
   {
-    q: "How long before I see new booking enquiries?",
-    a: "The site and reel are usually ready within the first couple of weeks. Outreach replies and shortlist mentions typically start in the weeks after campaigns go live. Timing depends on your topic and the event calendar you're targeting.",
+    q: "How long does speaker outreach take to produce results?",
+    a: "Website work and campaign preparation can start quickly, but event responses depend on your topic, the organisers targeted, the event calendar and the quality of the offer. We focus on building a consistent, relevant outreach process rather than promising a number of bookings."
   },
 ];
 
@@ -176,13 +185,12 @@ export function buildJsonLd() {
   return {
     "@context": "https://schema.org",
     "@graph": [
-      {
-        "@type": "ProfessionalService",
-        "@id": `${SITE}/#business`,
-        name: "Zarrar",
-        url: SITE,
-        areaServed: "Worldwide",
-      },
+      /* The ONE shared Organization + WebSite entity from src/lib/site.js
+         (same @id on every page). This page used to declare its own thin
+         "ProfessionalService" with a different @id (#business), so Google
+         saw two businesses named Zarrar. */
+      organizationSchema(),
+      websiteSchema(),
       {
         "@type": "WebPage",
         "@id": `${PAGE_URL}#webpage`,
@@ -190,7 +198,7 @@ export function buildJsonLd() {
         name: PAGE_TITLE,
         description: PAGE_DESCRIPTION,
         inLanguage: "en",
-        isPartOf: { "@id": `${SITE}/#business` },
+        isPartOf: { "@id": WEBSITE_ID },
         about: { "@id": `${PAGE_URL}#service` },
         breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },
       },
@@ -205,10 +213,9 @@ export function buildJsonLd() {
       {
         "@type": "Service",
         "@id": `${PAGE_URL}#service`,
-        name: "Website, outreach and social media for keynote speakers",
-        serviceType:
-          "Speaker website development, lead generation and social media management",
-        provider: { "@id": `${SITE}/#business` },
+        name: "Speaker website development, lead generation, cold email outreach and social media management",
+        serviceType: ["Speaker website development", "Lead generation for speakers", "Cold email outreach to event organisers", "Social media management for speakers"],
+        provider: { "@id": ORG_ID },
         areaServed: "Worldwide",
         audience: { "@type": "Audience", audienceType: "Keynote speakers" },
         hasOfferCatalog: {
@@ -228,15 +235,6 @@ export function buildJsonLd() {
             })),
           ],
         },
-      },
-      {
-        "@type": "FAQPage",
-        "@id": `${PAGE_URL}#faq`,
-        mainEntity: FAQS.map((f) => ({
-          "@type": "Question",
-          name: f.q,
-          acceptedAnswer: { "@type": "Answer", text: f.a },
-        })),
       },
     ],
   };

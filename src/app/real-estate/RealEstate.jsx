@@ -1,7 +1,7 @@
 "use client";
 
 /* =============================================================
-   Zarrar — /for-real-estate-agents
+   Zarrar — /real-estate
    -------------------------------------------------------------
    Content + JSON-LD live in realestate-data.js.
    Metadata, fonts and the JSON-LD <script> live in page.js.
@@ -579,20 +579,18 @@ function RealEstate() {
       <main id="main" tabIndex={-1}>
         <section className="hero" id="top" aria-labelledby="hero-title">
           <p className="hero-eyebrow">
-            Websites, local SEO and lead generation for real estate agents
+            For real estate agents who want stronger local visibility, more direct enquiries and a website they control.
           </p>
 
           <h1 className="hero-heading" id="hero-title">
-            Own your <span className="accent">pipeline</span>. Not just your listings.
+            Real estate websites, local SEO and lead generation that make it easier to contact you.
           </h1>
 
           <div className="hero-rule" aria-hidden="true" />
 
           <div className="hero-foot">
             <p className="hero-sub">
-              Real estate website development, local SEO that gets you found
-              before a portal ad does, and outreach that lands showings and
-              listings straight in your calendar.
+              Real estate website development, local SEO, lead generation, cold outreach and social media management designed to help buyers and sellers discover your business and contact you directly.
             </p>
             <div className="hero-actions">
               <a className="btn btn-solid magnetic" href="#plans">
@@ -606,7 +604,7 @@ function RealEstate() {
 
           <div className="area-chips">
             <p className="area-chips-label" id="area-chips-label">
-              Searches we help you win
+              Example searches your website can target
             </p>
             <ul className="area-chips-list" aria-labelledby="area-chips-label">
               {SEARCH_TERMS.map((term) => (
@@ -620,10 +618,9 @@ function RealEstate() {
 
         <section className="compare" id="compare" aria-labelledby="compare-title">
           <div className="section-head">
-            <h2 id="compare-title">Portals get the traffic. You take the risk.</h2>
+            <h2 id="compare-title">Make your real estate business easier to find and contact</h2>
             <p>
-              Here&apos;s the difference between renting attention on a
-              property portal and owning your own pipeline.
+              Portals can be useful sources of attention, but your own website, local search presence and follow-up system give buyers and sellers a direct way to understand your services and contact you.
             </p>
           </div>
 
@@ -649,8 +646,8 @@ function RealEstate() {
 
         <section className="services" id="services" aria-labelledby="services-title">
           <div className="section-head">
-            <h2 id="services-title">Built around speed and local search</h2>
-            <p>Four services that work together. Pick what you need first.</p>
+            <h2 id="services-title">Website development, local SEO, lead generation, cold outreach and social media for real estate agents</h2>
+            <p>Build the local foundation first, then add the prospecting and content systems that help buyers and sellers find you.</p>
           </div>
 
           <div className="services-grid">
@@ -680,8 +677,8 @@ function RealEstate() {
 
         <section className="case-study" id="process" aria-labelledby="case-title">
           <div className="section-head">
-            <h2 id="case-title">What the first 90 days look like</h2>
-            <p>A rough shape of how the pieces come online, in order.</p>
+            <h2 id="case-title">How we build your real estate lead system</h2>
+            <p>The work is staged so your website, local search presence, outreach and social content support one clear pipeline.</p>
           </div>
 
           <ol className="case-steps">
@@ -701,10 +698,9 @@ function RealEstate() {
 
         <section className="plans" id="plans" aria-labelledby="plans-title">
           <div className="section-head">
-            <h2 id="plans-title">Pick a starting point</h2>
+            <h2 id="plans-title">Choose the real estate marketing support you need</h2>
             <p>
-              Each plan builds on the one before it. Move up whenever
-              you&apos;re ready.
+              Start with the website and local search foundation, then add social media and lead generation as your pipeline needs grow.
             </p>
           </div>
 
@@ -778,7 +774,7 @@ function RealEstate() {
         </section>
 
         <section className="closing" id="contact" aria-labelledby="contact-title">
-          <h2 id="contact-title">Ready to own your pipeline?</h2>
+          <h2 id="contact-title">Ready for more direct buyer and seller enquiries?</h2>
           <a
             className="btn btn-solid btn-lg magnetic"
             href={`mailto:${CONTACT_EMAIL}?subject=Real%20estate%20website%20and%20lead%20generation%20enquiry`}

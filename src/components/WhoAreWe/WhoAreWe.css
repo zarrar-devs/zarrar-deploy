@@ -1,7 +1,44 @@
 /* =====================================================================
-   WhoAreWe — round 12
+   WhoAreWe — round 14
 
    ── This round ─────────────────────────────────────────────────────────
+   - FIXED an orphaned-looking lede + a right-pinned closing paragraph.
+     `.waw-lede` (column 1) and `.waw-capability-block` (column 2) sat in
+     the same implicit grid row, but the capability block (photo + list)
+     is taller than the two-line lede, and `.waw-closing` was ALSO pinned
+     to column 2 with no explicit row — so it auto-placed into a second
+     implicit row under the capability block, in column 2 only. Net
+     effect: the lede looked stranded at the top of a too-tall row with a
+     big dead gap beneath it, and the closing paragraph sat right-aligned
+     with a big empty gap to its left where column 1 had nothing in that
+     row. Rows are now explicit: row 1 holds the lede (vertically
+     centered against the capability block's height) and the capability
+     block side by side; row 2 holds the closing paragraph spanning BOTH
+     columns, so it starts flush with the lede's left edge instead of
+     floating on the right, and sits right under row 1 instead of behind
+     an inflated gap.
+
+   ── Round 13 (still current) ────────────────────────────────────────────
+   - FIXED A TABLET DEAD ZONE. The "phone card" layout below only kicked
+     in under 768px, but the component's JS treats anything under 1024px
+     as non-desktop (no pin, no photo-spotlight handoff — see the
+     `isMobile` matchMedia query in WhoAreWe.jsx). Between 768–1023px
+     neither layout was right for the other: the desktop shared photo
+     stage was still visible here (frozen on capability #1's photo, since
+     the spotlight handoff that swaps it never runs outside the desktop
+     branch) while the card layout that gives rows 2 and 3 their own
+     image was hidden. The breakpoint below is now 1023.98px, matching
+     the JS threshold exactly, so there's no width where the two
+     implementations disagree about which one is showing.
+   - Added a tablet-only (640–1023.98px) upgrade: the capability cards
+     now sit in a 2-column grid (with the third centered full-width)
+     instead of stretching a phone's single-column layout across the
+     extra width a tablet actually has.
+   - Merged the duplicated `.waw-stage.is-marquee .waw-story` selector
+     (it was declared twice, in two different sections of this file)
+     into one block, in the "desktop marquee" section below.
+
+   ── Round 12 (still current) ────────────────────────────────────────────
    - FIXED the lede's reveal. It used one overflow:hidden mask per
      SENTENCE, which only works if the sentence renders as a single
      visual line. In the desktop column each sentence wraps onto three,
@@ -333,13 +370,6 @@
   will-change: transform;
 }
 
-.waw-stage.is-marquee .waw-story {
-  width: min(90vw, 1220px);
-  /* Reserves room so the list column never runs into the fixed progress
-     rail sitting further out at the viewport edge. */
-  padding-right: clamp(1rem, 3vw, 2rem);
-}
-
 /* ---------- lede: the one big idea, set large, revealed word by word.
    Emphasis on the second line is weight + ink depth rather than a colour
    swap — the first line sits back in muted ink, the second lands in full
@@ -409,6 +439,10 @@
   flex-direction: column;
   gap: clamp(1.5rem, 4vw, 2rem);
   margin-top: clamp(2.25rem, 5vw, 3.5rem);
+}
+
+.waw-mobile-capability-media {
+  display: none;
 }
 
 .waw-capability-stage {
@@ -530,21 +564,44 @@
   border-radius: 0; /* single-sided border — never round these corners */
 }
 
-/* ---------- desktop marquee: lede left, stage + list side by side on the right ---------- */
+/* ---------- desktop marquee: lede left, stage + list side by side on the right ----------
+   (Both halves of what used to be two separate declarations of this same
+   selector live here now — see the round 13 note at the top of the file.) ---------- */
 .waw-stage.is-marquee .waw-story {
+  width: min(90vw, 1220px);
+  /* Reserves room so the list column never runs into the fixed progress
+     rail sitting further out at the viewport edge. */
+  padding-right: clamp(1rem, 3vw, 2rem);
   display: grid;
   grid-template-columns: minmax(280px, 0.9fr) minmax(380px, 1.2fr);
+  /* Explicit, not implicit-auto-flow — see the round 14 note at the top
+     of this file for the orphaned-lede / right-stuck-closing bug that
+     leaving this to the grid's default row placement caused. */
+  grid-template-rows: auto auto;
   column-gap: clamp(2.5rem, 5vw, 5rem);
+  row-gap: clamp(1.5rem, 3vw, 2.5rem);
   align-items: start;
 }
 
 .waw-stage.is-marquee .waw-lede {
   grid-column: 1;
+  grid-row: 1;
+  /* Centers the short two-line statement against the taller capability
+     block next to it, instead of top-aligning into a tall row and
+     leaving dead space underneath. */
+  align-self: center;
 }
 
-.waw-stage.is-marquee .waw-capability-block,
-.waw-stage.is-marquee .waw-closing {
+.waw-stage.is-marquee .waw-capability-block {
   grid-column: 2;
+  grid-row: 1;
+}
+
+.waw-stage.is-marquee .waw-closing {
+  /* Full width, not column 2 — this is what pulls it in from being
+     stuck on the right with an empty gap to its left. */
+  grid-column: 1 / -1;
+  grid-row: 2;
 }
 
 .waw-stage.is-marquee .waw-capability-block {
@@ -571,7 +628,11 @@
 }
 
 .waw-stage.is-marquee .waw-closing {
-  margin-top: clamp(1.5rem, 3vw, 2rem);
+  /* No extra margin-top here any more — the grid's own row-gap (set on
+     .waw-story above) already spaces this row away from row 1, and
+     stacking a margin on top of that was pushing it lower than it
+     needed to be. */
+  margin-top: 0;
 }
 
 /* ---------- narrower desktop widths (right at the 1024px threshold) ----------
@@ -620,5 +681,187 @@
 
   .waw-closing {
     margin-top: 1.5rem;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   PHONE + TABLET EXPERIENCE (anything below the desktop pin threshold)
+   Desktop keeps the shared photo + scroll spotlight. Everything under
+   1024px uses a different information architecture: each service carries
+   its own image and lives in normal flow, so the visual and its
+   explanation are always within one card. This intentionally avoids
+   asking a touch user to scrub a long pinned story.
+
+   This threshold (1023.98px) MUST match the `isMobile` matchMedia query
+   in WhoAreWe.jsx exactly — see the round 13 note at the top of this
+   file for what goes wrong when the two disagree. It used to be
+   767.98px here (phone-only) while the JS split at 1023.98px, leaving a
+   768–1023px range where the desktop stage was visible but never
+   animated and the per-row images below were hidden.
+   ------------------------------------------------------------------------- */
+@media (max-width: 1023.98px) {
+  .waw-pin {
+    display: block;
+    min-height: auto;
+    padding: clamp(4.5rem, 17vw, 7rem) clamp(1rem, 5vw, 1.5rem) clamp(4rem, 14vw, 6rem);
+  }
+
+  .waw-stage {
+    width: 100%;
+    max-width: none;
+    gap: clamp(2.5rem, 10vw, 4rem);
+  }
+
+  .waw-intro {
+    width: 100%;
+    text-align: center;
+    font-size: clamp(2.8rem, 14vw, 5rem);
+    line-height: 0.98;
+  }
+
+  .waw-story {
+    width: 100%;
+    max-width: 760px;
+  }
+
+  .waw-lede-lines {
+    gap: 0.35em;
+  }
+
+  .waw-lede-line {
+    font-size: clamp(1.45rem, 7.2vw, 2.25rem);
+    line-height: 1.18;
+  }
+
+  .waw-capability-block {
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .waw-capability-stage {
+    display: none;
+  }
+
+  .waw-capabilities {
+    display: grid;
+    gap: 0.9rem;
+    border-top: 0;
+  }
+
+  .waw-capability {
+    overflow: hidden;
+    border: 1px solid rgba(11, 11, 12, 0.13);
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 12px 32px rgba(11, 11, 12, 0.06);
+  }
+
+  .waw-capability-fill {
+    display: none;
+  }
+
+  .waw-mobile-capability-media {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--waw-ink);
+  }
+
+  .waw-mobile-capability-media img,
+  .waw-mobile-capability-media video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .waw-capability-row {
+    padding: 1.1rem 1rem 1.15rem;
+    align-items: flex-start;
+    gap: 0.9rem;
+  }
+
+  .waw-capability-label {
+    font-size: 1rem;
+    line-height: 1.35;
+    margin-bottom: 0.35rem;
+  }
+
+  .waw-capability-desc {
+    max-width: none;
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+
+  .waw-capability-mark {
+    width: 8px;
+    height: 8px;
+    margin-top: 0.35rem;
+  }
+
+  .waw-closing {
+    margin-top: 1.75rem;
+    padding-left: 0.9rem;
+    font-size: 1rem;
+    line-height: 1.58;
+  }
+}
+
+/* ---------- tablet refinement (640–1023.98px) ----------
+   The block above now covers this whole range too (it used to stop at
+   767.98px — see the round 13 note at the top of the file). A phone's
+   single-column card stack works, but it wastes the extra width a
+   tablet has, so this layers a 2-column grid on top of it: two cards
+   side by side, and the third centered full-width beneath them rather
+   than left stranded alone in a lopsided row. Phones below 640px are
+   untouched. ---------- */
+@media (min-width: 640px) and (max-width: 1023.98px) {
+  .waw-story {
+    max-width: 900px;
+  }
+
+  .waw-intro {
+    font-size: clamp(3.5rem, 8vw, 5.5rem);
+  }
+
+  .waw-lede-line {
+    font-size: clamp(1.75rem, 4.5vw, 2.5rem);
+  }
+
+  .waw-capabilities {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .waw-capabilities > .waw-capability:last-child {
+    grid-column: 1 / -1;
+    max-width: calc(50% - 0.45rem);
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 420px) {
+  .waw-pin {
+    padding-inline: 0.9rem;
+  }
+
+  .waw-intro {
+    font-size: clamp(2.55rem, 15vw, 3.4rem);
+  }
+
+  .waw-lede-line {
+    font-size: 1.38rem;
+  }
+
+  .waw-capability-row {
+    padding-inline: 0.9rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .waw-mobile-capability-media img,
+  .waw-mobile-capability-media video {
+    will-change: auto;
   }
 }

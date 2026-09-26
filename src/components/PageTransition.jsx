@@ -138,7 +138,7 @@ export default function PageTransition({ children, mark = "ZARRAR" }) {
   return (
     <TransitionContext.Provider value={{ navigate }}>
       {children}
-      <div ref={overlayRef} className="page-transition-overlay" aria-hidden="true">
+      <div ref={overlayRef} className="page-transition-overlay" aria-hidden="true" data-nosnippet="">
         {Array.from({ length: BAR_COUNT }).map((_, i) => (
           <div key={i} className="page-transition-bar" />
         ))}

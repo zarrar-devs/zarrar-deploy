@@ -41,8 +41,8 @@ export default function OgImage() {
             textTransform: "uppercase",
           }}
         >
-          <div style={row}>Get found.</div>
-          <div style={{ ...row, color: "#5b3df5" }}>Get booked.</div>
+          <div style={row}>Website development.</div>
+          <div style={{ ...row, color: "#5b3df5" }}>Lead generation. Outreach.</div>
         </div>
         <div style={{ ...row, fontSize: 27, color: "#565144" }}>
           Web development · Lead generation · Cold email · Social media

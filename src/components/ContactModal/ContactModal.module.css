@@ -342,11 +342,53 @@
 /* ---------- Responsive ---------- */
 
 @media (max-width: 480px) {
+  .overlay {
+    align-items: flex-end;
+    padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+  }
+
   .modal {
-    padding: 36px 24px 28px;
+    width: 100%;
+    max-width: none;
+    max-height: min(92dvh, 760px);
+    padding: 38px 18px calc(24px + env(safe-area-inset-bottom));
     border-radius: 22px;
   }
+
+  .stepHeading {
+    font-size: 22px;
+  }
+
+  .stepSubheading {
+    margin-bottom: 20px;
+  }
+
   .optionGrid {
     grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .optionButton {
+    min-height: 60px;
+    padding: 14px;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .field {
+    margin-bottom: 14px;
+  }
+
+  .stepActions {
+    position: sticky;
+    bottom: -1px;
+    padding-top: 10px;
+    background: #ffffff;
+  }
+
+  .primaryButton {
+    min-height: 46px;
+    padding-inline: 22px;
   }
 }
+

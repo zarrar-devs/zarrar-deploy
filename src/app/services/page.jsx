@@ -10,7 +10,6 @@ import {
   organizationSchema,
   websiteSchema,
   breadcrumbSchema,
-  faqSchema,
   graph,
   safeJsonLd,
   ORG_ID,
@@ -43,6 +42,16 @@ import {
    plain file with no "use client" directive, same convention as
    RealEstate.jsx/Founders.jsx pulling from realestate-data.js /
    founders-data.js.
+
+   BREADCRUMB: "Home / Services" must NOT be rendered here. It's
+   rendered inside Services.jsx, as the first thing inside
+   .services-page, so it shares that element's --bone background
+   and gutter with the nav right below it. Rendering it here too
+   (as a sibling above <Services/>) puts it outside .services-page
+   entirely — outside the element that sets `background: var(--bone)`
+   — so it paints on the page's plain white background instead and
+   shows up as a visible colour seam above the nav, AND (if both
+   copies exist at once) the breadcrumb renders twice on the page.
    ============================================================= */
 
 const archivo = Archivo({
@@ -58,26 +67,16 @@ const interTight = Inter_Tight({
   variable: "--font-inter-tight",
 });
 
-const TITLE =
-  "Website Development, Lead Generation & Social Media Services | Zarrar";
+/* Title <= 60 and description <= 160 characters, so Google shows them
+   whole instead of cutting them off with "…". */
+const TITLE = "Website, Lead Generation, Cold Email & Social | Zarrar";
 const DESCRIPTION =
-  "Custom website development, SEO optimization, social media management, and cold email lead generation that helps speakers, authors, coaches, consultants, and founders attract more clients.";
-const SOCIAL_TITLE = "Everything your brand needs to get found and get booked";
+  "Website development, lead generation, cold email outreach and social media management for speakers, authors, coaches, real estate agents and founders.";
+const SOCIAL_TITLE = "Website, lead generation and outreach services | Zarrar";
 
 export const metadata = {
   title: { absolute: TITLE },
   description: DESCRIPTION,
-  keywords: [
-    "website development",
-    "web design",
-    "portfolio website",
-    "seo services",
-    "lead generation services",
-    "cold email outreach agency",
-    "b2b lead generation",
-    "social media management services",
-    "digital marketing agency",
-  ],
   alternates: { canonical: ROUTES.services },
   robots: ROBOTS,
   openGraph: {
@@ -152,10 +151,10 @@ const jsonLd = graph([
   {
     "@type": "Service",
     "@id": `${url(ROUTES.services)}#service`,
-    name: "Website development, lead generation and social media management",
+    name: "Website development, lead generation, cold email outreach and social media management",
     description: DESCRIPTION,
     url: url(ROUTES.services),
-    serviceType: "Digital marketing and web development",
+    serviceType: ["Website development", "Lead generation", "Cold email outreach", "Social media management"],
     areaServed: "Worldwide",
     provider: { "@id": ORG_ID },
     hasOfferCatalog: {
@@ -176,10 +175,8 @@ const jsonLd = graph([
       "@type": "Offer",
       name: p.name,
       description: `${p.body} Includes: ${p.includes.join("; ")}.`,
-      availability: "https://schema.org/InStock",
     })),
   },
-  faqSchema(FAQS, ROUTES.services),
 ]);
 
 export default function ServicesPage() {

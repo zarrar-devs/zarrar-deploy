@@ -1,12 +1,13 @@
 "use client";
 
 import { Fragment, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { Bricolage_Grotesque, Plus_Jakarta_Sans } from "next/font/google";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./WhyChooseUs.module.css";
 import ContactModal from "../ContactModal/ContactModal";
-import { CONTACT_EMAIL as SITE_CONTACT_EMAIL } from "@/lib/site";
+import { CONTACT_EMAIL as SITE_CONTACT_EMAIL, ROUTES } from "@/lib/site";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -26,37 +27,48 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 const KICKER_TEXT =
-  "Every project starts with one question — how does this get you more customers?";
+  "Every project starts with one question — what needs to happen for the right person to become a customer?";
 
 const QUOTE_TEXT =
-  "A beautiful website that doesn't bring you customers is just an " +
-  "expensive brochure.";
+  "A good website makes the offer clear, earns trust and makes the next step obvious — enquire, book, call or buy.";
 
 const STATEMENT_TOKENS = [
   { text: "We" },
-  { text: "combine" },
-  { text: "premium" },
-  { text: "web development", chip: "web" },
-  { text: "with" },
-  { text: "lead generation", chip: "leads" },
-  { text: "systems," },
-  { text: "email marketing", chip: "email" },
-  { text: "that" },
-  { text: "nurtures" },
-  { text: "every" },
-  { text: "contact," },
-  { text: "and" },
-  { text: "graphic design", chip: "design" },
-  { text: "that" },
-  { text: "keeps" },
+  { text: "make" },
   { text: "your" },
-  { text: "brand" },
-  { text: "consistent" },
-  { text: "everywhere" },
-  { text: "it" },
-  { text: "shows" },
-  { text: "up." },
+  { text: "web development", chip: "web" },
+  { text: "clear," },
+  { text: "use" },
+  { text: "lead generation", chip: "leads" },
+  { text: "to" },
+  { text: "find" },
+  { text: "the" },
+  { text: "right" },
+  { text: "prospects," },
+  { text: "use" },
+  { text: "cold email outreach", chip: "outreach" },
+  { text: "to" },
+  { text: "start" },
+  { text: "conversations," },
+  { text: "and" },
+  { text: "use" },
+  { text: "social media management", chip: "social" },
+  { text: "to" },
+  { text: "keep" },
+  { text: "your" },
+  { text: "expertise" },
+  { text: "visible." },
 ];
+
+// Splits a chip's label into a breakable lead ("social media ") and the
+// trailing word ("management") that must stay permanently glued to its
+// icon — see .chipGroup / .chipGroupTail in the CSS module. Single-word
+// labels (none currently, but just in case) come back with an empty lead.
+function splitTrailingWord(text) {
+  const idx = text.lastIndexOf(" ");
+  if (idx === -1) return { lead: "", tail: text };
+  return { lead: text.slice(0, idx + 1), tail: text.slice(idx + 1) };
+}
 
 const CHIP_DEFS = {
   web: {
@@ -78,9 +90,9 @@ const CHIP_DEFS = {
       </svg>
     ),
   },
-  email: {
+  outreach: {
     bg: "#D6F3D0",
-    label: "Email marketing",
+    label: "Cold email outreach",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="5" width="18" height="14" rx="2" />
@@ -88,13 +100,15 @@ const CHIP_DEFS = {
       </svg>
     ),
   },
-  design: {
+  social: {
     bg: "#F5D3E6",
-    label: "Graphic design",
+    label: "Social media management",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M4 20l1-4L15 6l3 3L8 19l-4 1z" />
-        <path d="M13 8l3 3" />
+        <circle cx="6" cy="12" r="2.4" />
+        <circle cx="18" cy="6" r="2.4" />
+        <circle cx="18" cy="18" r="2.4" />
+        <path d="M8.2 10.8l7.6-3.6M8.2 13.2l7.6 3.6" />
       </svg>
     ),
   },
@@ -103,8 +117,8 @@ const CHIP_DEFS = {
 const CTA_SERVICES = [
   { id: "web", label: "Web development" },
   { id: "leads", label: "Lead generation" },
-  { id: "email", label: "Email marketing" },
-  { id: "design", label: "Graphic design" },
+  { id: "outreach", label: "Cold email outreach" },
+  { id: "social", label: "Social media management" },
 ];
 
 function Chip({ id }) {
@@ -117,31 +131,12 @@ function Chip({ id }) {
   );
 }
 
-const APPROACH_ITEMS = [
-  {
-    title: "Web development",
-    desc:
-      "Custom-built Next.js sites engineered for speed as much as looks.",
-  },
-  {
-    title: "Lead generation",
-    desc:
-      "Landing pages, forms, and calls-to-action designed to turn visits " +
-      "into qualified conversations.",
-  },
-  {
-    title: "Email marketing",
-    desc:
-      "Welcome sequences, nurture flows, and campaigns written to move " +
-      "someone toward a decision.",
-  },
-  {
-    title: "Graphic design",
-    desc:
-      "A visual identity that holds together across your site, ads, " +
-      "emails, and everywhere else your brand shows up.",
-  },
-];
+/* Structured data note: this component no longer ships its own JSON-LD.
+   The four services are described ONCE, in the Organization node of the
+   page-level @graph (src/app/page.jsx <- SERVICES in src/lib/site.js).
+   The old local Service block named the provider "ZARRAR" (all caps)
+   while the rest of the site says "Zarrar" — Google saw two slightly
+   different entities. If you edit a service, edit it in site.js. */
 
 // Replaces the old STORIES (testimonial) data. Nothing here is a claim
 // about a third party — it's how the studio itself works — so there is
@@ -154,40 +149,35 @@ const PROCESS_STEPS = [
   {
     title: "Discover",
     desc:
-      "We start with your customers, your offer, and what a new lead is " +
-      "actually worth to your business.",
+      "We start with your offer, your audience, your current pipeline and the action you want a new visitor or prospect to take.",
     outcome: "A clear goal",
     tint: "#CFE3FF",
   },
   {
     title: "Plan",
     desc:
-      "The site, the lead funnel, and the email flow are mapped together, " +
-      "so nothing gets built in isolation.",
+      "We map the website, prospecting, outreach and social content together so every channel points to the same offer.",
     outcome: "One shared roadmap",
     tint: "#FFDCA8",
   },
   {
     title: "Design",
     desc:
-      "Layouts and brand assets that look premium and point every " +
-      "visitor toward one clear next action.",
+      "We shape the message, layout and calls to action around what a real prospect needs to understand before they say yes.",
     outcome: "A consistent brand",
     tint: "#D6F3D0",
   },
   {
     title: "Build",
     desc:
-      "A custom Next.js site that loads fast on every device, with lead " +
-      "capture wired in from day one.",
+      "A custom website built for mobile, search and conversion, with forms and enquiry paths connected from the start.",
     outcome: "A fast, working site",
     tint: "#F5D3E6",
   },
   {
-    title: "Grow",
+    title: "Improve",
     desc:
-      "Email sequences and ongoing tuning so new contacts are nurtured " +
-      "and results keep improving.",
+      "Cold outreach and social content keep the business visible, while replies and engagement tell us what to improve next.",
     outcome: "Steady improvement",
     tint: "#E1D9FF",
   },
@@ -227,18 +217,12 @@ function ArrowIcon() {
   );
 }
 
-const MARQUEE_PHRASE = "Let's build your next website";
+const MARQUEE_PHRASE = "Let's build a website that supports your sales pipeline";
 const MARQUEE_REPEAT = 6;
 
-// Single source of truth for the secondary contact path — previously
-// the mailto: href (hello@zarrar.studio) and the visible link text
-// (isabella.web.devs@gmail.com) were two different addresses — this
-// this one constant and both stay in sync.
+// Single source of truth for the secondary contact path.
 // Comes from src/lib/site.js so the homepage shows the same address
-// as every other page. It was a personal Gmail while the rest of the
-// site advertised hello@zarrar.com — inconsistent contact details
-// across a site read as untrustworthy and weaken the business
-// entity Google builds from your pages.
+// as every other page.
 const CONTACT_EMAIL = SITE_CONTACT_EMAIL;
 
 const SNAP_DURATION = 0.5;
@@ -300,6 +284,8 @@ export default function WhyChooseUs() {
 
     if (prefersReducedMotion) return;
 
+    let marqueeIdleTimeout = null;
+
     const ctx = gsap.context(() => {
       gsap.set(stage1Ref.current, STAGE1_LIGHT_VARS);
 
@@ -311,12 +297,16 @@ export default function WhyChooseUs() {
         });
       };
 
-      const isMobile = window.matchMedia("(max-width: 640px)").matches;
-
+      // A function (not a one-time boolean) so ScrollTrigger re-evaluates
+      // it on every refresh — including the debounced resize/orientation
+      // handler below. A boolean captured once at mount used to leave the
+      // trigger point stuck on whatever breakpoint the page happened to
+      // load at (e.g. rotating a phone, or resizing a desktop window).
+      const getIsMobile = () => window.matchMedia("(max-width: 640px)").matches;
 
       ScrollTrigger.create({
         trigger: heroRef.current,
-        start: isMobile ? "center 38%" : "center center",
+        start: () => (getIsMobile() ? "center 38%" : "center center"),
         onEnter: () => snapStage1(true),
         onEnterBack: () => snapStage1(true),
         onLeaveBack: () => snapStage1(false),
@@ -379,29 +369,53 @@ export default function WhyChooseUs() {
         }
       );
 
-      gsap.set([quoteRef.current, marqueeSectionRef.current], {
-        backgroundColor: "#0a0a0a",
-        color: "#ffffff",
-      });
+      // Only the philosophy panel (quoteStage) snaps color on scroll — it
+      // starts black, then snaps to the light --color-accent once it's in
+      // view (see .quoteStage's CSS comment for its settled state).
+      //
+      // BUG FIX: this used to run the exact same tween on
+      // marqueeSectionRef.current as well, which meant the closing CTA
+      // panel (Stage 3) — meant to stay solid black per its own CSS —
+      // was being force-switched to the bright accent color the instant
+      // the philosophy panel scrolled into view, and it never switched
+      // back. That's the "green then black" flash reported on the live
+      // page. Stage 3 now keeps the color its own stylesheet already
+      // gives it and is never touched here.
+      //
+      // MOBILE FIX: on phones the browser's address bar hides/shows while
+      // scrolling, which shrinks/grows the viewport height mid-scroll.
+      // That fires the debounced resize handler below -> ScrollTrigger.
+      // refresh(), which re-measures this trigger's "top ±10%" start point
+      // against the new height and can re-fire onEnter/onLeaveBack while
+      // the user is still mid-scroll — that's the black/white flash on
+      // phones. So on phones we skip this whole animation and just leave
+      // the panel at its static CSS resting color (see .quoteStage);
+      // desktop keeps the snap exactly as before.
+      if (!getIsMobile()) {
+        gsap.set(quoteRef.current, {
+          backgroundColor: "#0a0a0a",
+          color: "#ffffff",
+        });
 
-      ScrollTrigger.create({
-        trigger: quoteRef.current,
-        start: isMobile ? "top -10%" : "top 10%",
-        onEnter: () =>
-          gsap.to([quoteRef.current, marqueeSectionRef.current], {
-            backgroundColor: "var(--color-accent)",
-            color: "var(--color-ink)",
-            duration: SNAP_DURATION,
-            ease: SNAP_EASE,
-          }),
-        onLeaveBack: () =>
-          gsap.to([quoteRef.current, marqueeSectionRef.current], {
-            backgroundColor: "#0a0a0a",
-            color: "#ffffff",
-            duration: SNAP_DURATION,
-            ease: SNAP_EASE,
-          }),
-      });
+        ScrollTrigger.create({
+          trigger: quoteRef.current,
+          start: "top 10%",
+          onEnter: () =>
+            gsap.to(quoteRef.current, {
+              backgroundColor: "var(--color-accent)",
+              color: "var(--color-ink)",
+              duration: SNAP_DURATION,
+              ease: SNAP_EASE,
+            }),
+          onLeaveBack: () =>
+            gsap.to(quoteRef.current, {
+              backgroundColor: "#0a0a0a",
+              color: "#ffffff",
+              duration: SNAP_DURATION,
+              ease: SNAP_EASE,
+            }),
+        });
+      }
 
       const quoteWords = quoteTextRef.current.querySelectorAll(
         `.${styles.word}`
@@ -449,15 +463,21 @@ export default function WhyChooseUs() {
         }
       );
 
-      const marqueeTween = gsap.to(marqueeTrackRef.current, {
+      const useAnimatedMarquee = window.matchMedia(
+      "(min-width: 768px) and (hover: hover) and (pointer: fine)"
+    ).matches;
+
+    let marqueeTween = null;
+    let lastBoost = 1;
+
+    if (useAnimatedMarquee) {
+      marqueeTween = gsap.to(marqueeTrackRef.current, {
         xPercent: -50,
         ease: "none",
         duration: 22,
         repeat: -1,
       });
 
-      let lastBoost = 1;
-      let idleTimeout;
       ScrollTrigger.create({
         trigger: marqueeSectionRef.current,
         start: "top bottom",
@@ -469,10 +489,7 @@ export default function WhyChooseUs() {
             3.2,
             1 + Math.abs(velocity) / 2000
           );
-          // Only spin up a new tween when the boost actually moved —
-          // onUpdate can fire many times per scroll tick, and without
-          // this guard every tick was creating a fresh gsap.to() call.
-          if (Math.abs(boost - lastBoost) > 0.03) {
+          if (Math.abs(boost - lastBoost) > 0.03 && marqueeTween) {
             lastBoost = boost;
             gsap.to(marqueeTween, {
               timeScale: boost,
@@ -480,19 +497,26 @@ export default function WhyChooseUs() {
               overwrite: true,
             });
           }
-          // getVelocity() reports 0 almost immediately after scrolling
-          // stops, but that 0 only reaches here on the NEXT scroll
-          // event — so without this timeout, the marquee stayed sped up
-          // (or slowed down) indefinitely once someone stopped
-          // scrolling mid-tick, instead of settling back to its normal
-          // pace.
-          clearTimeout(idleTimeout);
-          idleTimeout = setTimeout(() => {
+          clearTimeout(marqueeIdleTimeout);
+          marqueeIdleTimeout = setTimeout(() => {
             lastBoost = 1;
-            gsap.to(marqueeTween, { timeScale: 1, duration: 0.6, overwrite: true });
+            if (marqueeTween) {
+              gsap.to(marqueeTween, {
+                timeScale: 1,
+                duration: 0.6,
+                overwrite: true,
+              });
+            }
           }, 120);
         },
       });
+    }
+
+    // Mobile/touch: no continuous horizontal motion. The banner becomes a
+    // static, readable service section and the CTA below remains the focus.
+    if (!useAnimatedMarquee) {
+      gsap.set(marqueeTrackRef.current, { xPercent: 0 });
+    }
     }, sectionRef);
 
     const handleLoad = () => ScrollTrigger.refresh();
@@ -514,6 +538,7 @@ export default function WhyChooseUs() {
       window.removeEventListener("load", handleLoad);
       window.removeEventListener("resize", handleResize);
       clearTimeout(resizeTimeout);
+      if (marqueeIdleTimeout) clearTimeout(marqueeIdleTimeout);
       ctx.revert();
     };
   }, []);
@@ -526,7 +551,10 @@ export default function WhyChooseUs() {
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
-    if (prefersReducedMotion) return;
+    const useTouchLayout = !window.matchMedia(
+      "(min-width: 768px) and (hover: hover) and (pointer: fine)"
+    ).matches;
+    if (prefersReducedMotion || useTouchLayout) return;
 
     const tween = gsap.to(track, {
       xPercent: -50,
@@ -667,44 +695,31 @@ export default function WhyChooseUs() {
     setIsPaused(nextPaused);
   };
 
-  // Service structured data only. The old Organization schema with
-  // aggregateRating + Review[] was generated from the placeholder
-  // testimonials, i.e. fabricated reviews — that's against Google's
-  // review-snippet guidelines and can trigger a manual action. It has
-  // been removed on purpose. Only add Review / AggregateRating markup
-  // back once it's built from REAL, verifiable reviews (and note Google
-  // ignores self-served reviews for an organization's own site anyway).
-  const serviceSchema = {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    serviceType: "Web development and digital marketing",
-    provider: { "@type": "Organization", name: "ZARRAR" },
-    hasOfferCatalog: {
-      "@type": "OfferCatalog",
-      name: "Our approach",
-      itemListElement: APPROACH_ITEMS.map((item) => ({
-        "@type": "Offer",
-        itemOffered: {
-          "@type": "Service",
-          name: item.title,
-          description: item.desc,
-        },
-      })),
-    },
-  };
+  /* Never add Review / AggregateRating markup here until it is built
+     from REAL, verifiable reviews — the old version generated it from
+     placeholder testimonials, which is against Google's review-snippet
+     guidelines and can trigger a manual action. */
 
-  const renderStepGroup = (duplicate) => (
-    <div
-      className={styles.stepsTrackGroup}
-      aria-hidden={duplicate ? "true" : undefined}
-      data-nosnippet={duplicate ? "" : undefined}
-    >
-      {PROCESS_STEPS.map((step, i) => {
-        // The duplicated group exists only for the seamless loop, so it
-        // must not add a second set of headings to the page outline.
-        const Title = duplicate ? "p" : "h3";
-        return (
-          <article
+  const renderStepGroup = (duplicate) => {
+    // Real group renders as an ordered list (these five steps genuinely
+    // are a sequence) so assistive tech announces "item 1 of 5" etc.
+    // The duplicate exists only to make the marquee loop seamless, so it
+    // stays a plain aria-hidden div — it must not add a second list (or
+    // a second set of headings) to the page outline.
+    const GroupTag = duplicate ? "div" : "ol";
+    const ItemTag = duplicate ? "div" : "li";
+    // Nested one level under the "How we work" h3 above, not a sibling
+    // h3 — each step is a subsection of that heading, not of the page.
+    const Title = duplicate ? "p" : "h4";
+
+    return (
+      <GroupTag
+        className={styles.stepsTrackGroup}
+        aria-hidden={duplicate ? "true" : undefined}
+        data-nosnippet={duplicate ? "" : undefined}
+      >
+        {PROCESS_STEPS.map((step, i) => (
+          <ItemTag
             key={step.title}
             ref={duplicate ? undefined : (el) => (stepItemRefs.current[i] = el)}
             className={styles.stepCard}
@@ -725,11 +740,11 @@ export default function WhyChooseUs() {
               <span className={styles.stepOutcomeLabel}>You get</span>
               <span className={styles.stepOutcomeValue}>{step.outcome}</span>
             </div>
-          </article>
-        );
-      })}
-    </div>
-  );
+          </ItemTag>
+        ))}
+      </GroupTag>
+    );
+  };
 
   return (
     <section
@@ -738,12 +753,6 @@ export default function WhyChooseUs() {
       className={`${styles.section} ${bricolageGrotesque.variable} ${plusJakartaSans.variable}`}
       aria-labelledby="why-choose-us-heading"
     >
-      {/* eslint-disable-next-line react/no-danger */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
-      />
-
       <div ref={stage1Ref} className={styles.stage1}>
         <div className={styles.stage1Content}>
           <div ref={heroRef} className={styles.hero}>
@@ -756,30 +765,44 @@ export default function WhyChooseUs() {
               ref={statementRef}
               className={styles.statement}
             >
-              {STATEMENT_TOKENS.map((tok, i) => (
-                <span key={i}>
-                  <span className={styles.wordMask}>
-                    <span className={styles.word}>
-                      {tok.chip ? (
-                        <span className={styles.chipGroup}>
-                          {tok.text}
-                          <Chip id={tok.chip} />
-                        </span>
-                      ) : (
-                        tok.text
-                      )}
+              {STATEMENT_TOKENS.map((tok, i) => {
+                let chipContent = tok.text;
+
+                if (tok.chip) {
+                  // Only the trailing word stays permanently glued to the
+                  // icon (via .chipGroupTail, always nowrap) — the rest of
+                  // a multi-word label (e.g. "social media ") is free to
+                  // wrap normally on narrow screens. See the CSS module
+                  // for why the icon can otherwise end up orphaned alone
+                  // on its own line.
+                  const { lead, tail } = splitTrailingWord(tok.text);
+                  chipContent = (
+                    <span className={styles.chipGroup}>
+                      {lead}
+                      <span className={styles.chipGroupTail}>
+                        {tail}
+                        <Chip id={tok.chip} />
+                      </span>
                     </span>
-                  </span>{" "}
-                </span>
-              ))}
+                  );
+                }
+
+                return (
+                  <span key={i}>
+                    <span className={styles.wordMask}>
+                      <span className={styles.word}>{chipContent}</span>
+                    </span>{" "}
+                  </span>
+                );
+              })}
             </h2>
           </div>
 
           <div className={styles.stepsSection}>
             <div className={styles.stepsHeader}>
-              <span ref={stepsLabelRef} className={styles.stepsLabel}>
+              <h3 ref={stepsLabelRef} className={styles.stepsLabel}>
                 How we work
-              </span>
+              </h3>
 
               <div className={styles.stepsControls}>
                 <button
@@ -836,7 +859,7 @@ export default function WhyChooseUs() {
 
       <div ref={quoteRef} className={styles.quoteStage}>
         <div className={styles.quoteInner}>
-          <span className={styles.quoteLabel}>Our philosophy</span>
+          <h3 className={styles.quoteLabel}>Our philosophy</h3>
 
           <p ref={quoteTextRef} className={styles.quoteText}>
             {/* The {" "} matters: without a real space between the
@@ -851,7 +874,7 @@ export default function WhyChooseUs() {
             ))}
           </p>
 
-          <div ref={ctaRef}>
+          <div ref={ctaRef} className={styles.quoteCtaRow}>
             <button
               type="button"
               className={styles.processButton}
@@ -867,6 +890,9 @@ export default function WhyChooseUs() {
               </span>
               Let&rsquo;s Talk
             </button>
+            <Link href={ROUTES.services} className={styles.quoteServiceLink}>
+              Explore services
+            </Link>
           </div>
         </div>
       </div>
@@ -896,11 +922,10 @@ export default function WhyChooseUs() {
           <div className={styles.marqueeCtaGlow} aria-hidden="true" />
 
           <h3 className={styles.marqueeHeading}>
-            Got an idea? Let&rsquo;s build the system behind it.
+            Need a clearer online presence and a better way to reach prospects?
           </h3>
           <p className={styles.marqueeSub}>
-            Website, funnel, email, and brand — designed and built
-            together, not as four separate vendors.
+            We connect web development, lead generation, cold email outreach and social media management so the channels support each other.
           </p>
 
           <ul className={styles.marqueeServices}>
@@ -918,7 +943,14 @@ export default function WhyChooseUs() {
             ))}
           </ul>
 
-          <div className={styles.marqueeCtaActions}>
+          <nav className={styles.marqueeCtaLinks} aria-label="Explore Zarrar services">
+            <Link href={ROUTES.webDevelopment}>Web development</Link>
+            <Link href={ROUTES.leadGeneration}>Lead generation</Link>
+            <Link href={ROUTES.coldEmail}>Cold email outreach</Link>
+            <Link href={ROUTES.socialMedia}>Social media management</Link>
+          </nav>
+
+          <div style={{marginTop: '20px'}} className={styles.marqueeCtaActions}>
             <button
               type="button"
               className={styles.ctaButton}

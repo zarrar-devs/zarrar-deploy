@@ -55,11 +55,13 @@ function IconMail(props) {
   );
 }
 
-function IconPen(props) {
+function IconShare(props) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...props}>
-      <path d="M4 20l1-4L15 6l3 3L8 19l-4 1z" />
-      <path d="M13 8l3 3" />
+      <circle cx="6" cy="12" r="2.4" />
+      <circle cx="18" cy="6" r="2.4" />
+      <circle cx="18" cy="18" r="2.4" />
+      <path d="M8.2 10.8l7.6-3.6M8.2 13.2l7.6 3.6" />
     </svg>
   );
 }
@@ -99,8 +101,8 @@ const ROLE_OPTIONS = [
 
 // Step 2 — "what they need help with".
 const NEED_OPTIONS = [
-  { id: "email-marketing", label: "Email Marketing", icon: IconMail },
-  { id: "graphic-design", label: "Graphic Design", icon: IconPen },
+  { id: "lead-gen-outreach", label: "Lead Generation & Outreach", icon: IconMail },
+  { id: "social-media", label: "Social Media Management", icon: IconShare },
   { id: "web-development", label: "Website Development", icon: IconCode },
   { id: "other", label: "Other", icon: IconSparkle },
 ];
@@ -137,6 +139,10 @@ export default function ContactModal({ isOpen, onClose, plan = null }) {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
   const nameInputRef = useRef(null);
+  const closeButtonRef = useRef(null);
+  const modalRef = useRef(null);
+  const previousFocusRef = useRef(null);
+  const onCloseRef = useRef(onClose);
 
   // Reset the whole flow a moment after closing, so reopening it later
   // always starts fresh instead of resuming a half-filled form. The
@@ -155,6 +161,10 @@ export default function ContactModal({ isOpen, onClose, plan = null }) {
     return () => clearTimeout(timeout);
   }, [isOpen]);
 
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
+
   // Lock page scroll behind the modal while it's open.
   useEffect(() => {
     if (!isOpen) return;
@@ -165,15 +175,55 @@ export default function ContactModal({ isOpen, onClose, plan = null }) {
     };
   }, [isOpen]);
 
-  // Close on Escape.
+  // Dialog focus management: remember the opener, focus the close button,
+  // trap Tab inside the dialog, and return focus when the dialog closes.
   useEffect(() => {
     if (!isOpen) return;
+
+    previousFocusRef.current = document.activeElement;
+    const rafId = window.requestAnimationFrame(() => closeButtonRef.current?.focus());
+
     const handleKey = (e) => {
-      if (e.key === "Escape") onClose?.();
+      if (e.key === "Escape") {
+        onCloseRef.current?.();
+        return;
+      }
+
+      if (e.key !== "Tab" || !modalRef.current) return;
+
+      const focusable = Array.from(
+        modalRef.current.querySelectorAll(
+          'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+      ).filter((el) => el.getClientRects().length > 0);
+
+      if (!focusable.length) {
+        e.preventDefault();
+        return;
+      }
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
+
     window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, [isOpen, onClose]);
+    return () => {
+      window.cancelAnimationFrame(rafId);
+      window.removeEventListener("keydown", handleKey);
+      const previous = previousFocusRef.current;
+      if (previous && typeof previous.focus === "function") {
+        window.requestAnimationFrame(() => previous.focus());
+      }
+    };
+  }, [isOpen]);
 
   // Autofocus the first field once the details step mounts.
   useEffect(() => {
@@ -247,6 +297,7 @@ export default function ContactModal({ isOpen, onClose, plan = null }) {
     <div className={styles.overlay} onClick={onClose}>
       <div
         className={styles.modal}
+        ref={modalRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="contact-modal-heading"
@@ -254,6 +305,7 @@ export default function ContactModal({ isOpen, onClose, plan = null }) {
       >
         <button
           type="button"
+          ref={closeButtonRef}
           className={styles.closeButton}
           onClick={onClose}
           aria-label="Close contact form"
@@ -305,7 +357,7 @@ export default function ContactModal({ isOpen, onClose, plan = null }) {
         )}
 
         {submitted ? (
-          <div className={styles.successState}>
+          <div className={styles.successState} role="status" aria-live="polite">
             <div className={styles.successIcon} aria-hidden="true">
               <svg
                 className={styles.successIconSvg}
@@ -440,7 +492,7 @@ export default function ContactModal({ isOpen, onClose, plan = null }) {
                 </label>
 
                 {error && (
-                  <p className={styles.errorBox}>
+                  <p className={styles.errorBox} role="alert">
                     <IconAlert className={styles.errorIcon} />
                     {error}
                   </p>

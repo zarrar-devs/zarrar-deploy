@@ -90,7 +90,7 @@ const bodyFont = Space_Grotesk({
 // the old copy said "email campaigns" and "branding", neither of
 // which is a service this agency sells.
 const SUB_COPY =
-  "Zarrar builds custom websites and portfolios, then runs the lead generation, cold email outreach and social media that fill them.";
+  "Zarrar builds custom websites that explain your offer, then connects them to lead generation, cold email outreach and social media management so the right people can find you, understand you and take the next step.";
 
 // Stable reference on purpose — see ScrambleHeadline's setup effect for
 // why. Never inline this array literal directly into <ScrambleHeadline lines={...}/>.
@@ -101,7 +101,7 @@ const SUB_COPY =
 // "Emails that bring them back" named a service (email campaigns)
 // this agency doesn't sell. Same two-line shape, same boxed-first-
 // word treatment ("Websites" / "Outreach").
-const HEADLINE_LINES = ["Websites worth staying on.", "Outreach worth replying to."];
+const HEADLINE_LINES = ["Websites that explain your offer.", "Outreach that reaches the right people."];
 
 // Stable reference for the same reason as HEADLINE_LINES above — this
 // feeds the dropdown's GSAP stagger via dropdownItemsRef, and a fresh
@@ -111,11 +111,11 @@ const HEADLINE_LINES = ["Websites worth staying on.", "Outreach worth replying t
 // Labels are descriptive on purpose (anchor text is an SEO signal, and
 // "For Speakers" alone doesn't say what you build). hrefs unchanged.
 const BUILD_FOR_OPTIONS = [
-  { label: "For Speakers", href: "/speakers" },
-  { label: "For Real Estate", href: "/real-estate" },
-  { label: "For Authors", href: "/authors" },
-  { label: "For Coaches", href: "/coaches" },
-  { label: "For Entrepreneurs", href: "/entrepreneurs" },
+  { label: "Websites & outreach for speakers", href: "/speakers" },
+  { label: "Websites, local SEO & leads for real estate agents", href: "/real-estate" },
+  { label: "Websites, outreach & social media for authors", href: "/authors" },
+  { label: "Websites, lead generation & social media for coaches", href: "/coaches" },
+  { label: "Websites, lead generation & outreach for founders", href: "/entrepreneurs" },
 ];
 
 const DROPDOWN_ID = "who-we-serve-menu";
@@ -969,11 +969,78 @@ const Hero = forwardRef(function Hero({ revealed = true }, ref) {
         @media (max-width: 640px) {
           .hero {
             min-height: auto;
-            padding-top: 28px;
-            padding-bottom: 24px;
+            padding-top: 18px;
+            padding-bottom: 22px;
           }
+
+          .hero__nav {
+            padding-inline: 14px;
+            gap: 10px;
+          }
+
+          .hero__mark {
+            font-size: 0.86rem;
+          }
+
+          .hero__links {
+            gap: 6px;
+          }
+
+          .hero__link {
+            min-height: 40px;
+            padding: 0 10px;
+            font-size: 0.72rem;
+          }
+
+          .hero__dropdown-panel {
+            right: 0;
+            width: min(300px, calc(100vw - 28px));
+          }
+
           .hero__stage {
-            padding-bottom: 0;
+            padding: 26px 10px 0;
+          }
+
+          .hero__content {
+            width: 100%;
+            max-width: 680px;
+          }
+
+          .hero__headline {
+            max-width: 11ch;
+            font-size: clamp(2.45rem, 11.5vw, 4.4rem);
+            line-height: 1.02;
+          }
+
+          .hero__sub {
+            max-width: 32ch;
+            margin-top: 18px;
+            font-size: 0.98rem;
+            line-height: 1.58;
+          }
+        }
+
+        @media (max-width: 380px) {
+          .hero__nav {
+            align-items: flex-start;
+          }
+
+          .hero__links {
+            max-width: 66%;
+          }
+
+          .hero__link {
+            min-height: 38px;
+            padding-inline: 8px;
+            font-size: 0.68rem;
+          }
+
+          .hero__headline {
+            font-size: 2.3rem;
+          }
+
+          .hero__sub {
+            font-size: 0.94rem;
           }
         }
 
@@ -1052,7 +1119,7 @@ const Hero = forwardRef(function Hero({ revealed = true }, ref) {
         </nav>
       </header>
 
-      <div className="hero__edge-tag" ref={edgeTagRef}>
+      <div className="hero__edge-tag" ref={edgeTagRef} data-nosnippet="">
         <span>SCROLL TO EXPLORE</span>
         <span className="hero__edge-dot" aria-hidden="true" />
       </div>

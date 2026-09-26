@@ -56,6 +56,21 @@ import "./Preloader.css";
  *  - children: your real page (e.g. <Hero/>) — a single element that
  *    accepts a ref and, ideally, a `revealed` boolean prop
  */
+/* SEO / Core Web Vitals knobs ------------------------------------------
+   The intro used to lock scrolling for several seconds on EVERY
+   visit. Two changes, both easy to undo:
+   - COUNT_SECONDS: the "0% -> 100%" count is now under a second, and the
+     intro exits quickly enough that it does not dominate first paint/LCP.
+   - SKIP_INTRO_ON_REPEAT: after the intro has played once in a browser
+     session, later visits/refreshes hand over instantly.
+   - Mobile/touch and Save-Data skip the blocking intro entirely; the main
+     content remains fully rendered and interactive. */
+const COUNT_SECONDS = 0.72;
+const SKIP_INTRO_ON_REPEAT = true;
+const SKIP_INTRO_ON_SMALL_SCREENS = true;
+const SKIP_INTRO_ON_SAVE_DATA = true;
+const INTRO_SEEN_KEY = "zarrar:intro-seen";
+
 export default function Preloader({ heroRef: externalHeroRef, onDone, children }) {
   const heroElRef = useRef(null);
   const bgRef = useRef(null);
@@ -155,6 +170,14 @@ export default function Preloader({ heroRef: externalHeroRef, onDone, children }
     }
 
     const finish = () => {
+      /* Flag is written only once the intro has actually finished, so
+         React StrictMode's dev double-mount (which cancels the first
+         run) can't mark it "seen" before anyone watched it. */
+      try {
+        window.sessionStorage.setItem(INTRO_SEEN_KEY, "1");
+      } catch (e) {
+        /* ignore */
+      }
       document.body.style.overflow = "auto";
       if (heroEl) {
         heroEl.style.position = "";
@@ -168,7 +191,23 @@ export default function Preloader({ heroRef: externalHeroRef, onDone, children }
       onDone?.();
     };
 
-    if (reduceMotion) {
+    let introSeen = false;
+    try {
+      introSeen =
+        SKIP_INTRO_ON_REPEAT &&
+        window.sessionStorage.getItem(INTRO_SEEN_KEY) === "1";
+    } catch (e) {
+      /* storage blocked (private mode etc.) — just play the intro */
+    }
+
+    const smallScreen =
+      SKIP_INTRO_ON_SMALL_SCREENS &&
+      window.matchMedia("(max-width: 800px), (hover: none), (pointer: coarse)").matches;
+    const saveData =
+      SKIP_INTRO_ON_SAVE_DATA &&
+      Boolean(navigator.connection?.saveData || /(^|-)slow-2g|2g/.test(navigator.connection?.effectiveType || ""));
+
+    if (reduceMotion || introSeen || smallScreen || saveData) {
       setRevealed(true);
       finish();
       return;
@@ -233,7 +272,7 @@ export default function Preloader({ heroRef: externalHeroRef, onDone, children }
         counter,
         {
           value: 100,
-          duration: 2.2,
+          duration: COUNT_SECONDS,
           ease: "power2.inOut",
           onUpdate: () => paintCounter(counter.value),
         },
@@ -314,7 +353,7 @@ export default function Preloader({ heroRef: externalHeroRef, onDone, children }
         document.fonts.load(`400 1em ${family}`, "Loading"),
       ]);
     })().catch(() => {});
-    const timeout = new Promise((resolve) => setTimeout(resolve, 800));
+    const timeout = new Promise((resolve) => setTimeout(resolve, 350));
     Promise.race([fontsReady, timeout]).then(start);
 
     return () => {
@@ -342,7 +381,7 @@ export default function Preloader({ heroRef: externalHeroRef, onDone, children }
           <Preloader/>, so it shares this stacking context */}
       {child}
 
-      <div className="preloader__panel" ref={panelRef}>
+      <div className="preloader__panel" ref={panelRef} data-nosnippet="">
         <div className="preloader__mask" ref={maskRef}>
           <div className="stage" aria-hidden="true">
             {/* mirrors Hero's real structure 1:1 */}

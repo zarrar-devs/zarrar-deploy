@@ -28,21 +28,13 @@ const interTight = Inter_Tight({
   variable: "--font-inter-tight",
 });
 
-const SOCIAL_TITLE = "Book more stages. Chase fewer emails. | Zarrar for Speakers";
+const SOCIAL_TITLE = "Speaker websites, lead generation and outreach | Zarrar";
 
 export const metadata = {
   metadataBase: new URL(SITE),
   /* absolute: stops a root-layout title template from doubling "| Zarrar" */
   title: { absolute: PAGE_TITLE },
   description: PAGE_DESCRIPTION,
-  keywords: [
-    "speaker website",
-    "keynote speaker website",
-    "speaker lead generation",
-    "get booked as a keynote speaker",
-    "event organiser outreach",
-    "social media management for speakers",
-  ],
   alternates: { canonical: PAGE_PATH },
   openGraph: {
     title: SOCIAL_TITLE,

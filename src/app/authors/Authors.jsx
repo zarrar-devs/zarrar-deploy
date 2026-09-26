@@ -23,8 +23,7 @@
    under Google's spam policies and undermine the credibility this
    page exists to build.
 
-   GENRES is still example content — trim to the real body of work
-   before launch.
+   GENRES should reflect the author categories you actually serve.
 
    Contact CTAs (nav, chapter buttons, edition/plan buttons, and
    the closing "Say hello" button) all open the shared ContactModal
@@ -58,8 +57,8 @@ const useIsoLayoutEffect =
 /* ---------------- Site constants ---------------- */
 
 /* Real domain, route and email now come from src/lib/site.js via the
-   server page.jsx. This used to hardcode "https://zarrar.com" (wrong
-   TLD) and "/for-authors" (a route that doesn't exist — the folder is
+   server page.jsx. This used to hardcode an old domain (wrong
+   TLD) and "/authors" (a route that doesn't exist — the folder is
    /authors). */
 import { SITE_URL, ROUTES, CONTACT_EMAIL, url as siteUrl } from "@/lib/site";
 const PAGE_URL = siteUrl(ROUTES.authors);
@@ -473,7 +472,7 @@ function Authors() {
           <a href="#faq">FAQ</a>
         </nav>
         <div className="nav-right">
-          <a className="nav-cta magnetic" onClick={openContact()}>
+          <a className="nav-cta magnetic" href="/contact" onClick={openContact()}>
             Contact
           </a>
           <button
@@ -497,14 +496,11 @@ function Authors() {
         <section className="hero" id="top">
           <div className="hero-copy">
             <h1 className="hero-heading">
-              <span className="hero-l1">You wrote the book.</span>{" "}
-              <span className="hero-l2">We build its audience.</span>
+              <span className="hero-l1">Give your book a home</span>{" "}
+              <span className="hero-l2">that keeps working after launch.</span>
             </h1>
             <p className="hero-sub">
-              A premium author website that sells the book on sight, lead
-              generation and outreach that put you in front of agents, press
-              and podcasts, and social media management that keeps readers
-              coming back for the next one.
+              We build your author website, research relevant contacts for lead generation, run targeted cold email outreach where appropriate, and manage the social media that keeps your books, writing and professional profile visible between releases.
             </p>
             <div className="hero-actions">
               <a className="btn btn-solid magnetic" href="#editions">See the editions</a>
@@ -563,8 +559,8 @@ function Authors() {
 
         <section className="genres" id="genres" aria-labelledby="genres-title">
           <div className="section-head">
-            <h2 id="genres-title">Built for every kind of author</h2>
-            <p>Whatever you write, the site and outreach are built around it.</p>
+            <h2 id="genres-title">For authors who want more than an Amazon page</h2>
+            <p>Your website, outreach and social presence should reflect the book, the audience and the opportunities you want next.</p>
           </div>
 
           <ul className="genres-grid">
@@ -579,8 +575,8 @@ function Authors() {
 
         <section className="chapters" id="chapters" aria-labelledby="chapters-title">
           <div className="section-head">
-            <h2 id="chapters-title">Three ways we get you read</h2>
-            <p>Pick one chapter, or run the whole book.</p>
+            <h2 id="chapters-title">Author website development, lead generation, cold email outreach and social media</h2>
+            <p>Start with the service you need most, or connect the website, prospecting and social content around your books, audience and next opportunity.</p>
           </div>
 
           <div className="chapters-list">
@@ -592,7 +588,7 @@ function Authors() {
                   <h3 className="chapter-title">{c.title}</h3>
                 </div>
                 <p>{c.body}</p>
-                <a className="btn btn-outline" onClick={openContact()}>
+                <a className="btn btn-outline" href="/contact" onClick={openContact()}>
                   {c.cta}
                 </a>
               </article>
@@ -602,8 +598,8 @@ function Authors() {
 
         <section className="timeline" id="how" aria-labelledby="timeline-title">
           <div className="section-head">
-            <h2 id="timeline-title">What the first 90 days look like</h2>
-            <p>The rough order the pieces come online. Exact pace depends on your genre and release calendar.</p>
+            <h2 id="timeline-title">How we build your author platform</h2>
+            <p>We build the website first, then connect outreach and social content so every channel supports the same audience and publishing goals.</p>
           </div>
 
           <ol className="timeline-list">
@@ -619,8 +615,8 @@ function Authors() {
 
         <section className="editions" id="editions" aria-labelledby="editions-title">
           <div className="section-head">
-            <h2 id="editions-title">Pick an edition</h2>
-            <p>Each one builds on the last. Move up whenever you&apos;re ready.</p>
+            <h2 id="editions-title">Choose the author marketing support you need</h2>
+            <p>Start with the author website, add social media management, or connect the platform to lead generation and cold email outreach.</p>
           </div>
 
           <div className="editions-grid">
@@ -634,11 +630,12 @@ function Authors() {
                   {ed.includes.map((item) => <li key={item}>{item}</li>)}
                 </ul>
                 {/* This is the actual "which plan did they pick" click —
-                    ed.name ("Paperback" / "Hardcover" / "Reborn") is
+                    ed.name ("Paperback" / "Hardcover" / "Growth") is
                     passed straight into openContact so it rides along
                     with the ContactModal submission. */}
                 <a
                   className={`btn ${ed.featured ? "btn-invert" : "btn-outline"}`}
+                  href="/contact"
                   onClick={openContact(ed.name)}
                 >
                   Start with {ed.name}
@@ -692,7 +689,7 @@ function Authors() {
         </section>
 
         <section className="closing" id="contact" aria-labelledby="contact-title">
-          <h2 id="contact-title">Ready to sell more books?</h2>
+          <h2 id="contact-title">Ready for an author website and marketing system built around your next book?</h2>
           <a
             className="btn btn-solid btn-lg magnetic"
             href={`mailto:${CONTACT_EMAIL}`}

@@ -25,9 +25,34 @@
      pull from realestate-data.js/founders-data.js. Icons are
      stored there as a string key and mapped to the real icon
      component below, in ICONS.
+
+   Breadcrumb
+   - "Home / Services" renders here, as the first thing inside
+     .services-page, so it shares --bone/--ink and the nav's own
+     left gutter. page.jsx must NOT render its own copy of this —
+     it only renders <Services/> — otherwise the breadcrumb either
+     shows up twice, or (if only page.jsx renders it) paints on the
+     page's plain white background instead of --bone, producing a
+     visible colour seam above the nav.
+
+   Service cards
+   - The card footer used to be two stacked pill buttons of equal
+     visual weight ("Learn about X" + the card's own CTA), which
+     read as cluttered. Redesigned into one clear hierarchy: a
+     solid dark CTA button (the actual conversion action) next to
+     a plain "Learn more →" text link (the lower-commitment,
+     read-more action) — same two destinations as before, just no
+     longer competing for attention. Added a numbered index
+     (01/02/03…) and an icon "badge" at the top of each card. Card
+     DOM still has exactly 4 direct children (top row / heading /
+     body / actions), which is what Services.css's subgrid rule
+     relies on to line up every card's heading/body/actions at the
+     same height regardless of how many lines its own title wraps
+     to.
    ============================================================= */
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
@@ -89,6 +114,23 @@ const ICONS = {
   outreach: <OutreachIcon />,
   social: <SocialIcon />,
 };
+
+/* small arrow used in the "Learn more" text-link — decorative,
+   the link's own text already says everything a reader needs */
+function ArrowIcon() {
+  return (
+    <svg className="service-learn-more-arrow" viewBox="0 0 16 16" aria-hidden="true">
+      <path
+        d="M3 8h9M8 3l5 5-5 5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 /* ---------------- Component ---------------- */
 
@@ -508,6 +550,12 @@ function Services({ faqs = [] }) {
     <>
       <div className="services-page" ref={root}>
 
+        <nav className="seo-breadcrumb" aria-label="Breadcrumb">
+          <Link href="/">Home</Link>
+          <span aria-hidden="true">/</span>
+          <span>Services</span>
+        </nav>
+
         <header className="nav">
           <a className="logo" href="#top">
             Zarrar
@@ -542,11 +590,11 @@ function Services({ faqs = [] }) {
           <section className="hero" id="top">
             <h1 className="hero-heading">
               <span className="hero-l1">
-                Get found.
+                Website development.
               </span>
 
               <span className="hero-l2">
-                Get booked.
+                Lead generation, outreach &amp; social media.
               </span>
             </h1>
 
@@ -557,10 +605,7 @@ function Services({ faqs = [] }) {
 
             <div className="hero-foot">
               <p className="hero-sub">
-                Website development, social media management,
-                and cold email lead generation — so speakers,
-                authors, coaches and founders spend their time
-                on the work instead of chasing it.
+                Website development, lead generation, cold email outreach and social media management for founders, speakers, coaches, authors and real estate agents — built to make your offer clearer and your next step easier.
               </p>
 
               <div className="hero-actions">
@@ -575,8 +620,15 @@ function Services({ faqs = [] }) {
                   className="btn btn-ghost"
                   href="#services"
                 >
-                  What we do
+                  What Zarrar does
                 </a>
+
+                <Link
+                  className="btn btn-ghost"
+                  href="/contact"
+                >
+                  Contact Zarrar
+                </Link>
               </div>
             </div>
           </section>
@@ -586,8 +638,8 @@ function Services({ faqs = [] }) {
             aria-label="What we believe"
           >
             <p>
-              You don&apos;t have a talent problem. You have a
-              nobody-can-find-you problem — and that one is fixable.
+              Your website explains the offer. Lead generation finds the right prospects.
+              Outreach starts the conversation. Social media keeps your expertise visible.
             </p>
           </section>
 
@@ -598,41 +650,49 @@ function Services({ faqs = [] }) {
           >
             <div className="section-head">
               <h2 id="services-title">
-                What we do
+                What Zarrar does
               </h2>
 
               <p>
-                Website development, lead generation and
-                social media management — pick one, or let
-                them work together.
+                Website development, lead generation, cold email outreach and social media management. Start with the service you need most, or connect them into one system.
               </p>
             </div>
 
             <div className="services-grid">
-              {SERVICES.map((s) => (
+              {SERVICES.map((s, i) => (
                 <article
                   className="service-card"
                   id={s.id}
                   key={s.id}
                 >
-                  <span
-                    className="service-icon"
-                    aria-hidden="true"
-                  >
-                    {ICONS[s.icon]}
-                  </span>
+                  <div className="service-card-top">
+                    <span className="service-icon" aria-hidden="true">
+                      {ICONS[s.icon]}
+                    </span>
+
+                    <span className="service-index" aria-hidden="true">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                  </div>
 
                   <h3>{s.title}</h3>
 
                   <p>{s.body}</p>
 
-                  <button
-                    type="button"
-                    className="btn btn-outline"
-                    onClick={() => openContact()}
-                  >
-                    {s.cta}
-                  </button>
+                  <div className="service-card-actions">
+                    <button
+                      type="button"
+                      className="btn btn-solid service-cta"
+                      onClick={() => openContact()}
+                    >
+                      {s.cta}
+                    </button>
+
+                    <Link href={s.href} className="service-learn-more">
+                      Learn more
+                      <ArrowIcon />
+                    </Link>
+                  </div>
                 </article>
               ))}
             </div>
@@ -645,12 +705,12 @@ function Services({ faqs = [] }) {
           >
             <div className="section-head">
               <h2 id="plans-title">
-                Pick a starting point
+                Choose the level of support that fits your business
               </h2>
 
               <p>
-                Each plan builds on the one before it.
-                Move up whenever you&apos;re ready.
+                Start with the foundation you need today, then add social media,
+                lead generation or outreach when the business is ready for it.
               </p>
             </div>
 
@@ -708,7 +768,7 @@ function Services({ faqs = [] }) {
 
           {/* ------------------------------------------------------
               FAQ — added for SEO. Real questions people type before
-              hiring an agency, backing the FAQPage schema in
+              hiring an agency, keeping the FAQ content clear and useful
               page.jsx (legitimate only because these answers are
               visible on the page). Native <details>/<summary>: no
               JS needed, keyboard-accessible for free.
@@ -716,8 +776,8 @@ function Services({ faqs = [] }) {
           {faqs.length > 0 && (
             <section className="faq" id="faq" aria-labelledby="faq-title">
               <div className="section-head">
-                <h2 id="faq-title">Questions we get asked</h2>
-                <p>If yours isn&apos;t here, email us and you&apos;ll get a straight answer.</p>
+                <h2 id="faq-title">Questions about web development, lead generation, outreach and social media</h2>
+                <p>Not sure which service fits? Tell us what you are trying to achieve and we will explain the simplest place to start.</p>
               </div>
 
               <div className="faq-list">
@@ -742,7 +802,7 @@ function Services({ faqs = [] }) {
             aria-labelledby="contact-title"
           >
             <h2 id="contact-title">
-              Tell us what you&apos;re building.
+              Tell us what you need help with.
             </h2>
 
             <a

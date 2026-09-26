@@ -13,31 +13,80 @@
       another. The older block still had
       `.services-page { overflow-x: clip; }` — which the newer
       block's own comment said had been removed and rescoped to
-      `.services-page > main` (setting overflow-x on .services-page,
-      with overflow-y left unset, makes overflow-y compute to
-      `auto`, turning .services-page into a scroll container and
-      the wrong sticky-positioning reference for .nav). That
-      removal never actually took effect, because the old rule was
-      still further up in the file. Deduplicated to one version;
+      `.services-page > main`. Deduplicated to one version;
       overflow-x now lives ONLY on `.services-page > main`.
 
    2) `.faq-list` was missing from the shared max-width/gutter rule
-      that every other section's content uses (`.services-grid`,
-      `.plans-grid`, `.section-head`, etc). So the FAQ questions and
-      answers ran edge-to-edge against the viewport instead of
-      lining up with the rest of the page. Added `.faq-list` to
-      that rule.
+      that every other section's content uses. Added it, so FAQ
+      rows line up with the rest of the page instead of running
+      edge-to-edge.
 
    3) No `scroll-margin-top` on the sections the sticky nav links
-      to, so clicking a nav link (or #faq/#services/#plans landing
-      directly) tucked the section's own heading underneath the
-      nav bar — which is why "Questions we get asked" and the first
-      FAQ question were invisible. Added scroll-margin-top matching
-      the nav's height.
+      to, so jumping to a section tucked its heading underneath the
+      nav bar. Added scroll-margin-top matching the nav's height.
 
    4) The featured plan's name-vs-badge clearance padding was a
       fixed 6.5rem, which could crowd out on very narrow phones.
       Made it a clamp() so it scales down instead of overflowing.
+
+   5) "Home / Services" (the breadcrumb) rendered on a different
+      background than everything below it, because it lived outside
+      the element that declares `--bone`/`background: var(--bone)`.
+      It's now rendered inside .services-page (see Services.jsx),
+      and styled below under "Breadcrumb" using the exact same
+      "no max-width, just padding-inline: var(--gut)" approach as
+      `.nav` right below it — not the centered max-width:1280
+      "shell" treatment the content sections use — so its left edge
+      lines up with the logo exactly instead of sitting ~40px
+      further in.
+
+   6) `.statement p` was in the shared max-width/gutter rule *and*
+      had its own later rule that set `margin: 0` and
+      `max-width: 24ch`. Same property, later wins — so the
+      auto-centering margin was cancelled and the 1280px max-width
+      was replaced by 24ch, and the paragraph sat flush against the
+      section's own edge instead of lining up with the hero/section
+      headings around it. Fixed by giving the alignment (max-width,
+      centering, gutter) to `.statement` (the section) instead of
+      `.statement p` — same split of responsibility `.faq`/`.faq-list`
+      already use. The paragraph keeps its own 24ch cap for the
+      short punchy line-wrap, now positioned correctly.
+
+   7) The hero headline ("Get found. / Get booked.") was designed
+      for exactly two short words per line at up to 9rem — the
+      comment even says so. The new, longer copy ("Website
+      development." / "Lead generation, outreach & social media.")
+      doesn't fit that assumption: at 9rem a single word like
+      "DEVELOPMENT" is wider than most viewports, so it was
+      breaking mid-word ("DEVELOPME" / "NT.") and the headline block
+      ran to several screens tall. Brought the scale down to
+      something that stays legible and wraps cleanly at any length
+      (clamp 1.9rem–4.5rem instead of 2.75rem–9rem), loosened the
+      variable-width axis slightly so long lines take less horizontal
+      space, and let it wrap by word (text-wrap: balance) instead of
+      assuming a fixed two-word shape.
+
+   8) Inside each service card, the heading, body copy and actions
+      all stacked with plain flex spacing, so different heading
+      lengths (1–3 lines depending on the title) pushed the body
+      copy and buttons to a different height in every card. Fixed
+      with CSS subgrid: from 620px up, each card's top-row/heading/
+      body/actions are locked to shared row tracks on
+      `.services-grid`, so the tallest content in a row sets that
+      row's height for every card in it.
+
+   9) There are 4 services now, but the grid capped out at 3
+      columns, so the 4th card fell into its own row alone with a
+      big empty gap beside it. Changed the ≥620px breakpoint to 2
+      columns (2×2), which also fixes the same problem for any
+      future count that isn't a multiple of 3.
+
+   10) The card footer used to be two stacked pill buttons of equal
+       visual weight ("Learn about X" + the card's own CTA) — busy,
+       nothing told the eye which action mattered more. Redesigned
+       as a small icon "badge" + numbered index at the top, and a
+       footer with one solid CTA button next to a plain
+       "Learn more →" text link.
    ========================================================= */
 
 .services-page {
@@ -115,14 +164,16 @@ html { scroll-behavior: smooth; }
    Every section's actual content lines up on this same max-width +
    side-gutter — .faq-list is included now (fix #2) so FAQ rows sit
    flush with the hero/services/plans content instead of running to
-   the viewport edges. */
+   the viewport edges. `.statement` (the section, not the <p> inside
+   it) is here too now (fix #6) so the pull-quote's left edge lines
+   up with everything else instead of hugging the raw section edge. */
 
 .shell,
 .hero,
 .section-head,
 .services-grid,
 .plans-grid,
-.statement p,
+.statement,
 .faq-list {
   max-width: var(--maxw);
   margin-inline: auto;
@@ -159,6 +210,38 @@ html { scroll-behavior: smooth; }
 .btn-acid:hover, .btn-acid:focus-visible { background: var(--paper); }
 
 .btn-lg { font-size: 1rem; min-height: 54px; padding: 0.95rem 2.4rem; }
+
+/* ---------- Breadcrumb ----------
+   "Home / Services", rendered as the first thing inside
+   .services-page (see Services.jsx) so it shares --bone/--ink with
+   the rest of the page (fix #5). Deliberately NOT in the shared
+   "Layout shells" rule above — .nav right below it isn't either,
+   it's just padding-inline: var(--gut) with no max-width cap — so
+   both sit at exactly the same left edge as each other. */
+
+.seo-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.65rem var(--gut) 0.55rem;
+  background: var(--bone);
+  font-size: clamp(0.76rem, 0.73rem + 0.15vw, 0.85rem);
+  color: var(--ink-soft);
+}
+
+.seo-breadcrumb a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.seo-breadcrumb a:hover,
+.seo-breadcrumb a:focus-visible {
+  color: var(--violet);
+}
+
+.seo-breadcrumb span[aria-hidden] { opacity: 0.55; }
+
+.seo-breadcrumb span:last-child { color: var(--ink); font-weight: 500; }
 
 /* ---------- Nav ---------- */
 
@@ -244,13 +327,16 @@ html { scroll-behavior: smooth; }
 .hero { padding-block: clamp(3rem, 10vw, 7rem) clamp(2rem, 6vw, 4.5rem); }
 
 .hero-heading {
-  font-variation-settings: 'wdth' 114, 'wght' 900;
-  /* short lines on purpose — this scale only works because the
-     headline is two words per line and never wraps */
-  font-size: clamp(2.75rem, 11.5vw, 9rem);
-  line-height: 0.82;
-  letter-spacing: -0.05em;
+  font-variation-settings: 'wdth' 100, 'wght' 900;
+  /* Brought down from clamp(2.75rem, 11.5vw, 9rem) — that scale
+     only worked for a fixed two-word-per-line headline. The copy
+     is now longer and variable-length, so this needs to wrap
+     cleanly at any length instead of assuming a shape (fix #7). */
+  font-size: clamp(1.9rem, 6.5vw, 4.5rem);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
   margin-bottom: clamp(1.5rem, 3.5vw, 2.5rem);
+  text-wrap: balance;
 }
 
 .hero-heading span { display: block; }
@@ -314,7 +400,7 @@ html { scroll-behavior: smooth; }
   font-size: clamp(1.5rem, 4.4vw, 3.4rem);
   line-height: 1.12;
   letter-spacing: -0.035em;
-  max-width: 24ch;
+  max-width: 32ch;
 }
 
 /* ---------- Services ---------- */
@@ -327,38 +413,98 @@ html { scroll-behavior: smooth; }
   grid-template-columns: minmax(0, 1fr);
 }
 
+/* 4 services now — 2×2 fits cleanly at every count that isn't a
+   multiple of 3 (fix #9). */
 @media (min-width: 620px) {
   .services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-@media (min-width: 900px) {
-  .services-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
 
 .service-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 1rem;
   background: var(--paper);
   border: 1px solid var(--rule);
-  border-radius: 8px;
-  padding: clamp(1.6rem, 3vw, 2.4rem);
-  transition: border-color 0.4s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 14px;
+  padding: clamp(1.8rem, 3vw, 2.6rem);
+  transition: border-color 0.4s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s ease;
 }
 
 @media (hover: hover) {
-  .service-card:hover { border-color: var(--ink); transform: translateY(-5px); }
+  .service-card:hover {
+    border-color: var(--ink);
+    transform: translateY(-6px);
+    box-shadow: 0 26px 50px -28px rgba(16, 16, 16, 0.4);
+  }
+  .service-card:hover .service-icon {
+    background: var(--ink);
+    color: var(--bone);
+  }
 }
 
-.service-icon { width: 44px; height: 44px; color: var(--violet); display: block; }
-.service-icon svg { width: 100%; height: 100%; overflow: visible; }
+/* From 620px up, cards sit side by side in the same row. Lock each
+   card's top-row / heading / body / actions to the row's own shared
+   grid tracks via subgrid: whichever card needs the most vertical
+   space in a given row sets that row's height for every card next
+   to it, so headings, body copy and the footer all start at the
+   same Y in every card (fix #8). Each card still has exactly 4
+   direct children (top row, h3, p, actions), matching the 4 tracks
+   below. Below 620px cards stack one per row, so there's nothing to
+   align across and the plain flex column above is enough. */
+@media (min-width: 620px) {
+  .services-grid { grid-template-rows: auto auto auto auto; }
+
+  .service-card {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 4;
+  }
+}
+
+/* ---- top row: icon badge + numbered index (fix #10) ---- */
+
+.service-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.service-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--violet) 12%, transparent);
+  color: var(--violet);
+  transition: background 0.4s ease, color 0.4s ease;
+}
+.service-icon svg { width: 22px; height: 22px; overflow: visible; }
+
+.service-index {
+  font-family: var(--font-archivo), system-ui, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  opacity: 0.5;
+}
 
 .service-card h3 {
   font-variation-settings: 'wdth' 98, 'wght' 900;
   font-size: clamp(1.2rem, 2vw, 1.55rem);
-  line-height: 1;
+  line-height: 1.08;
   letter-spacing: -0.03em;
-  max-width: 15ch;
+  max-width: 26ch;
+  /* lets a long title settle into balanced lines instead of one
+     long line + one short leftover fragment (progressive
+     enhancement — unsupported browsers just wrap normally) */
+  text-wrap: balance;
 }
 
 .service-card p {
@@ -369,7 +515,52 @@ html { scroll-behavior: smooth; }
   flex: 1;
 }
 
-.service-card .btn { margin-top: 0.4rem; }
+/* ---- footer: one clear primary action + a lighter secondary link
+   (fix #10) — replaces the old two-stacked-pill-buttons layout ---- */
+
+.service-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.85rem 1.25rem;
+  width: 100%;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--rule);
+  align-self: end;
+}
+
+.service-cta {
+  padding: 0.65rem 1.35rem;
+  font-size: 0.85rem;
+  min-height: auto;
+}
+
+.service-learn-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.service-learn-more-arrow {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.3s ease;
+}
+
+.service-learn-more:hover,
+.service-learn-more:focus-visible {
+  color: var(--violet);
+}
+.service-learn-more:hover .service-learn-more-arrow,
+.service-learn-more:focus-visible .service-learn-more-arrow {
+  transform: translateX(4px);
+}
 
 /* ---------- Plans ---------- */
 

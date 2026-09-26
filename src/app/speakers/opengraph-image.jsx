@@ -1,10 +1,10 @@
 import { ImageResponse } from "next/og";
 import { OgMark } from "@/lib/og-mark";
 
-/* Social share card for /for-speakers (used by Open Graph; copy this file to
+/* Social share card for /speakers (used by Open Graph; copy this file to
    twitter-image.jsx too if a platform doesn't pick it up). */
 
-export const alt = "Zarrar for speakers: book more stages, chase fewer emails";
+export const alt = "Zarrar for keynote speakers: website development, lead generation, cold email outreach and social media";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -43,14 +43,14 @@ export default function Image() {
             textTransform: "uppercase",
           }}
         >
-          <div style={line}>Book more</div>
-          <div style={line}>stages.</div>
-          <div style={{ ...line, color: "#5b3df5" }}>Chase fewer</div>
-          <div style={{ ...line, color: "#5b3df5" }}>emails.</div>
+          <div style={line}>Build a stronger</div>
+          <div style={line}>speaker presence.</div>
+          <div style={{ ...line, color: "#5b3df5" }}>Reach event</div>
+          <div style={{ ...line, color: "#5b3df5" }}>organisers.</div>
         </div>
 
         <div style={{ ...line, fontSize: 28, color: "#565144" }}>
-          Website, outreach and social media for speakers
+          Website, lead generation, cold email outreach and social media for speakers
         </div>
       </div>
     ),

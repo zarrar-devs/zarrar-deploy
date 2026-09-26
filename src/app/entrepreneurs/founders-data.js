@@ -1,5 +1,5 @@
 /* =============================================================
-   /for-founders — content, SEO strings and structured data.
+   /entrepreneurs — content, SEO strings and structured data.
 
    This is a plain module (NO "use client") on purpose: the server
    page (metadata + JSON-LD) and the client component both import
@@ -11,35 +11,31 @@
    ============================================================= */
 
 // Fallback domain fixed (zarrar.co is now official) and the route
-// fixed too — it built PAGE_URL as "/for-founders", a route that
+// fixed too — it built PAGE_URL as "/entrepreneurs", a route that
 // does not exist (the folder is /entrepreneurs), so the canonical
 // and every JSON-LD @id on this page pointed at a 404.
-export const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://zarrar.co";
-export const PAGE_URL = `${SITE}/entrepreneurs`;
+import { ORG_ID, ROUTES, SITE_URL, WEBSITE_ID, organizationSchema, websiteSchema } from "@/lib/site";
+export const SITE = SITE_URL;
+export const PAGE_URL = `${SITE}${ROUTES.entrepreneurs}`;
 export const BRAND = "Zarrar";
 export const AUDIENCE_TYPE = "Founders, entrepreneurs and CEOs";
-
-/* Put your real profile URLs here (LinkedIn, X, Instagram...).
-   They are added to Organization.sameAs, which helps Google connect
-   the page to the brand. Leave empty until you have them. */
-export const SOCIAL_LINKS = [];
 
 /* ---------------- SEO strings ---------------- */
 
 export const SEO = {
   /* <= 60 chars so it isn't truncated in results */
-  title: "Founder & CEO Website, Email & Social Media Agency | Zarrar",
+  title: "Founder & CEO Website, Lead Generation & Outreach | Zarrar",
   /* <= 155 chars */
   description:
-    "Custom websites, email marketing and social media management for founders, entrepreneurs and CEOs. Look as big as the company you're building.",
-  ogTitle: "Founders and CEOs get Googled before they get a reply | Zarrar",
-  h1: "Founders and CEOs get Googled before they get a reply.",
+    "Website development, lead generation, cold email outreach and social media management for founders and CEOs who want a credible online presence and a stronger business pipeline.",
+  ogTitle: "A founder website that matches the business you're building | Zarrar",
+  h1: "A founder website that explains the person behind the business.",
   /* Update when you materially change the page (used in sitemap.js) */
   lastModified: "2026-09-20",
 };
 
 export const HERO = {
-  sub: "Custom website and portfolio design, email marketing and social media management for founders, entrepreneurs and CEOs, so what people find is worth the click.",
+  sub: "We build founder websites that explain what you do, lead generation and cold email outreach that put the right prospects in front of you, and social media management that keeps your expertise visible.",
 };
 
 /* ---------------- Hero demo ----------------
@@ -97,39 +93,39 @@ export const SERP = [
 
 export const PAIN_POINTS = [
   {
-    title: "Your name doesn't tell your story",
-    line: "Investors, candidates and journalists look you up before the meeting. If the first results are a stale profile or an old press mention, that's the pitch they've already heard.",
+    title: "Your search results do not explain enough",
+    line: "A prospect, candidate, partner or journalist can look you up before they ever reply. Your website and public profiles should make the story clear in a few seconds.",
   },
   {
-    title: "The website undersells the company",
-    line: "People judge a company by its site within seconds. A dated one quietly undersells work that's genuinely good.",
+    title: "The website does not carry its share of the sale",
+    line: "A company can be doing excellent work and still lose trust when the website is vague, slow or hard to navigate. Your site should make the value obvious.",
   },
   {
-    title: "You're building in silence",
-    line: "Competitors post every week while you run the company. Attention, and the introductions that follow it, go to whoever shows up.",
+    title: "Your expertise disappears between meetings",
+    line: "Running a company leaves little time for content. Without a consistent social presence, the market may only hear from you when you need something.",
   },
   {
-    title: "Outreach never gets done properly",
-    line: "Investor, partner and customer emails get written late at night or not at all, and without a proper sending setup they land in spam.",
+    title: "Prospecting keeps slipping down the list",
+    line: "Partner, customer and business-development outreach is easy to postpone when you are running the company. A repeatable system makes it a process, not a late-night task.",
   },
 ];
 
 export const AUDIENCES = [
   {
     title: "Startup founders",
-    line: "Raising a round, hiring your first team or launching a product. Investors and candidates check you out before they reply.",
+    line: "You are raising, hiring or launching, and the people you want to attract are researching you alongside the company. A clear founder presence helps them understand the context quickly.",
   },
   {
     title: "CEOs and executives",
-    line: "You lead a real company, and your public profile hasn't caught up with it. We close that gap.",
+    line: "Your business has matured, but the public-facing profile may still feel like an earlier stage. We bring the website, bio and content system up to date.",
   },
   {
     title: "Solo entrepreneurs",
-    line: "You are the brand. A clear website, a working inbox and a steady social presence sell while you deliver.",
+    line: "When your name is the brand, the website, email and social presence all need to tell the same story while you stay focused on delivery.",
   },
   {
     title: "Founders of B2B and service businesses",
-    line: "Your next client will look you up first. A credible portfolio and steady outreach turn that look into a booked call.",
+    line: "Your next customer may search your name before they book a meeting. A strong website and targeted outreach give that research somewhere credible to land.",
   },
 ];
 
@@ -137,32 +133,32 @@ export const TIMELINE = [
   {
     when: "Weeks 1–2",
     title: "Foundation",
-    body: "Positioning agreed, the website in design, sending domains and social profiles set up properly, outreach list built.",
+    body: "We clarify your positioning, plan the website, prepare the social profile structure and build the first focused prospect list.",
   },
   {
     when: "Weeks 3–6",
     title: "Launch and outreach",
-    body: "The site goes live. Email campaigns and social content start on schedule, and the first replies come in.",
+    body: "The website goes live, social content begins publishing and cold outreach starts with a specific audience, offer and follow-up sequence.",
   },
   {
     when: "Weeks 7–12",
-    title: "Momentum",
-    body: "A steady flow of conversations from outreach and search, a founder presence that keeps compounding, and campaigns refined around what's working.",
+    title: "Refine and compound",
+    body: "We use search behaviour, engagement and outreach replies to improve the website, content and prospecting angles instead of repeating the same message forever.",
   },
 ];
 
 export const FAQS = [
   {
-    q: "Why does a founder or CEO need a personal website as well as a company site?",
-    a: "Because people look up the person before they back, hire or partner with the company. A company site explains the product. A founder site explains why you're the one to build it, and it's the one page in your search results that you fully control.",
+    q: "Why should a founder or CEO have a personal website as well as a company site?",
+    a: "A company site explains the business. A founder site can explain the person behind it: your track record, point of view, current work, media, speaking, writing and the best way to contact you. It also gives your personal search results a clear destination you control.",
   },
   {
     q: "What should a CEO or founder portfolio website include?",
     a: "A clear line on what you do and for whom, your track record and case studies, press and proof, what you're working on now, and one obvious way to get in touch or book a call. Underneath that: fast load times, a mobile-first layout and proper on-page SEO.",
   },
   {
-    q: "Can you help me rank on Google for my own name?",
-    a: "A proper founder website is the strongest first step: a fast, well-structured site with your name, role and company in the right places, structured data, and social profiles that link back to it. Nobody can guarantee a ranking, because it depends on how much competition your name and category have, but this is the foundation every ranking is built on.",
+    q: "Can you help build a stronger Google presence for my name?",
+    a: "A proper founder website is a strong starting point: a fast, well-structured site with your name, role and company in the right places, structured data, and social profiles that link back to it. Nobody can guarantee a ranking, because competition varies by name and category, but the site gives search engines and people a clear source of information about you.",
   },
   {
     q: "Is cold email still effective for founders and CEOs?",
@@ -173,8 +169,8 @@ export const FAQS = [
     a: "They're three DNS records that prove your emails really come from your domain. SPF lists who may send for you, DKIM signs each message, and DMARC tells inboxes what to do with mail that fails the checks. Without them, outreach and newsletters are far more likely to land in spam. We set all three up before anything is sent.",
   },
   {
-    q: "Does social media matter for a busy CEO?",
-    a: "Usually it's where investors, candidates and customers check you out first. You don't need to become a content creator. We plan the content, write it in your voice, post it and handle replies, so the account keeps working while you run the company.",
+    q: "Can you manage social media for a busy founder or CEO?",
+    a: "Yes. The goal is not to turn you into a full-time creator. We plan the content around your expertise and priorities, write it in your voice, publish it and handle routine replies so the profile stays active while you run the company.",
   },
   {
     q: "Can I start with just a website and add email or social media later?",
@@ -190,16 +186,16 @@ export const FAQS = [
   },
 ];
 
-/* SERVICES copy is written for founders; PLANS are identical to
-   /for-coaches on purpose so the offer stays the same everywhere.
+/* SERVICES copy is written for founders and CEOs. Keep each service
+   distinct so the page clearly explains what Zarrar actually delivers.
    Icons live in the component (this file has no JSX). */
 
 export const SERVICES = [
   {
     id: "web-development",
     tone: "ink",
-    serviceType: "Website design and development",
-    title: "Website and portfolio development for founders and CEOs",
+    serviceType: "Website development for founders and CEOs",
+    title: "Website development for founders and CEOs",
     body: "First impressions happen on your website, so we design and build one that looks like the company you actually run: custom, fast, mobile-first, and set up to rank when someone searches your name or your category.",
     points: [
       "Custom design and build, never a template",
@@ -210,16 +206,30 @@ export const SERVICES = [
     cta: "Build my site",
   },
   {
-    id: "email-marketing",
+    id: "lead-generation",
     tone: "paper",
-    serviceType: "Email marketing and outbound outreach",
-    title: "Email marketing and outbound promotion",
-    body: "We research the investors, buyers, partners and press worth reaching, write the emails, send them from properly authenticated domains and handle the follow-up. We also run newsletters and launch promotions for the list you already have.",
+    serviceType: "Lead generation",
+    title: "Lead generation for founders and CEOs",
+    body: "We research buyers, partners and other prospects that fit your target market, qualify the list and organise it into a focused pipeline ready for outreach or sales follow-up.",
     points: [
-      "Prospect research and list building",
-      "Copywriting, sending and follow-up sequences",
-      "Sending domains set up with SPF, DKIM and DMARC",
-      "Newsletter and launch-promotion campaigns",
+      "Ideal-customer and prospect research",
+      "Qualification and audience segmentation",
+      "Focused prospect list built around your offer",
+      "Pipeline prepared for outreach or sales follow-up",
+    ],
+    cta: "Build my lead list",
+  },
+  {
+    id: "cold-email-outreach",
+    tone: "paper",
+    serviceType: "Cold email outreach",
+    title: "Cold email outreach for founders and CEOs",
+    body: "We prepare the sending setup, write the campaign and manage follow-up around a specific audience and offer, with SPF, DKIM and DMARC configured before launch.",
+    points: [
+      "Sending setup and domain authentication",
+      "Audience-specific email copy",
+      "Follow-up sequences and reply handling",
+      "Campaign review and iteration",
     ],
     cta: "Start my outreach",
   },
@@ -228,7 +238,7 @@ export const SERVICES = [
     tone: "stone",
     serviceType: "Social media management",
     title: "Social media management for founders and CEOs",
-    body: "Your LinkedIn, X and Instagram run like a proper channel: content planned around your positioning, posted on schedule, with comments and DMs handled. The people who search your name find a founder worth backing.",
+    body: "Your LinkedIn, X and Instagram stay consistent: content planned around your positioning, posted on schedule, with routine comments and DMs handled. The goal is a clear, current picture of you and the business when people look you up.",
     points: [
       "Content plan built around your positioning",
       "Posts written in your voice",
@@ -243,11 +253,11 @@ export const PLANS = [
   {
     id: "launch",
     name: "Launch",
-    line: "For getting found.",
-    body: "You have the work but no proper home online. We build one.",
+    line: "For building your founder presence.",
+    body: "You have a real business but your personal online presence does not explain it clearly. We build the foundation.",
     includes: [
       "Custom website, designed and built from scratch",
-      "On-page SEO and Google Business setup",
+      "On-page SEO and search console setup",
       "Copy written for your offer, not filler text",
       "Handover and training so you can edit it",
     ],
@@ -255,25 +265,25 @@ export const PLANS = [
   {
     id: "presence",
     name: "Presence",
-    line: "For looking established.",
-    body: "Everything in Launch, plus the accounts that make you look like a real operation.",
+    line: "For staying visible.",
+    body: "Everything in Launch, plus social media management and a professional email setup that keep your public presence current.",
     includes: [
       "Everything in Launch",
       "Social media management, posting and replies",
-      "Instagram handle set up and built out",
+      "Social profiles set up and optimised on the agreed channels",
       "Custom email domain (you@yourname.com)",
     ],
   },
   {
-    id: "growth",
+    id: "reborn",
     name: "Reborn",
-    line: "For bringing in clients.",
-    body: "The full engine. We build the presence, then go and get the work.",
+    line: "For building the pipeline.",
+    body: "The full system: founder website, social media, lead generation and cold email outreach working together around the business.",
     includes: [
       "Everything in Presence",
-      "Portfolio site that closes on your behalf",
-      "Cold outreach campaigns, written and sent",
-      "Lead generation and booked calls in your calendar",
+      "Lead-generation workflow built around your target market",
+      "Cold outreach campaigns, written and managed",
+      "Prospect follow-up and enquiry tracking",
     ],
     featured: true,
   },
@@ -292,8 +302,6 @@ export const PERSONAS = [
 /* ---------------- Structured data (JSON-LD) ---------------- */
 
 export function buildJsonLd() {
-  const orgId = `${SITE}/#organization`;
-  const websiteId = `${SITE}/#website`;
   const pageId = `${PAGE_URL}#webpage`;
   const crumbId = `${PAGE_URL}#breadcrumb`;
   const serviceId = `${PAGE_URL}#service`;
@@ -303,30 +311,17 @@ export function buildJsonLd() {
   return {
     "@context": "https://schema.org",
     "@graph": [
-      /* Keep this @id identical on your home page so Google merges them. */
-      {
-        "@type": "Organization",
-        "@id": orgId,
-        name: BRAND,
-        url: SITE,
-        ...(SOCIAL_LINKS.length ? { sameAs: SOCIAL_LINKS } : {}),
-      },
-      {
-        "@type": "WebSite",
-        "@id": websiteId,
-        url: SITE,
-        name: BRAND,
-        inLanguage: "en",
-        publisher: { "@id": orgId },
-      },
+      /* Use the same full Organization + WebSite definitions as the rest of the site. */
+      organizationSchema(),
+      websiteSchema(),
       {
         "@type": "WebPage",
         "@id": pageId,
         url: PAGE_URL,
-        name: "Website, Email Marketing & Social Media for Founders & CEOs",
+        name: "Website, Lead Generation, Outreach & Social Media for Founders & CEOs",
         description: SEO.description,
         inLanguage: "en",
-        isPartOf: { "@id": websiteId },
+        isPartOf: { "@id": WEBSITE_ID },
         breadcrumb: { "@id": crumbId },
         about: { "@id": serviceId },
       },
@@ -341,12 +336,12 @@ export function buildJsonLd() {
       {
         "@type": "Service",
         "@id": serviceId,
-        name: "Website, email marketing and social media management for founders and CEOs",
+        name: "Website, lead generation, outreach and social media management for founders and CEOs",
         serviceType: SERVICES.map((s) => s.serviceType),
         description:
-          "Website and portfolio development, email marketing and outbound promotion, and social media management for founders, entrepreneurs and CEOs.",
+          "Website development, lead generation, cold email outreach and social media management for founders, entrepreneurs and CEOs.",
         url: PAGE_URL,
-        provider: { "@id": orgId },
+        provider: { "@id": ORG_ID },
         areaServed: "Worldwide",
         audience,
         hasOfferCatalog: [
@@ -374,15 +369,6 @@ export function buildJsonLd() {
             })),
           },
         ],
-      },
-      {
-        "@type": "FAQPage",
-        "@id": `${PAGE_URL}#faq`,
-        mainEntity: FAQS.map((f) => ({
-          "@type": "Question",
-          name: f.q,
-          acceptedAnswer: { "@type": "Answer", text: f.a },
-        })),
       },
     ],
   };

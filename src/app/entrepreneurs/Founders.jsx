@@ -1,10 +1,10 @@
 "use client";
 
 /* =============================================================
-   Zarrar — /for-founders  (founders, entrepreneurs & CEOs)
+   Zarrar — /entrepreneurs  (founders, entrepreneurs & CEOs)
    -------------------------------------------------------------
    Black and white. Content, metadata and schema live in
-   ./founders-data.js; the route file (app/for-founders/page.js)
+   ./founders-data.js; the route file (app/entrepreneurs/page.js)
    owns metadata, fonts and JSON-LD, because none of those can be
    exported from a "use client" file.
 
@@ -40,13 +40,24 @@
    - This whole file is already "use client", so the modal just
      lives here as local state (contactOpen / contactPlan) — no
      separate provider/context needed like on the server-rendered
-     /for-coaches page.
-   - Every button that used to be <a href="#contact"> (nav CONTACT,
+     /coaches page.
+   - Every button that used to be <a href="/contact"> (nav CONTACT,
      hero SAY HELLO, each service's CTA, each plan's "Start with…")
-     now calls openContact() instead of scrolling. The href="#contact"
+     now calls openContact() instead of scrolling. The href="/contact"
      is kept as a no-JS fallback.
    - The closing section's own "Say hello" button is untouched — it's
      a real mailto: link, not a scroll-to-contact link.
+
+   Hero copy
+   - The hero used to carry THREE stacked blocks under the headline:
+     an uppercase kicker line above it, then a sub paragraph, then a
+     second "audience" paragraph that restated the same sub in
+     slightly different words. That read as duplicated content and
+     threw off the vertical rhythm of the section, so it's down to a
+     single, clear subhead (HERO.sub). The hero grid is also aligned
+     to the top (align-items: start) instead of centered, so the copy
+     column and the SERP demo line up on their first line regardless
+     of how tall either column ends up being.
    ============================================================= */
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -72,7 +83,7 @@ import {
 // hardcoded a mailto: on the wrong domain.
 import { CONTACT_EMAIL } from "@/lib/site";
 // ⚠️ Adjust this import path to wherever ContactModal.jsx actually lives
-// in your project (same component used on /for-coaches).
+// in your project (same component used on /coaches).
 import ContactModal from "@/components/ContactModal/ContactModal";
 import "./entreprenuer.css";
 
@@ -435,6 +446,7 @@ function Founders() {
             <div className="fd-nav-actions">
               <a
                 className="fd-nav-cta"
+                href="/contact"
                 onClick={(e) => {
                   e.preventDefault();
                   openContact();
@@ -493,7 +505,7 @@ function Founders() {
               <div className="fd-hero-actions">
                 <a
                   className="fd-btn"
-                  href="#contact"
+                  href="/contact"
                   onClick={(e) => {
                     e.preventDefault();
                     openContact();
@@ -535,7 +547,7 @@ function Founders() {
                 </ul>
               </div>
               <figcaption className="fd-serp-caption">
-                Illustrative example: a search for a founder&apos;s name, before and after.
+                Illustrative search example — not a client result or guaranteed before-and-after.
               </figcaption>
             </figure>
           </div>
@@ -546,7 +558,7 @@ function Founders() {
           <div className="fd-wrap fd-split">
             <div className="fd-section-head fd-sticky">
               <h2 className="fd-display" id="problem-title">
-                Why great founders and CEOs still get overlooked online
+                Why founders and CEOs need a clearer online presence
               </h2>
               <p>The company is ready. Its public face often isn&apos;t.</p>
             </div>
@@ -567,9 +579,9 @@ function Founders() {
           <div className="fd-wrap">
             <div className="fd-section-head">
               <h2 className="fd-display" id="services-title">
-                Website, email marketing and social media that work together
+                Website development, lead generation, cold email outreach and social media for founders
               </h2>
-              <p>Pick one, or run all three. Each one makes the others work harder.</p>
+              <p>Build the public-facing foundation, then connect it to the prospecting and content systems that support your business goals.</p>
             </div>
 
             <div className="fd-stack">
@@ -587,6 +599,7 @@ function Founders() {
                     <p>{s.body}</p>
                     <a
                       className="fd-btn"
+                      href="/contact"
                       onClick={(e) => {
                         e.preventDefault();
                         openContact();
@@ -608,8 +621,8 @@ function Founders() {
         <section className="fd-process" id="process" aria-labelledby="process-title">
           <div className="fd-wrap">
             <div className="fd-section-head">
-              <h2 className="fd-display" id="process-title">What the first 90 days look like</h2>
-              <p>A rough shape of how the pieces come online, in order.</p>
+              <h2 className="fd-display" id="process-title">How we build your founder website and outreach system</h2>
+              <p>The work is staged so the website, lead generation, outreach and social media all reinforce the same positioning.</p>
             </div>
 
             <div className="fd-steps-wrap">
@@ -659,8 +672,8 @@ function Founders() {
         <section className="fd-plans fd-light" id="plans" aria-labelledby="plans-title">
           <div className="fd-wrap">
             <div className="fd-section-head">
-              <h2 className="fd-display" id="plans-title">Pick a starting point</h2>
-              <p>Each plan builds on the one before it. Move up whenever you&apos;re ready.</p>
+              <h2 className="fd-display" id="plans-title">Choose the founder marketing support you need</h2>
+              <p>Start with the website, add social media, or connect the platform to lead generation and cold email outreach when you are ready to reach more prospects.</p>
             </div>
 
             <div className="fd-plans-grid">
@@ -675,6 +688,7 @@ function Founders() {
                   </ul>
                   <a
                     className="fd-btn"
+                    href="/contact"
                     onClick={(e) => {
                       e.preventDefault();
                       openContact(p.name);
@@ -692,7 +706,7 @@ function Founders() {
         <section className="fd-faq fd-light" id="faq" aria-labelledby="faq-title">
           <div className="fd-wrap fd-split">
             <div className="fd-section-head fd-sticky">
-              <h2 className="fd-display" id="faq-title">Questions founders and CEOs ask us</h2>
+              <h2 className="fd-display" id="faq-title">Questions founders and CEOs ask before hiring us</h2>
               <p>If yours isn&apos;t here, ask us directly. We reply fast.</p>
             </div>
 

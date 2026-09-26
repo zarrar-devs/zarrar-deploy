@@ -1,5 +1,5 @@
 /* =========================================================
-   Zarrar — /for-real-estate-agents
+   Zarrar — /real-estate
    Fonts come from next/font in page.js, which sets the
    --font-archivo and --font-inter-tight variables on a wrapper.
 
@@ -339,10 +339,10 @@ html.lenis body { height: auto; }
    lonely "listings." or breaks mid-phrase at odd widths. */
 .realestate-page .hero-heading {
   font-variation-settings: 'wdth' 106, 'wght' 900;
-  font-size: clamp(2.1rem, 7.5vw, 5.5rem);
-  line-height: 0.98;
-  letter-spacing: -0.045em;
-  max-width: 20ch;
+  font-size: clamp(2rem, 5.6vw, 4.4rem);
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+  max-width: 34ch;
   /* optical alignment: big glyphs have side bearing, so pull the
      heading left until its edge matches the eyebrow and body text */
   margin-inline-start: -0.03em;

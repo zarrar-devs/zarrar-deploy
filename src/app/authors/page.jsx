@@ -1,4 +1,5 @@
 import { Fraunces, Inter } from "next/font/google";
+import Link from "next/link";
 import Authors from "./Authors";
 import { CHAPTERS, FAQS, EDITIONS } from "./authors-data";
 import {
@@ -10,7 +11,6 @@ import {
   organizationSchema,
   websiteSchema,
   breadcrumbSchema,
-  faqSchema,
   graph,
   safeJsonLd,
   ORG_ID,
@@ -49,28 +49,14 @@ const body = Inter({
   variable: "--font-authors-body",
 });
 
-const TITLE = "Author Website Design & Book Marketing Services | Zarrar";
+const TITLE = "Author Website Design, Outreach & Social Media | Zarrar";
 const DESCRIPTION =
-  "Premium website development, lead generation & outreach, and social media management for authors and writers. We build the site that sells your book and get you in front of agents, press and readers.";
-const SOCIAL_TITLE = "You wrote the book. We build its audience. | Zarrar for Authors";
+  "Website development, lead generation, cold email outreach and social media for authors who want a professional online presence and more relevant opportunities.";
+const SOCIAL_TITLE = "Author websites, outreach and social media | Zarrar";
 
 export const metadata = {
   title: { absolute: TITLE },
   description: DESCRIPTION,
-  keywords: [
-    "author website design",
-    "author website developer",
-    "website for authors",
-    "book marketing agency",
-    "author branding services",
-    "lead generation for authors",
-    "author outreach services",
-    "literary agent outreach",
-    "social media management for authors",
-    "writer website design",
-    "author SEO services",
-    "author platform building",
-  ],
   alternates: { canonical: ROUTES.authors },
   robots: ROBOTS,
   openGraph: {
@@ -115,11 +101,11 @@ const jsonLd = graph([
   {
     "@type": "Service",
     "@id": `${url(ROUTES.authors)}#service`,
-    name: "Websites, Lead Generation & Social Media for Authors",
+    name: "Author website development, lead generation, cold email outreach and social media management",
     description:
-      "Author website development, lead generation and outreach, and social media management for authors and writers.",
+      "Author website development, lead generation, cold email outreach and social media management for authors and writers.",
     url: url(ROUTES.authors),
-    serviceType: "Author marketing services",
+    serviceType: ["Author website development", "Lead generation for authors", "Cold email outreach for authors", "Social media management for authors"],
     areaServed: "Worldwide",
     audience: { "@type": "Audience", audienceType: "Authors and writers" },
     provider: { "@id": ORG_ID },
@@ -137,16 +123,32 @@ const jsonLd = graph([
       })),
     },
     /* No `price` on the offers on purpose — schema with a price
-       Google can't verify against something visible on the page
+       This avoids adding unverifiable pricing to structured data.
        gets rich results rejected. */
     makesOffer: EDITIONS.map((e) => ({
       "@type": "Offer",
       name: e.name,
       description: `${e.body} Includes: ${e.includes.join("; ")}.`,
-      availability: "https://schema.org/InStock",
     })),
   },
-  faqSchema(FAQS, ROUTES.authors),
+  /* FAQPage: the /authors FAQ section already shows real, visible
+     Q&A copy (FAQS, rendered in Authors.jsx) — this just describes
+     that same on-page content to search engines so it's eligible
+     for an FAQ rich result. Google only honors this when the
+     questions/answers are genuinely visible on the page, which they
+     are here, so no content had to be invented for it. */
+  {
+    "@type": "FAQPage",
+    "@id": `${url(ROUTES.authors)}#faq`,
+    mainEntity: FAQS.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.a,
+      },
+    })),
+  },
 ]);
 
 export default function AuthorsPage() {
@@ -156,6 +158,7 @@ export default function AuthorsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
       />
+      <nav className="seo-breadcrumb" aria-label="Breadcrumb"><Link href="/">Home</Link><span aria-hidden="true">/</span><span>Authors</span></nav>
       <Authors />
     </div>
   );

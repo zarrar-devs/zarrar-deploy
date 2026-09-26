@@ -8,6 +8,39 @@
  *   (self-host these before shipping — a third-party image host on the
  *    critical path hurts LCP, which hurts SEO.)
  *
+ * ── Round 13 — responsiveness, real alt text, image sizing ─────────────────
+ * 1) FIXED A TABLET DEAD ZONE (768–1023px). The "phone card" CSS layout
+ *    only applied below 768px, but the JS's non-desktop branch (which
+ *    skips the whole pin/spotlight choreography — see `isMobile` below)
+ *    covers everything below 1024px. In that 768–1023px gap you got the
+ *    worst of both: the shared desktop photo stage was still visible
+ *    (only ever showing capability #1's image, frozen — the spotlight
+ *    handoff never runs outside the desktop branch) while none of the
+ *    list rows ever highlighted and rows 2–3 had no photo of their own.
+ *    The CSS breakpoint for the per-row-image card layout now matches
+ *    the JS threshold exactly (1023.98px), and a new tablet-only
+ *    sub-breakpoint upgrades the cards to a 2-column grid so the extra
+ *    width isn't wasted (see WhoAreWe.css).
+ * 2) REAL ALT TEXT. `CAPABILITIES[].media.alt` was written out per image
+ *    but never actually used — every <Image> rendered with `alt=""`.
+ *    The mobile/tablet cards (one unambiguous image per card, no
+ *    stacking) now use the real alt text and are no longer
+ *    `aria-hidden`, so they're both accessible and indexable. The
+ *    desktop shared stage keeps `aria-hidden` on its wrapper — three
+ *    images are physically stacked there and the same information is
+ *    already in the adjacent text row, so exposing all three to
+ *    assistive tech at once would just be noise — but the images
+ *    themselves still carry real `alt` for image-search purposes.
+ * 3) Tightened the `sizes` hints on both image spots so the browser
+ *    isn't picking a blurrier source than it needs (the stage column
+ *    can render close to 640px on wide desktops) or fetching a full
+ *    desktop-res image at breakpoints where that spot is hidden.
+ *
+ * NOTE (unfixed, needs a new asset, not a code fix): the lead-generation
+ * capability's photo doesn't actually depict lead generation — see the
+ * comment on that entry in CAPABILITIES below. Swap the file in once a
+ * real asset exists; alt text is already written for the correct subject.
+ *
  * ── What changed vs round 11 ────────────────────────────────────────────────
  * 1) FIXED THE LEDE REVEAL (visible in the screen recording — "people
  *    actually trust," rendered sliced in half horizontally for the whole
@@ -41,8 +74,8 @@
  *    reload with the page already scrolled to this section, or a
  *    deep-link to #who-we-are. In exactly that case the callback hit the
  *    temporal dead zone and threw a ReferenceError, taking the rest of
- *    the timeline setup down with it (no pin, no reveals). The function
- *    is now declared before the timeline that references it.
+ *    the timeline setup down with it. The function is now declared
+ *    before the timeline that references it.
  * 3) 01 / 02 / 03 MARKERS REMOVED. The three capabilities are parallel
  *    offerings, not steps in a process, so numbering them encoded
  *    something untrue. Each row now carries a small state dot instead —
@@ -164,7 +197,7 @@ const PAPER_MUTED = "rgba(255, 255, 255, 0.78)";
 // second line is the emphasised one (full black against the first line's
 // muted ink — see .waw-lede-accent).
 const LEDE_LINES = [
-  { text: "From qualified leads to a digital presence people actually trust,", accent: false },
+ { text: "From qualified leads to a digital presence people actually trust,", accent: false },
   { text: "we're the team that runs the whole engine.", accent: true },
 ];
 
@@ -174,64 +207,56 @@ const SCROLL_HINT_TEXT = "Scroll slowly for the best experience";
 
 const CAPABILITIES = [
   {
-    label: "Email marketing",
-    description: "Campaigns people actually open, click, and remember.",
+    label: "Cold email outreach",
+    description: "Targeted cold email campaigns built around your ideal customer, with the copy, sending setup and follow-up needed to start relevant conversations.",
     media: {
       type: "image",
-      src: "/email-marketing.png",
-      alt: "Email marketing campaign preview",
+      src: "/capability-cold-email.webp",
+      alt: "Shopping bag printed with the slogan “Built better email campaigns for your brand”",
     },
   },
   {
     label: "Lead generation",
-    description: "Funnels engineered to turn visits into qualified leads.",
+    description: "Research and qualification that turn a broad market into a focused list of prospects who actually fit your offer.",
     media: {
       type: "image",
-      src: "/graphic-design.png",
-      alt: "Lead generation funnel dashboard",
+      /* This photo is decorative; keep the asset description aligned with the actual image.
+         poster) is a graphic-design image and does not show lead
+         generation. The alt below describes what is ACTUALLY in it —
+         alt text must match the picture. Replace the file with a
+         lead-gen visual (same name, same 3:2 ratio) and update the alt. */
+      src: "/capability-lead-generation.webp",
+      alt: "Street poster reading “Good Design Creates Better Days” beside a parked red bicycle",
     },
   },
   {
     label: "Web development",
-    description: "Fast, conversion-ready sites built to hold up at scale.",
+    description: "Fast, custom websites that explain your offer clearly, capture enquiries and give your outreach somewhere credible to land.",
     media: {
       // Switch `type` to "video" and point `src` at a self-hosted,
       // compressed clip (ideally <1MB, no audio track) to use footage
       // here instead — the <video> branch below is already wired up,
       // including a poster and play-on-reveal.
       type: "image",
-      src: "/web-development.png",
-      alt: "Responsive web development project preview",
+      src: "/capability-web-development.webp",
+      alt: "Online store product page for a sherpa fleece jacket, shown as a website mockup",
     },
   },
 ];
 
 const CLOSING_TEXT =
-  "We pair data-driven strategy with conversion-focused design, so every " +
-  "campaign, funnel and website we ship actually moves the needle for " +
-  "your business.";
+  "We build the parts as one system: a website that earns trust, lead generation that finds the right people, outreach that starts conversations, and social media that keeps your name in the room.";
 
 // Reveal direction for the stage photo wipe — mirrors the row fill's
 // left-anchored scaleX, so the two "spotlight" motions read as one idea.
 const HIDDEN_CLIP = "inset(0% 0% 0% 100%)";
 const VISIBLE_CLIP = "inset(0% 0% 0% 0%)";
 
-// Structured data so search engines can read the three services directly,
-// independent of the scroll-linked reveal animation. These are parallel
-// offerings rather than a ranked or sequenced list, so this is a plain
-// ItemList of Services with `itemListOrder` marked unordered — matching
-// the UI, which no longer numbers them either.
-const SERVICES_JSON_LD = {
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  name: "Services",
-  itemListOrder: "https://schema.org/ItemListUnordered",
-  itemListElement: CAPABILITIES.map((cap) => ({
-    "@type": "Service",
-    name: cap.label,
-    description: cap.description,
-  })),
-};
+// Structured data: intentionally NOT declared here any more. This block
+// listed three services with no provider, while the site sells four and
+// the page-level @graph (src/app/page.jsx <- SERVICES in
+// src/lib/site.js) already describes all of them under the one
+// Organization. Two competing service lists is worse than one.
 
 export default function WhoAreWe() {
   const pinRef = useRef(null);
@@ -636,102 +661,23 @@ export default function WhoAreWe() {
           reveal(revealTargets, capabilityBlockRef.current, { stagger: 0.12, onStart: startVideo });
           reveal(closing, closing, { duration: 0.6 });
 
-          // No pin on mobile, so the spotlight is driven by each row's own
-          // trigger instead of one scrubbed timeline — but it's the exact
-          // same "light row i, revert row i-1" logic as desktop, just fired
-          // discretely as each row crosses ~60% up the viewport (either
-          // scroll direction), so it still only ever lights one row. The
-          // active row's photo keeps the same slow Ken-Burns drift desktop
-          // uses, started once its own reveal finishes and killed the
-          // moment another row takes over.
-          let activeIndex = -1;
-          const setActive = (i) => {
-            if (activeIndex === i) return;
+          // Mobile intentionally does NOT run the desktop spotlight pattern.
+          // Each service gets its own inline image in normal document flow
+          // (see the JSX below), so the user understands each offer without
+          // having to scroll a long distance before a shared image changes.
+          // This also removes several ScrollTriggers + continuous image
+          // transforms from the phone path.
+          gsap.set(capabilityItems, { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" });
 
-            if (activeIndex > -1) {
-              driftTween?.kill();
-              driftTween = null;
-              gsap.to(fills[activeIndex], { scaleX: 0, duration: 0.45, ease: "power3.inOut" });
-              gsap.to(capLabels[activeIndex], { color: INK, duration: 0.45 });
-              gsap.to(capDescs[activeIndex], { color: INK_MUTED, duration: 0.45 });
-              gsap.to(capMarks[activeIndex], {
-                backgroundColor: "rgba(11, 11, 12, 0)",
-                borderColor: INK_MUTED,
-                duration: 0.45,
-              });
-              gsap.to(stageMediaInner[activeIndex], {
-                scale: 1.08,
-                filter: blurOut,
-                duration: 0.6,
-                ease: "power2.in",
-              });
-              gsap.to(stageMedia[activeIndex], {
-                opacity: 0,
-                duration: 0.35,
-                delay: 0.25,
-                ease: "power2.in",
-              });
-            }
-
-            gsap.to(fills[i], { scaleX: 1, duration: 0.45, ease: "power4.out" });
-            gsap.to(capLabels[i], { color: PAPER, duration: 0.45 });
-            gsap.to(capDescs[i], { color: PAPER_MUTED, duration: 0.45 });
-            gsap.to(capMarks[i], { backgroundColor: PAPER, borderColor: PAPER, duration: 0.45 });
-
-            const startDrift = () => {
-              driftTween = gsap.to(stageMediaInner[i], {
-                scale: 1.06,
-                duration: 5,
-                ease: "sine.inOut",
-                yoyo: true,
-                repeat: -1,
-              });
-            };
-
-            if (i === 0 && activeIndex === -1) {
-              // First activation, first row — the photo is already resting
-              // in the stage (see mount-time gsap.set above); unblur + pop it.
-              gsap.fromTo(
-                stageMediaInner[0],
-                { scale: 1.04, filter: blurHidden },
-                { scale: 1, filter: blurVisible, duration: 0.6, ease: "expo.out", onComplete: startDrift }
-              );
-            } else {
-              // Guard against a mid-fade-out opacity from a previous visit
-              // to this row before the wipe reveals it again.
-              gsap.set(stageMedia[i], { opacity: 1 });
-              gsap.fromTo(
-                stageMedia[i],
-                { clipPath: HIDDEN_CLIP },
-                { clipPath: VISIBLE_CLIP, duration: 0.6, ease: "expo.inOut" }
-              );
-              gsap.fromTo(
-                stageMediaInner[i],
-                { scale: 1.18, filter: blurHidden },
-                { scale: 1, filter: blurVisible, duration: 0.6, ease: "expo.out", onComplete: startDrift }
-              );
-            }
-
-            activeIndex = i;
-          };
-
-          capabilityItems.forEach((row, i) => {
-            ScrollTrigger.create({
-              trigger: row,
-              start: "top 62%",
-              end: "bottom 38%",
-              onEnter: () => setActive(i),
-              onEnterBack: () => setActive(i),
-            });
-          });
-
+          // Keep only a very light ambient ring drift on mobile. It is decorative
+          // and does not affect content position or interaction.
           gsap.to(rings, {
-            y: -30,
-            duration: 6,
+            y: -18,
+            duration: 8,
             ease: "sine.inOut",
             repeat: -1,
             yoyo: true,
-            stagger: 0.6,
+            stagger: 0.7,
           });
         }
 
@@ -754,16 +700,8 @@ export default function WhoAreWe() {
       aria-labelledby="who-we-are-heading"
       className={`waw-section ${displayFont.variable} ${stampFont.variable} ${bodyFont.variable}`}
     >
-      {/* Structured data for the three services — read by crawlers straight
-          from markup, independent of the scroll-linked reveal animation. */}
-      <script
-        type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(SERVICES_JSON_LD) }}
-      />
-
       <div className="waw-pin" ref={pinRef}>
-        <p className="waw-scroll-hint" ref={scrollHintRef} aria-hidden="true">
+        <p className="waw-scroll-hint" ref={scrollHintRef} aria-hidden="true" data-nosnippet="">
           {SCROLL_HINT_TEXT}
         </p>
 
@@ -831,6 +769,15 @@ export default function WhoAreWe() {
                   two are always in sync because one activateCapability()
                   call (or setActive() on mobile) drives both at once. */}
               <div className="waw-capability-block" ref={capabilityBlockRef}>
+                {/* Desktop shared stage: three photos stacked on top of each
+                    other, only one ever visible at a time (clip-path driven
+                    by the JS). aria-hidden stays on this wrapper on purpose
+                    — exposing all three stacked images to assistive tech at
+                    once would be confusing, and the same information is
+                    already in the row text next to it. The images still
+                    carry real alt text (rather than "") so they remain
+                    indexable for image search even though a screen reader
+                    won't announce them. */}
                 <div className="waw-capability-stage" ref={mediaStageRef} aria-hidden="true">
                   {CAPABILITIES.map((cap) => (
                     <div className="waw-capability-media" key={cap.label}>
@@ -842,16 +789,17 @@ export default function WhoAreWe() {
                           playsInline
                           preload="none"
                           poster={cap.media.poster}
+                          aria-label={cap.media.alt}
                         >
                           <source src={cap.media.src} type="video/mp4" />
                         </video>
                       ) : (
                         <Image
                           src={cap.media.src}
-                          alt={cap.media.alt || cap.label}
+                          alt={cap.media.alt}
                           fill
                           loading="lazy"
-                          sizes="(min-width: 1024px) 420px, 90vw"
+                          sizes="(min-width: 1024px) 640px, 0px"
                           style={{ objectFit: "cover", objectPosition: "center" }}
                         />
                       )}
@@ -863,6 +811,34 @@ export default function WhoAreWe() {
                   {CAPABILITIES.map((cap) => (
                     <li className="waw-capability" key={cap.label}>
                       <span className="waw-capability-fill" aria-hidden="true" />
+                      {/* Mobile/tablet card image: exactly one photo per
+                          card with no stacking, so — unlike the desktop
+                          stage above — it's exposed to assistive tech and
+                          crawlers with its real alt text rather than being
+                          aria-hidden. */}
+                      <div className="waw-mobile-capability-media">
+                        {cap.media.type === "video" ? (
+                          <video
+                            muted
+                            loop
+                            playsInline
+                            preload="none"
+                            poster={cap.media.poster}
+                            aria-label={cap.media.alt}
+                          >
+                            <source src={cap.media.src} type="video/mp4" />
+                          </video>
+                        ) : (
+                          <Image
+                            src={cap.media.src}
+                            alt={cap.media.alt}
+                            fill
+                            loading="lazy"
+                            sizes="(min-width: 1024px) 0px, (min-width: 640px) 45vw, 100vw"
+                            style={{ objectFit: "cover", objectPosition: "center" }}
+                          />
+                        )}
+                      </div>
                       <div className="waw-capability-row">
                         <div className="waw-capability-copy">
                           <h3 className="waw-capability-label">{cap.label}</h3>
