@@ -1,7 +1,18 @@
 /* =====================================================================
-   WhoAreWe — round 14
+   WhoAreWe — round 15
 
    ── This round ─────────────────────────────────────────────────────────
+   - Capability images are now links (see WhoAreWe.jsx, CapabilityMediaLink).
+     Only one new rule pair was added: `.waw-capability-media-link` (right
+     after the media img/video rule). It's absolutely positioned to fill
+     its parent, so next/image `fill`, the clip-path wipe on
+     `.waw-capability-media`, and the GSAP transforms on the <img> all
+     keep working exactly as before.
+   - The text row (`.waw-capability-row`) is now an <a> too, so it got
+     link resets (no underline, inherited colour, pointer cursor) plus a
+     `:focus-visible` ring. Its look is otherwise unchanged.
+
+   ── Round 14 (still current) ────────────────────────────────────────────
    - FIXED an orphaned-looking lede + a right-pinned closing paragraph.
      `.waw-lede` (column 1) and `.waw-capability-block` (column 2) sat in
      the same implicit grid row, but the capability block (photo + list)
@@ -481,6 +492,23 @@
   will-change: transform, filter;
 }
 
+/* Clickable image: fills its (already positioned) parent, so next/image
+   `fill` and the GSAP-driven img transforms keep working unchanged. Used
+   both inside the desktop stage (.waw-capability-media) and inside the
+   mobile/tablet card image (.waw-mobile-capability-media). */
+.waw-capability-media-link {
+  position: absolute;
+  inset: 0;
+  display: block;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.waw-capability-media-link:focus-visible {
+  outline: 2px solid var(--waw-paper);
+  outline-offset: -6px; /* inside, because the parents have overflow:hidden */
+}
+
 .waw-capabilities {
   list-style: none;
   margin: 0;
@@ -513,6 +541,20 @@
   justify-content: space-between;
   gap: 1rem;
   padding: clamp(1.1rem, 2.6vw, 1.6rem) clamp(0.6rem, 1.4vw, 1rem);
+  /* The row is now an <a> (see WhoAreWe.jsx) — keep it looking exactly
+     like the old <div>. Label/desc colours are driven by the JS timeline
+     directly on those elements, so `color: inherit` here can't fight it. */
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.waw-capability-row:focus-visible {
+  /* Outside the row on desktop, so it stays visible even while the row is
+     filled black; the mobile card block below pulls it inside. */
+  outline: 2px solid var(--waw-ink);
+  outline-offset: 2px;
 }
 
 .waw-capability-copy {
@@ -781,6 +823,10 @@
     padding: 1.1rem 1rem 1.15rem;
     align-items: flex-start;
     gap: 0.9rem;
+  }
+
+  .waw-capability-row:focus-visible {
+    outline-offset: -4px; /* inside, because .waw-capability clips overflow */
   }
 
   .waw-capability-label {

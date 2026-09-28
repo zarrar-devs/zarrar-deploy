@@ -557,8 +557,8 @@ function Services({ faqs = [] }) {
         </nav>
 
         <header className="nav">
-          <a className="logo" href="#top">
-            Zarrar
+          <a className="logo" href="/">
+            ZARRAR
           </a>
 
           <nav

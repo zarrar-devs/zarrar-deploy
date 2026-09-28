@@ -8,6 +8,25 @@
  *   (self-host these before shipping — a third-party image host on the
  *    critical path hurts LCP, which hurts SEO.)
  *
+ * ── Round 15 — capability images are now links ─────────────────────────────
+ * Each capability image (desktop shared stage AND the mobile/tablet cards)
+ * is wrapped in a <TransitionLink>, the same page-transition link the Hero
+ * uses, pointing at that capability's own page (`href` in CAPABILITIES).
+ * Nothing else changed: layout, GSAP timeline, responsive split (1024px),
+ * alt text and next/image sizing are all untouched.
+ *  - The text row of each capability (label + description) is a link too,
+ *    on desktop and mobile/tablet. It's the keyboard-focusable link; the
+ *    image links are mouse/touch-only so there's one tab stop per capability.
+ *  - Desktop stage: three images are physically stacked and the wrapper is
+ *    aria-hidden, so those links are tabIndex -1 (mouse-only). Because the
+ *    hidden photos are clipped away (clip-path), a click always lands on
+ *    the photo that's currently visible = the row that's currently lit.
+ *  - On desktop the stage and the rows are pointer-events:none until
+ *    capabilitiesReveal has started, so you can't click an invisible
+ *    (opacity 0) image or row before the section has revealed it.
+ *  - Mobile/tablet cards: real, keyboard-focusable, crawlable <a href>
+ *    (anchor text = the image's alt / aria-label).
+ *
  * ── Round 13 — responsiveness, real alt text, image sizing ─────────────────
  * 1) FIXED A TABLET DEAD ZONE (768–1023px). The "phone card" CSS layout
  *    only applied below 768px, but the JS's non-desktop branch (which
@@ -118,6 +137,7 @@ import { Fraunces, Space_Mono, Space_Grotesk } from "next/font/google";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
+import TransitionLink from "../TransitionLink"; // same component the Hero uses — adjust the path to your folder
 import "./WhoAreWe.css";
 
 if (typeof window !== "undefined") {
@@ -208,6 +228,9 @@ const SCROLL_HINT_TEXT = "Scroll slowly for the best experience";
 const CAPABILITIES = [
   {
     label: "Cold email outreach",
+    // Route this image links to. /cold-email-outreach is a guess — replace
+    // it with the real route.
+    href: "/cold-email-outreach",
     description: "Targeted cold email campaigns built around your ideal customer, with the copy, sending setup and follow-up needed to start relevant conversations.",
     media: {
       type: "image",
@@ -217,6 +240,8 @@ const CAPABILITIES = [
   },
   {
     label: "Lead generation",
+    // /lead-generation is a guess — replace it with the real route.
+    href: "/lead-generation",
     description: "Research and qualification that turn a broad market into a focused list of prospects who actually fit your offer.",
     media: {
       type: "image",
@@ -231,6 +256,7 @@ const CAPABILITIES = [
   },
   {
     label: "Web development",
+    href: "/web-development",
     description: "Fast, custom websites that explain your offer clearly, capture enquiries and give your outreach somewhere credible to land.",
     media: {
       // Switch `type` to "video" and point `src` at a self-hosted,
@@ -257,6 +283,26 @@ const VISIBLE_CLIP = "inset(0% 0% 0% 0%)";
 // the page-level @graph (src/app/page.jsx <- SERVICES in
 // src/lib/site.js) already describes all of them under the one
 // Organization. Two competing service lists is worse than one.
+
+// Wraps a capability image in a transition-aware link. Every image link is
+// `decorative` (mouse/touch only, tabIndex -1): the desktop stage sits inside
+// an aria-hidden wrapper (focusable links can't live there), and the text row
+// next to each image is already a real keyboard-focusable link to the same
+// page, so keyboard users don't get two tab stops per capability.
+// NOTE: aria-label / tabIndex only work if TransitionLink forwards extra
+// props to its underlying <a>/<Link> (spread `...rest` in that component).
+function CapabilityMediaLink({ cap, decorative = false, children }) {
+  return (
+    <TransitionLink
+      href={cap.href}
+      className="waw-capability-media-link"
+      aria-label={`${cap.label} — learn more`}
+      {...(decorative ? { tabIndex: -1 } : {})}
+    >
+      {children}
+    </TransitionLink>
+  );
+}
 
 export default function WhoAreWe() {
   const pinRef = useRef(null);
@@ -462,6 +508,13 @@ export default function WhoAreWe() {
           stage.classList.add("is-marquee");
           progressTrackRef.current?.classList.add("is-visible");
 
+          // The stage and the rows are invisible (opacity 0) until
+          // capabilitiesReveal, but an invisible element still takes
+          // clicks — keep them inert until the reveal has started. Desktop
+          // only: on mobile/tablet everything is in normal flow and always
+          // clickable.
+          gsap.set(revealTargets, { pointerEvents: "none" });
+
           // The progress dot's travel distance is measured from the actual
           // rendered track/dot rather than a hardcoded pixel pair, so it
           // can't drift out of sync with the CSS. Re-measured on every
@@ -598,6 +651,14 @@ export default function WhoAreWe() {
               onStart: startVideo, // only fetch/play the clip once it's actually revealed
             },
             PHASE.capabilitiesReveal[0]
+          );
+          // Stage + rows become clickable only once their reveal has begun
+          // (reverses back to "none" if the user scrolls back above this
+          // point).
+          tl.set(
+            revealTargets,
+            { pointerEvents: "auto" },
+            PHASE.capabilitiesReveal[0] + 0.05
           );
 
           // Act 3 — HOLD (no x movement, and nothing exits after this — this
@@ -777,48 +838,19 @@ export default function WhoAreWe() {
                     already in the row text next to it. The images still
                     carry real alt text (rather than "") so they remain
                     indexable for image search even though a screen reader
-                    won't announce them. */}
+                    won't announce them.
+
+                    Each image is wrapped in a mouse-only link (tabIndex -1,
+                    see CapabilityMediaLink). Hidden photos are clipped away
+                    by clip-path, so a click always lands on the photo that's
+                    currently visible. */}
                 <div className="waw-capability-stage" ref={mediaStageRef} aria-hidden="true">
                   {CAPABILITIES.map((cap) => (
                     <div className="waw-capability-media" key={cap.label}>
-                      {cap.media.type === "video" ? (
-                        <video
-                          ref={webVideoRef}
-                          muted
-                          loop
-                          playsInline
-                          preload="none"
-                          poster={cap.media.poster}
-                          aria-label={cap.media.alt}
-                        >
-                          <source src={cap.media.src} type="video/mp4" />
-                        </video>
-                      ) : (
-                        <Image
-                          src={cap.media.src}
-                          alt={cap.media.alt}
-                          fill
-                          loading="lazy"
-                          sizes="(min-width: 1024px) 640px, 0px"
-                          style={{ objectFit: "cover", objectPosition: "center" }}
-                        />
-                      )}
-                    </div>
-                  ))}
-                </div>
-
-                <ul className="waw-capabilities" ref={capabilitiesListRef}>
-                  {CAPABILITIES.map((cap) => (
-                    <li className="waw-capability" key={cap.label}>
-                      <span className="waw-capability-fill" aria-hidden="true" />
-                      {/* Mobile/tablet card image: exactly one photo per
-                          card with no stacking, so — unlike the desktop
-                          stage above — it's exposed to assistive tech and
-                          crawlers with its real alt text rather than being
-                          aria-hidden. */}
-                      <div className="waw-mobile-capability-media">
+                      <CapabilityMediaLink cap={cap} decorative>
                         {cap.media.type === "video" ? (
                           <video
+                            ref={webVideoRef}
                             muted
                             loop
                             playsInline
@@ -834,18 +866,61 @@ export default function WhoAreWe() {
                             alt={cap.media.alt}
                             fill
                             loading="lazy"
-                            sizes="(min-width: 1024px) 0px, (min-width: 640px) 45vw, 100vw"
+                            sizes="(min-width: 1024px) 640px, 0px"
                             style={{ objectFit: "cover", objectPosition: "center" }}
                           />
                         )}
+                      </CapabilityMediaLink>
+                    </div>
+                  ))}
+                </div>
+
+                <ul className="waw-capabilities" ref={capabilitiesListRef}>
+                  {CAPABILITIES.map((cap) => (
+                    <li className="waw-capability" key={cap.label}>
+                      <span className="waw-capability-fill" aria-hidden="true" />
+                      {/* Mobile/tablet card image: exactly one photo per
+                          card with no stacking, so — unlike the desktop
+                          stage above — it's exposed to assistive tech and
+                          crawlers with its real alt text rather than being
+                          aria-hidden. It's a real, keyboard-focusable link
+                          to the capability's page. */}
+                      <div className="waw-mobile-capability-media">
+                        <CapabilityMediaLink cap={cap} decorative>
+                          {cap.media.type === "video" ? (
+                            <video
+                              muted
+                              loop
+                              playsInline
+                              preload="none"
+                              poster={cap.media.poster}
+                              aria-label={cap.media.alt}
+                            >
+                              <source src={cap.media.src} type="video/mp4" />
+                            </video>
+                          ) : (
+                            <Image
+                              src={cap.media.src}
+                              alt={cap.media.alt}
+                              fill
+                              loading="lazy"
+                              sizes="(min-width: 1024px) 0px, (min-width: 640px) 45vw, 100vw"
+                              style={{ objectFit: "cover", objectPosition: "center" }}
+                            />
+                          )}
+                        </CapabilityMediaLink>
                       </div>
-                      <div className="waw-capability-row">
+                      {/* The whole text row is a link too (desktop list and
+                          mobile/tablet cards). This is the keyboard-focusable
+                          link for each capability; the heading + description
+                          inside it give crawlers real anchor text. */}
+                      <TransitionLink href={cap.href} className="waw-capability-row">
                         <div className="waw-capability-copy">
                           <h3 className="waw-capability-label">{cap.label}</h3>
                           <p className="waw-capability-desc">{cap.description}</p>
                         </div>
                         <span className="waw-capability-mark" aria-hidden="true" />
-                      </div>
+                      </TransitionLink>
                     </li>
                   ))}
                 </ul>
