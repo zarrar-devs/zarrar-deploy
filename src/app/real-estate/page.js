@@ -31,7 +31,7 @@ const interTight = Inter_Tight({
 });
 
 const SOCIAL_TITLE =
-  "Real estate websites, local SEO and lead generation | Zarrar";
+  "Real Estate Website Design & Lead Generation | Zarrar";
 
 export const metadata = {
   metadataBase: new URL(SITE),
@@ -53,16 +53,7 @@ export const metadata = {
     title: SOCIAL_TITLE,
     description: PAGE_DESCRIPTION,
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
 };
 
 export const viewport = {

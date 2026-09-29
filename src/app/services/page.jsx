@@ -14,6 +14,7 @@ import {
   safeJsonLd,
   ORG_ID,
   WEBSITE_ID,
+  TARGET_MARKETS,
 } from "@/lib/site";
 
 /* =============================================================
@@ -69,10 +70,10 @@ const interTight = Inter_Tight({
 
 /* Title <= 60 and description <= 160 characters, so Google shows them
    whole instead of cutting them off with "…". */
-const TITLE = "Website, Lead Generation, Cold Email & Social | Zarrar";
+const TITLE = "Web Development & Lead Generation Services | Zarrar";
 const DESCRIPTION =
-  "Website development, lead generation, cold email outreach and social media management for speakers, authors, coaches, real estate agents and founders.";
-const SOCIAL_TITLE = "Website, lead generation and outreach services | Zarrar";
+  "Web development, lead generation, cold email outreach and social media management for founders, speakers, coaches, authors and real estate professionals across US and European markets.";
+const SOCIAL_TITLE = "Web Development & Lead Generation Services | Zarrar";
 
 export const metadata = {
   title: { absolute: TITLE },
@@ -117,7 +118,7 @@ export const FAQS = [
   },
   {
     q: "Is cold email outreach still effective, and is it legal?",
-    a: "It works when the list is genuinely targeted, the message is relevant to that specific person, and the sending setup is technically sound. We authenticate your sending domains with SPF, DKIM and DMARC, warm them up properly, keep volumes sensible and include a clear opt-out in every message — which is what compliance regimes like CAN-SPAM and GDPR require. Blasting a generic template at a bought list does not work and we don't do it.",
+    a: "It can work when the list is genuinely targeted, the message is relevant to the recipient and the sending setup is technically sound. We authenticate sending domains with SPF, DKIM and DMARC and use clear opt-out handling. Email and privacy rules vary by country, recipient type and campaign, so the final approach should be checked against the requirements that apply to your market. We do not rely on generic blasts to bought lists.",
   },
   {
     q: "What does social media management actually include?",
@@ -155,7 +156,7 @@ const jsonLd = graph([
     description: DESCRIPTION,
     url: url(ROUTES.services),
     serviceType: ["Website development", "Lead generation", "Cold email outreach", "Social media management"],
-    areaServed: "Worldwide",
+    areaServed: TARGET_MARKETS,
     provider: { "@id": ORG_ID },
     hasOfferCatalog: {
       "@type": "OfferCatalog",

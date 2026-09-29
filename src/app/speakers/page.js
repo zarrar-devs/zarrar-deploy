@@ -7,6 +7,7 @@ import {
   SITE,
   buildJsonLd,
 } from "./speakers-data";
+import { ROBOTS } from "@/lib/site";
 
 /* Metadata must live in a server file, so it sits here and the
    interactive component stays "use client".
@@ -28,7 +29,7 @@ const interTight = Inter_Tight({
   variable: "--font-inter-tight",
 });
 
-const SOCIAL_TITLE = "Speaker websites, lead generation and outreach | Zarrar";
+const SOCIAL_TITLE = "Speaker Website Design & Lead Generation | Zarrar";
 
 export const metadata = {
   metadataBase: new URL(SITE),
@@ -50,16 +51,7 @@ export const metadata = {
     title: SOCIAL_TITLE,
     description: PAGE_DESCRIPTION,
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
+  robots: ROBOTS,
 };
 
 export const viewport = {

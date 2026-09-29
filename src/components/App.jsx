@@ -14,11 +14,13 @@ export default function App() {
 
   return (
     <SmoothScrollProvider>
-      <Preloader heroRef={heroRef} onDone={() => setIntroDone(true)}>
-        <Hero ref={heroRef} />
-      </Preloader>
-      <WhoAreWe></WhoAreWe>
-      <WhyChooseUs />
+      <main id="page-main">
+        <Preloader heroRef={heroRef} onDone={() => setIntroDone(true)}>
+          <Hero ref={heroRef} />
+        </Preloader>
+        <WhoAreWe />
+        <WhyChooseUs />
+      </main>
     </SmoothScrollProvider>
   );
 }

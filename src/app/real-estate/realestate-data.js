@@ -11,20 +11,20 @@
    - FAQ answers describe the service in general terms. Check that
      each one matches how you actually work (especially IDX/MLS
      setup and the outreach-compliance answer).
-   - The copy is US/Canada-flavoured (MLS, IDX, zip code, realtor).
+   - Property-feed terminology is kept platform-neutral so the page can serve agents across multiple markets.
    ============================================================= */
 
-import { SITE_URL, CONTACT_EMAIL as SHARED_CONTACT_EMAIL, organizationSchema, websiteSchema, ORG_ID, WEBSITE_ID } from "@/lib/site";
+import { SITE_URL, CONTACT_EMAIL as SHARED_CONTACT_EMAIL, organizationSchema, websiteSchema, ORG_ID, WEBSITE_ID, TARGET_MARKETS } from "@/lib/site";
 
 export const SITE = SITE_URL;
 export const PAGE_PATH = "/real-estate";
 export const PAGE_URL = `${SITE}${PAGE_PATH}`;
 export const CONTACT_EMAIL = SHARED_CONTACT_EMAIL;
 
-export const PAGE_TITLE = "Real Estate Website, Local SEO & Leads | Zarrar";
+export const PAGE_TITLE = "Real Estate Website Design & Lead Generation | Zarrar";
 /* keep under ~160 characters so Google doesn't cut it off */
 export const PAGE_DESCRIPTION =
-  "Website development, local SEO, lead generation, outreach and social media management for real estate agents who want more direct buyer and seller enquiries.";
+  "Real estate website design, local SEO and lead generation for agents who want more direct buyer and seller enquiries beyond portal profiles.";
 
 /* Search patterns buyers and sellers actually type. */
 export const SEARCH_TERMS = [
@@ -40,7 +40,7 @@ export const COMPARE = {
     tag: "Relying on portals",
     points: [
       "Your profile sits next to ads for other agents on the same listing page.",
-      "Enquiries are often shared with whoever else is paying for that zip code.",
+      "Enquiries can be competing with other agent profiles on the same portal page.",
       "Your visibility can still depend heavily on the portal while your profile is active.",
     ],
   },
@@ -136,7 +136,7 @@ export const PLANS = [
     body: "The full system: website, local SEO, social media and lead generation working together around your market.",
     includes: [
       "Everything in Presence",
-      "Outreach to expired listings, FSBOs and past clients",
+      "Targeted outreach to relevant buyers, sellers and past enquiries",
       "Instant lead alerts and follow-up sequences",
       "Enquiry alerts and follow-up workflow for buyer and seller leads",
     ],
@@ -149,12 +149,12 @@ const planName = (id) => PLANS.find((p) => p.id === id)?.name ?? id;
 
 export const FAQS = [
   {
-    q: "I'm already on Zillow and Realtor.com. Do I still need my own website?",
-    a: "A portal can be useful, but your own website gives buyers and sellers a place to evaluate your services, market knowledge, listings and contact options without competing profiles on the same page.",
+    q: "I'm already listed on property portals. Do I still need my own website?",
+    a: "A portal can be useful, but your own website gives buyers and sellers a place to evaluate your services, market knowledge, listings and contact options without competing agent profiles around the page.",
   },
   {
-    q: "Can my real estate website show live MLS listings?",
-    a: "Where an MLS/IDX feed is available and your brokerage permits it, the site can display live listing data. We confirm the feed, board and brokerage requirements before building it.",
+    q: "Can my real estate website show live property listings?",
+    a: "Where a property or brokerage-approved listings feed is available, the site can display live listing data. We confirm the feed and brokerage requirements before building it.",
   },
   {
     q: "How quickly can a new buyer or seller reach me?",
@@ -199,15 +199,6 @@ export function buildJsonLd() {
         inLanguage: "en",
         isPartOf: { "@id": WEBSITE_ID },
         about: { "@id": `${PAGE_URL}#service` },
-        breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },
-      },
-      {
-        "@type": "BreadcrumbList",
-        "@id": `${PAGE_URL}#breadcrumb`,
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: SITE },
-          { "@type": "ListItem", position: 2, name: "For real estate agents", item: PAGE_URL },
-        ],
       },
       {
         "@type": "Service",
@@ -216,7 +207,7 @@ export function buildJsonLd() {
         serviceType:
           ["Real estate website development", "Local SEO", "Lead generation for real estate agents", "Cold outreach for real estate agents", "Social media management for real estate agents"],
         provider: { "@id": ORG_ID },
-        areaServed: "Worldwide",
+        areaServed: TARGET_MARKETS,
         audience: { "@type": "Audience", audienceType: "Real estate agents" },
         hasOfferCatalog: {
           "@type": "OfferCatalog",

@@ -3,15 +3,15 @@ import { ROUTES } from "./site";
 export const SERVICE_PAGES = {
   webDevelopment: {
     path: ROUTES.webDevelopment,
-    title: "Web Development Agency for Business Websites | Zarrar",
+    title: "Website Development for Founders & Personal Brands | Zarrar",
     description:
-      "Custom website development for founders and service businesses, with clear messaging, responsive UX, technical SEO and a focused enquiry path.",
-    socialTitle: "Business Website Development | Zarrar",
+      "Custom website development for founders, speakers, coaches, authors and real estate professionals who need a credible, conversion-focused online presence.",
+    socialTitle: "Website Development for Founders & Personal Brands | Zarrar",
     eyebrow: "WEB DEVELOPMENT",
-    h1: "Custom web development for businesses that need a clearer online presence.",
+    h1: "Website development for founders, speakers and service businesses that need to look credible and convert attention into enquiries.",
     intro:
-      "Zarrar designs and develops custom business websites for founders and service businesses that need a clearer online presence. We shape the message, build the pages around real customer questions, make the site work across devices, and give important visitors a clear next step.",
-    serviceType: "Custom business website development",
+      "Zarrar designs and develops custom websites for founders, speakers, coaches, authors and real estate professionals who need more than a template. We shape the message, build pages around real customer questions, make the experience work across devices, and give visitors a clear next step. Projects are handled remotely across the US, UK and Europe.",
+    serviceType: "Website development",
     audience:
       "Founders, speakers, coaches, authors, real estate agents and other service businesses",
     audienceIntro:
@@ -65,17 +65,17 @@ export const SERVICE_PAGES = {
 
   leadGeneration: {
     path: ROUTES.leadGeneration,
-    title: "Lead Generation Agency for B2B & Service Businesses | Zarrar",
+    title: "Lead Generation for Founders, Speakers & Coaches | Zarrar",
     description:
-      "Targeted lead generation built around your ideal customers, with prospect research, qualification, segmentation and a focused pipeline ready for outreach.",
-    socialTitle: "Targeted Lead Generation | Zarrar",
+      "Targeted lead generation built around your ideal customers, with prospect research, qualification, segmentation and a focused pipeline ready for outreach or sales follow-up.",
+    socialTitle: "Lead Generation for Founders & Service Businesses | Zarrar",
     eyebrow: "LEAD GENERATION",
-    h1: "Lead generation built around the people most likely to need what you sell.",
+    h1: "Lead generation built around the people most likely to need, book or buy what you sell.",
     intro:
-      "Zarrar builds targeted lead-generation systems for businesses that know who they want to reach but do not have a reliable prospecting process. We define the ideal customer, research companies and contacts that fit, qualify them against clear criteria and organise the data so it is ready for outreach or sales follow-up.",
-    serviceType: "B2B lead generation",
+      "Zarrar builds targeted lead-generation systems for founders, speakers, coaches, authors, real estate professionals and service businesses that know who they want to reach but do not have a reliable prospecting process. We define the ideal customer, research people, companies or event teams that fit, qualify them against clear criteria and organise the data so it is ready for outreach or sales follow-up. Projects are handled remotely across the US, UK and Europe.",
+    serviceType: "Lead generation",
     audience:
-      "Founders, agencies, consultants, speakers, coaches and other service businesses",
+      "Founders, speakers, coaches, authors, real estate agents and other service businesses",
     audienceIntro:
       "This service is for businesses that need a focused prospect pipeline rather than a large unqualified list. The criteria can include industry, role, geography, company size, offer fit and other buying signals.",
     benefits: [
@@ -126,17 +126,17 @@ export const SERVICE_PAGES = {
 
   coldEmail: {
     path: ROUTES.coldEmail,
-    title: "Cold Email Outreach Agency for B2B Businesses | Zarrar",
+    title: "Cold Email Outreach for Founders & Speakers | Zarrar",
     description:
-      "Targeted cold email outreach for founders and service businesses, covering prospect research, sending setup, campaign copy, follow-up and reply handling.",
-    socialTitle: "Cold Email Outreach for B2B Businesses | Zarrar",
+      "Cold email outreach for founders, speakers, coaches, authors, real estate agents and service businesses, covering targeting, sending setup, campaign copy and follow-up.",
+    socialTitle: "Cold Email Outreach for Founders & Speakers | Zarrar",
     eyebrow: "COLD EMAIL OUTREACH",
-    h1: "Cold email outreach built around a relevant audience, a clear offer and a credible sending system.",
+    h1: "Cold email outreach for a relevant audience, a clear offer and a credible sending system.",
     intro:
-      "Zarrar helps businesses build cold email campaigns that start with the right prospects and the right offer. We handle prospect selection, sending-domain authentication, campaign messaging, follow-up and iteration so outreach has a defined process instead of relying on one generic template.",
+      "Zarrar helps founders, speakers, coaches, authors, real estate professionals and service businesses build cold email campaigns that start with the right prospects and the right offer. We handle prospect selection, sending-domain authentication, campaign messaging, follow-up and iteration so outreach has a defined process instead of relying on one generic template. Projects are handled remotely across the US, UK and Europe.",
     serviceType: "Cold email outreach",
     audience:
-      "B2B businesses, agencies, consultants, founders, speakers and coaches",
+      "Founders, speakers, coaches, authors, real estate agents and other service businesses",
     audienceIntro:
       "This service is for businesses with a specific offer and a defined audience they can approach directly. We focus on relevance, sending hygiene and useful follow-up rather than high-volume blasting.",
     benefits: [
@@ -175,7 +175,7 @@ export const SERVICE_PAGES = {
       ["04", "Improve", "We review replies, objections and campaign data to adjust targeting and messaging for the next iteration."],
     ],
     faqs: [
-      ["Do you use purchased email lists?", "The process is built around targeted research and agreed qualification criteria rather than treating a large bought list as a strategy."],
+      ["Do you use purchased email lists?", "The process is built around targeted research and agreed qualification criteria rather than treating a large bought list as a strategy. The permitted approach depends on the recipient, market and applicable rules."],
       ["Will you set up SPF, DKIM and DMARC?", "Yes, where applicable to the sending setup. We treat authentication and sending configuration as part of campaign preparation."],
       ["Does cold email guarantee meetings or sales?", "No. Outreach performance depends on the offer, audience, timing, market and execution. The goal is to build a disciplined system for starting relevant conversations, not promise a fixed outcome."],
     ],
@@ -187,17 +187,17 @@ export const SERVICE_PAGES = {
 
   socialMedia: {
     path: ROUTES.socialMedia,
-    title: "Social Media Management for Founders & Businesses | Zarrar",
+    title: "Social Media Management for Personal Brands | Zarrar",
     description:
-      "Social media management for founders and businesses, including content planning, writing, publishing, profile optimisation and routine community replies.",
-    socialTitle: "Social Media Management for Founders & Businesses | Zarrar",
+      "Social media management for founders, speakers, coaches, authors and personal brands, covering content planning, publishing, profile optimisation and replies.",
+    socialTitle: "Social Media Management for Personal Brands | Zarrar",
     eyebrow: "SOCIAL MEDIA MANAGEMENT",
     h1: "Social media management that turns your expertise into a consistent business presence.",
     intro:
-      "Zarrar manages social media for founders and service businesses that want to stay visible without turning content into another full-time task. We build the content plan around your expertise and offers, write and schedule the posts, keep profiles clear and handle routine replies on the channels you choose.",
+      "Zarrar manages social media for founders, speakers, coaches, authors, personal brands and service businesses that want to stay visible without turning content into another full-time task. We build the content plan around your expertise and offers, write and schedule the posts, keep profiles clear and handle routine replies on the channels you choose. Projects are handled remotely across the US, UK and Europe.",
     serviceType: "Social media management",
     audience:
-      "Founders, coaches, speakers, authors, agencies and service businesses",
+      "Founders, speakers, coaches, authors, real estate agents and other service businesses",
     audienceIntro:
       "This service is for businesses with useful expertise, stories or offers to share but not enough time to plan, publish and maintain social profiles consistently themselves.",
     benefits: [

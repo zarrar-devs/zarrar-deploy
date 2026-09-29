@@ -4,6 +4,7 @@ import { serviceDisplayFont, serviceBodyFont } from "@/lib/service-fonts";
 import {
   ORG_ID,
   SITE_URL,
+  TARGET_MARKETS,
   WEBSITE_ID,
   breadcrumbSchema,
   graph,
@@ -41,7 +42,7 @@ const jsonLd = graph([
     description: service.description,
     url: url(service.path),
     serviceType: service.serviceType,
-    areaServed: "Worldwide",
+    areaServed: TARGET_MARKETS,
     audience: { "@type": "Audience", audienceType: service.audience },
     provider: { "@id": ORG_ID },
   },

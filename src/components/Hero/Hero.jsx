@@ -90,7 +90,7 @@ const bodyFont = Space_Grotesk({
 // the old copy said "email campaigns" and "branding", neither of
 // which is a service this agency sells.
 const SUB_COPY =
-  "Zarrar builds custom websites that explain your offer, then connects them to lead generation, cold email outreach and social media management so the right people can find you, understand you and take the next step.";
+  "Zarrar builds custom websites and lead-generation systems for founders, speakers, coaches, authors and real estate professionals. We work remotely across the US, UK and Europe, connecting web development, cold email outreach and social media when you need the full system.";
 
 // Stable reference on purpose — see ScrambleHeadline's setup effect for
 // why. Never inline this array literal directly into <ScrambleHeadline lines={...}/>.
@@ -101,7 +101,7 @@ const SUB_COPY =
 // "Emails that bring them back" named a service (email campaigns)
 // this agency doesn't sell. Same two-line shape, same boxed-first-
 // word treatment ("Websites" / "Outreach").
-const HEADLINE_LINES = ["Websites that explain your offer.", "Outreach that reaches the right people."];
+const HEADLINE_LINES = ["Websites that explain your offer.", "Lead generation that reaches the right people."];
 
 // Stable reference for the same reason as HEADLINE_LINES above — this
 // feeds the dropdown's GSAP stagger via dropdownItemsRef, and a fresh

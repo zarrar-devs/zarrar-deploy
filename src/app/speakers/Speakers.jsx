@@ -573,17 +573,17 @@ function Speakers() {
           </p>
 
           <h1 className="hero-heading" id="hero-title">
-            <span className="hero-line">Build a stronger</span>{" "}
-            <span className="hero-line">speaker presence.</span>{" "}
+            <span className="hero-line">Speaker website design</span>{" "}
+            <span className="hero-line">built for organisers.</span>{" "}
             <span className="hero-line hero-line--accent">Reach the right</span>{" "}
-            <span className="hero-line hero-line--accent">organisers.</span>
+            <span className="hero-line hero-line--accent">event teams.</span>
           </h1>
 
           <div className="hero-rule" aria-hidden="true" />
 
           <div className="hero-foot">
             <p className="hero-sub">
-              We build your speaker website, research relevant event prospects, run targeted cold email outreach and manage social media so organisers can quickly understand your topics, proof and booking options.
+              We build your speaker website, research relevant event prospects, run targeted cold email outreach and manage social media so organisers can quickly understand your topics, proof and booking options. Zarrar works remotely across the US, UK and Europe.
             </p>
             <div className="hero-actions">
               <a className="btn btn-solid magnetic" href="#plans">
@@ -767,6 +767,11 @@ function Speakers() {
           </a>
           <p className="closing-alt">
             Not a speaker? <Link href="/services">Check out our services</Link>
+          </p>
+          <p className="closing-alt">
+            <Link href="/web-development">Speaker website development</Link> · {" "}
+            <Link href="/lead-generation">Lead generation for speakers</Link> · {" "}
+            <Link href="/cold-email-outreach">Cold email outreach for speakers</Link>
           </p>
         </section>
       </main>

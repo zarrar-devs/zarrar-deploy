@@ -1,7 +1,42 @@
 import Link from "next/link";
+import ContactModalLink from "@/components/ContactModalLink"; // path adjust karo
 import { SERVICE_PAGE_LIST } from "@/lib/service-pages";
 import { CONTACT_EMAIL, PERSONAS, ROUTES } from "@/lib/site";
 import "./service-landing.css";
+
+const AUDIENCE_ANCHOR_LABELS = {
+  [ROUTES.webDevelopment]: {
+    [ROUTES.speakers]: "Speaker website development",
+    [ROUTES.realEstate]: "Real estate website development",
+    [ROUTES.authors]: "Author website development",
+    [ROUTES.coaches]: "Coach website development",
+    [ROUTES.entrepreneurs]: "Founder website development",
+  },
+  [ROUTES.leadGeneration]: {
+    [ROUTES.speakers]: "Lead generation for speakers",
+    [ROUTES.realEstate]: "Lead generation for real estate agents",
+    [ROUTES.authors]: "Lead generation for authors",
+    [ROUTES.coaches]: "Lead generation for coaches",
+    [ROUTES.entrepreneurs]: "Lead generation for founders",
+  },
+  [ROUTES.coldEmail]: {
+    [ROUTES.speakers]: "Cold email outreach for speakers",
+    [ROUTES.realEstate]: "Cold email outreach for real estate agents",
+    [ROUTES.authors]: "Cold email outreach for authors",
+    [ROUTES.coaches]: "Cold email outreach for coaches",
+    [ROUTES.entrepreneurs]: "Cold email outreach for founders",
+  },
+  [ROUTES.socialMedia]: {
+    [ROUTES.speakers]: "Social media management for speakers",
+    [ROUTES.realEstate]: "Social media management for real estate agents",
+    [ROUTES.authors]: "Social media management for authors",
+    [ROUTES.coaches]: "Social media management for coaches",
+    [ROUTES.entrepreneurs]: "Social media management for founders",
+  },
+};
+
+const audienceAnchorLabel = (servicePath, persona) =>
+  AUDIENCE_ANCHOR_LABELS[servicePath]?.[persona.href] || persona.label;
 
 export default function ServicePage({ service }) {
   return (
@@ -18,7 +53,7 @@ export default function ServicePage({ service }) {
           <h1 className="serviceTitle">{service.h1}</h1>
           <p className="serviceIntro">{service.intro}</p>
           <div className="serviceHeroActions" aria-label={`${service.serviceType} actions`}>
-            <Link className="servicePrimaryAction" href={ROUTES.contact}>Discuss this service</Link>
+            <ContactModalLink className="servicePrimaryAction" href={ROUTES.contact}>Discuss this service</ContactModalLink>
             <a className="serviceSecondaryAction" href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`${service.serviceType} enquiry`)}`}>
               Email Zarrar
             </a>
@@ -88,7 +123,7 @@ export default function ServicePage({ service }) {
           <nav className="serviceLinks" aria-label="Zarrar audience pages">
             {PERSONAS.filter((persona) => service.relatedAudiences.includes(persona.href)).map((persona) => (
               <Link href={persona.href} key={persona.href}>
-                {persona.label}
+                {audienceAnchorLabel(service.path, persona)}
               </Link>
             ))}
           </nav>
@@ -104,7 +139,7 @@ export default function ServicePage({ service }) {
               .filter((item) => service.related.includes(item.path))
               .map((item) => (
                 <Link href={item.path} key={item.path}>
-                  {item.eyebrow}
+                  {item.serviceType}
                 </Link>
               ))}
           </nav>
@@ -132,7 +167,7 @@ export default function ServicePage({ service }) {
             <p>{service.ctaBody}</p>
           </div>
           <div className="serviceCtaActions">
-            <Link href={ROUTES.contact}>Start a project</Link>
+            <ContactModalLink href={ROUTES.contact}>Start a project</ContactModalLink>
             <a href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`${service.serviceType} enquiry`)}`}>Email {CONTACT_EMAIL}</a>
           </div>
         </section>

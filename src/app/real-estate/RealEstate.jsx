@@ -583,14 +583,14 @@ function RealEstate() {
           </p>
 
           <h1 className="hero-heading" id="hero-title">
-            Real estate websites, local SEO and lead generation that make it easier to contact you.
+            Real estate website design, local SEO and lead generation that make it easier to contact you.
           </h1>
 
           <div className="hero-rule" aria-hidden="true" />
 
           <div className="hero-foot">
             <p className="hero-sub">
-              Real estate website development, local SEO, lead generation, cold outreach and social media management designed to help buyers and sellers discover your business and contact you directly.
+              Real estate website development, local SEO, lead generation, cold outreach and social media management designed to help buyers and sellers discover your business and contact you directly. Zarrar works remotely across the US, UK and Europe.
             </p>
             <div className="hero-actions">
               <a className="btn btn-solid magnetic" href="#plans">
@@ -783,6 +783,11 @@ function RealEstate() {
           </a>
           <p className="closing-alt">
             Not an agent? <Link href="/services">See who else we work with</Link>
+          </p>
+          <p className="closing-alt">
+            <Link href="/web-development">Real estate website development</Link> · {" "}
+            <Link href="/lead-generation">Lead generation for real estate agents</Link> · {" "}
+            <Link href="/cold-email-outreach">Cold email outreach for real estate agents</Link>
           </p>
         </section>
       </main>

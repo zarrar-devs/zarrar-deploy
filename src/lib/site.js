@@ -5,9 +5,9 @@
    Before this, the real domain was written out by hand in 10+
    files and three of them disagreed with each other
    (old placeholder origins and zarrar.co). Canonical
-   tags, sitemap entries and JSON-LD @ids built from a wrong or
-   inconsistent domain are the single fastest way to lose
-   rankings — Google treats them as pointing at a different site.
+   tags, sitemap entries and JSON-LD @ids built from inconsistent
+   domains create conflicting signals about which version of the site is
+   canonical.
 
    From now on: NOTHING hardcodes the domain, a route path, the
    brand name or the contact email. Everything imports from here.
@@ -16,11 +16,13 @@
    ============================================================= */
 
 /* The production origin. No trailing slash. */
+const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/$/, "");
+const PRODUCTION_SITE_URL = "https://www.zarrar.co";
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://zarrar.co";
+  configuredSiteUrl?.replace(/^https?:\/\/(?:www\.)?zarrar\.co$/i, PRODUCTION_SITE_URL) ||
+  PRODUCTION_SITE_URL;
 
 export const BRAND = "Zarrar";
-export const LEGAL_NAME = "Zarrar";
 export const CONTACT_EMAIL = "hello@zarrar.co";
 export const LOCALE = "en_US";
 
@@ -91,24 +93,24 @@ export const PERSONAS = [
   { label: "Real Estate Agents", href: ROUTES.realEstate },
   { label: "Authors & Writers", href: ROUTES.authors },
   { label: "Coaches", href: ROUTES.coaches },
-  { label: "Entrepreneurs & CEOs", href: ROUTES.entrepreneurs },
+  { label: "Founders & CEOs", href: ROUTES.entrepreneurs },
 ];
 
 /* Reused verbatim in Organization schema on every page so the
    entity description Google sees is identical site-wide. */
 export const ORG_DESCRIPTION =
-  "Zarrar is a digital agency providing website development, lead generation, cold email outreach and social media management for founders, speakers, coaches, authors, real estate agents and service businesses.";
+  "Zarrar is a remote digital agency providing website development, lead generation, cold email outreach and social media management for founders, speakers, coaches, authors, real estate agents and service businesses.";
+
+export const TARGET_MARKETS = ["United States", "United Kingdom", "Europe"];
 
 /* Homepage title + description — used by layout.jsx, page.jsx, the
    WebPage JSON-LD and the manifest, so they can never drift apart.
-   Title is under ~60 characters and leads with the keywords people
-   actually search ("website development", "lead generation"); the
-   brand goes last. The old title was 66 characters and got cut off
-   in results. Description is under 160 characters for the same
-   reason (the old one was ~185). */
-export const HOME_TITLE = "Website Development & Lead Generation Agency | Zarrar";
+   The title leads with the core service intent while still naming the
+   audience. The description states who the agency serves and the
+   primary markets without stuffing a list of keywords. */
+export const HOME_TITLE = "Web Development & Lead Generation Agency | Zarrar";
 export const HOME_DESCRIPTION =
-  "Web development, lead generation, cold email outreach and social media management for founders, speakers, coaches, authors, real estate agents and service firms.";
+  "Custom web development and lead generation for founders, speakers, coaches, authors and real estate professionals across the US, UK and Europe.";
 
 /* The Organization node. Given a stable @id so every page's JSON-LD
    can reference the same entity instead of declaring a duplicate
@@ -121,7 +123,6 @@ export function organizationSchema() {
     "@type": "Organization",
     "@id": ORG_ID,
     name: BRAND,
-    legalName: LEGAL_NAME,
     url: SITE_URL,
     description: ORG_DESCRIPTION,
     email: CONTACT_EMAIL,
@@ -136,10 +137,13 @@ export function organizationSchema() {
       width: 512,
       height: 512,
     },
-    areaServed: "Worldwide",
+    areaServed: TARGET_MARKETS,
     knowsAbout: [
-      "Website development",
-      "Portfolio website design",
+      "Web development for founders",
+      "Speaker website design",
+      "Coach website development",
+      "Author website design",
+      "Real estate website development",
       "Search engine optimization",
       "Lead generation",
       "Cold email outreach",
@@ -202,9 +206,7 @@ export function safeJsonLd(obj) {
   return JSON.stringify(obj).replace(/</g, "\\u003c");
 }
 
-/* Shared robots directive — "max-image-preview: large" is what lets
-   Google show a big thumbnail next to your result, which measurably
-   lifts click-through. */
+/* Shared robots directive for all indexable marketing pages. */
 export const ROBOTS = {
   index: true,
   follow: true,

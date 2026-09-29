@@ -12,17 +12,17 @@
      each one matches how you actually work.
    ============================================================= */
 
-import { SITE_URL, CONTACT_EMAIL as SHARED_CONTACT_EMAIL, organizationSchema, websiteSchema, ORG_ID, WEBSITE_ID } from "@/lib/site";
+import { SITE_URL, CONTACT_EMAIL as SHARED_CONTACT_EMAIL, organizationSchema, websiteSchema, ORG_ID, WEBSITE_ID, TARGET_MARKETS } from "@/lib/site";
 
 export const SITE = SITE_URL;
 export const PAGE_PATH = "/speakers";
 export const PAGE_URL = `${SITE}${PAGE_PATH}`;
 export const CONTACT_EMAIL = SHARED_CONTACT_EMAIL;
 
-export const PAGE_TITLE = "Speaker Website, Lead Generation & Outreach | Zarrar";
+export const PAGE_TITLE = "Speaker Website Design & Lead Generation | Zarrar";
 /* keep under ~160 characters so Google doesn't cut it off */
 export const PAGE_DESCRIPTION =
-  "Website development, lead generation, cold email outreach and social media for keynote speakers who want a stronger online presence and more event opportunities.";
+  "Custom speaker website design, lead generation and cold email outreach for keynote speakers seeking relevant event organisers and booking opportunities.";
 
 /* Real past engagements only. Leave empty and the strip is hidden. */
 export const AS_SEEN_AT = [];
@@ -200,15 +200,6 @@ export function buildJsonLd() {
         inLanguage: "en",
         isPartOf: { "@id": WEBSITE_ID },
         about: { "@id": `${PAGE_URL}#service` },
-        breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },
-      },
-      {
-        "@type": "BreadcrumbList",
-        "@id": `${PAGE_URL}#breadcrumb`,
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: SITE },
-          { "@type": "ListItem", position: 2, name: "For speakers", item: PAGE_URL },
-        ],
       },
       {
         "@type": "Service",
@@ -216,7 +207,7 @@ export function buildJsonLd() {
         name: "Speaker website development, lead generation, cold email outreach and social media management",
         serviceType: ["Speaker website development", "Lead generation for speakers", "Cold email outreach to event organisers", "Social media management for speakers"],
         provider: { "@id": ORG_ID },
-        areaServed: "Worldwide",
+        areaServed: TARGET_MARKETS,
         audience: { "@type": "Audience", audienceType: "Keynote speakers" },
         hasOfferCatalog: {
           "@type": "OfferCatalog",

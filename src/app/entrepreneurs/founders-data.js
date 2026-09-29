@@ -14,7 +14,7 @@
 // fixed too — it built PAGE_URL as "/entrepreneurs", a route that
 // does not exist (the folder is /entrepreneurs), so the canonical
 // and every JSON-LD @id on this page pointed at a 404.
-import { ORG_ID, ROUTES, SITE_URL, WEBSITE_ID, organizationSchema, websiteSchema } from "@/lib/site";
+import { ORG_ID, ROUTES, SITE_URL, WEBSITE_ID, TARGET_MARKETS, organizationSchema, websiteSchema } from "@/lib/site";
 export const SITE = SITE_URL;
 export const PAGE_URL = `${SITE}${ROUTES.entrepreneurs}`;
 export const BRAND = "Zarrar";
@@ -24,18 +24,18 @@ export const AUDIENCE_TYPE = "Founders, entrepreneurs and CEOs";
 
 export const SEO = {
   /* <= 60 chars so it isn't truncated in results */
-  title: "Founder & CEO Website, Lead Generation & Outreach | Zarrar",
+  title: "Founder Website Design & Lead Generation | Zarrar",
   /* <= 155 chars */
   description:
-    "Website development, lead generation, cold email outreach and social media management for founders and CEOs who want a credible online presence and a stronger business pipeline.",
-  ogTitle: "A founder website that matches the business you're building | Zarrar",
-  h1: "A founder website that explains the person behind the business.",
+    "Founder website design, lead generation and outreach for CEOs and entrepreneurs who want a credible personal presence and a focused business pipeline.",
+  ogTitle: "Founder Website Design & Lead Generation | Zarrar",
+  h1: "Founder website design that matches the business you're building.",
   /* Update when you materially change the page (used in sitemap.js) */
-  lastModified: "2026-09-20",
+  lastModified: "2026-09-28",
 };
 
 export const HERO = {
-  sub: "We build founder websites that explain what you do, lead generation and cold email outreach that put the right prospects in front of you, and social media management that keeps your expertise visible.",
+  sub: "We build founder websites that explain what you do, targeted lead generation and cold email outreach that put the right prospects in front of you, and social media management that keeps your expertise visible. Zarrar works remotely across the US, UK and Europe.",
 };
 
 /* ---------------- Hero demo ----------------
@@ -318,7 +318,7 @@ export function buildJsonLd() {
         "@type": "WebPage",
         "@id": pageId,
         url: PAGE_URL,
-        name: "Website, Lead Generation, Outreach & Social Media for Founders & CEOs",
+        name: SEO.title,
         description: SEO.description,
         inLanguage: "en",
         isPartOf: { "@id": WEBSITE_ID },
@@ -338,11 +338,10 @@ export function buildJsonLd() {
         "@id": serviceId,
         name: "Website, lead generation, outreach and social media management for founders and CEOs",
         serviceType: SERVICES.map((s) => s.serviceType),
-        description:
-          "Website development, lead generation, cold email outreach and social media management for founders, entrepreneurs and CEOs.",
+        description: SEO.description,
         url: PAGE_URL,
         provider: { "@id": ORG_ID },
-        areaServed: "Worldwide",
+        areaServed: TARGET_MARKETS,
         audience,
         hasOfferCatalog: [
           {

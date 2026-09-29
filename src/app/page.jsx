@@ -3,10 +3,7 @@ import {
   SITE_URL,
   HOME_TITLE,
   HOME_DESCRIPTION,
-  ORG_DESCRIPTION,
   ROUTES,
-  PERSONAS,
-  url,
   organizationSchema,
   websiteSchema,
   graph,
@@ -32,29 +29,14 @@ const jsonLd = graph([
     "@id": `${SITE_URL}/#webpage`,
     url: SITE_URL,
     name: HOME_TITLE,
-    description: ORG_DESCRIPTION,
+    headline: HOME_TITLE,
+    description: HOME_DESCRIPTION,
     isPartOf: { "@id": WEBSITE_ID },
     about: { "@id": ORG_ID },
+    mainEntity: { "@id": ORG_ID },
     inLanguage: "en",
   },
-  {
-    "@type": "ItemList",
-    "@id": `${SITE_URL}/#personas`,
-    name: "Who Zarrar builds for",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Services", url: url(ROUTES.services) },
-      { "@type": "ListItem", position: 2, name: "Web Development", url: url(ROUTES.webDevelopment) },
-      { "@type": "ListItem", position: 3, name: "Lead Generation", url: url(ROUTES.leadGeneration) },
-      { "@type": "ListItem", position: 4, name: "Cold Email Outreach", url: url(ROUTES.coldEmail) },
-      { "@type": "ListItem", position: 5, name: "Social Media Management", url: url(ROUTES.socialMedia) },
-      ...PERSONAS.map((p, i) => ({
-        "@type": "ListItem",
-        position: i + 6,
-        name: p.label,
-        url: url(p.href),
-      })),
-    ],
-  },
+
 ]);
 
 export default function Home() {

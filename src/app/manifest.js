@@ -2,7 +2,7 @@ import { BRAND, ORG_DESCRIPTION } from "@/lib/site";
 
 export default function manifest() {
   return {
-    name: `${BRAND} — Web Development, Lead Generation & Social Media`,
+    name: `${BRAND} — Web Development & Lead Generation`,
     short_name: BRAND,
     description: ORG_DESCRIPTION,
     start_url: "/",

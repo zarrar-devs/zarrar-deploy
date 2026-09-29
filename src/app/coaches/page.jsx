@@ -56,6 +56,8 @@ import {
   CONTACT_EMAIL,
   organizationSchema,
   websiteSchema,
+  TARGET_MARKETS,
+  ROBOTS,
 } from "@/lib/site";
 // Domain, route and email now come from src/lib/site.js — this used to
 // hardcode an old domain and build PAGE_URL as
@@ -69,10 +71,10 @@ const CONTACT_HREF = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
 
 // Title ≈ 60 chars, description ≈ 155 chars: what Google shows before truncating.
 // Primary keyword leads the title (front-loading helps both CTR and relevance).
-const PAGE_TITLE = "Coach Website Design, Lead Generation & Outreach | Zarrar";
+const PAGE_TITLE = "Coach Website Design & Lead Generation | Zarrar";
 const PAGE_DESC =
-  "Website development, lead generation, cold email outreach and social media for coaches seeking a stronger online presence and more qualified enquiries.";
-const SOCIAL_TITLE = "Online presence and lead generation for coaches | Zarrar";
+  "Custom coaching websites and targeted lead generation for coaches who need a clear offer, credible online presence and a repeatable path to enquiries.";
+const SOCIAL_TITLE = "Custom Coach Websites & Lead Generation | Zarrar";
 // Next.js auto-detects app/coaches/opengraph-image.(jpg|png|gif) and
 // twitter-image.(jpg|png|gif) and injects them into the metadata below —
 // add those files (1200×630) instead of hardcoding an `images` array here,
@@ -90,17 +92,7 @@ export const metadata = {
   publisher: "Zarrar",
   category: "Business",
   alternates: { canonical: PAGE_URL },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-      "max-video-preview": -1,
-    },
-  },
+  robots: ROBOTS,
   openGraph: {
     type: "website",
     url: PAGE_URL,
@@ -375,7 +367,7 @@ const JSON_LD = {
       url: PAGE_URL,
       provider: { "@id": ORG_ID },
       audience: { "@type": "Audience", audienceType: "Coaches" },
-      areaServed: "Worldwide",
+      areaServed: TARGET_MARKETS,
       hasOfferCatalog: {
         "@type": "OfferCatalog",
         name: "Zarrar for coaches",
@@ -475,12 +467,12 @@ export default function ForCoachesPage() {
 
           <section className="hero" id="top">
             <h1 className="hero-heading">
-              <span className="hero-l1">Coach website design,</span>{" "}
-              <span className="hero-l2">lead generation and social media that work together.</span>
+              <span className="hero-l1">Coach website design</span>{" "}
+              <span className="hero-l2">that turns expertise into enquiries.</span>
             </h1>
 
             <p className="hero-sub">
-              We build coaching websites that explain who you help and what you offer, manage the social media that keeps your expertise visible, and run targeted lead generation and cold email outreach to reach people who fit your coaching offer.
+              We build coaching websites that explain who you help and what you offer, manage the social media that keeps your expertise visible, and run targeted lead generation and cold email outreach to reach people who fit your coaching offer. Zarrar works remotely across the US, UK and Europe.
             </p>
 
             <div className="hero-rule" aria-hidden="true" />
@@ -614,6 +606,10 @@ export default function ForCoachesPage() {
             </a>
             <p className="closing-alt">
               Not a coach? <OtherPersonas />
+            </p>
+            <p className="closing-alt">
+              <Link href="/web-development">Coach website development</Link> · {" "}
+              <Link href="/lead-generation">Lead generation for coaches</Link>
             </p>
           </section>
         </main>

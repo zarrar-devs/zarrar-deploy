@@ -1,7 +1,7 @@
 import { Fraunces, Inter } from "next/font/google";
 import Link from "next/link";
 import Authors from "./Authors";
-import { CHAPTERS, FAQS, EDITIONS } from "./authors-data";
+import { CHAPTERS, EDITIONS } from "./authors-data";
 import {
   BRAND,
   LOCALE,
@@ -49,10 +49,10 @@ const body = Inter({
   variable: "--font-authors-body",
 });
 
-const TITLE = "Author Website Design, Outreach & Social Media | Zarrar";
+const TITLE = "Author Website Design & Lead Generation | Zarrar";
 const DESCRIPTION =
-  "Website development, lead generation, cold email outreach and social media for authors who want a professional online presence and more relevant opportunities.";
-const SOCIAL_TITLE = "Author websites, outreach and social media | Zarrar";
+  "Custom author website design, lead generation and outreach for authors who want a professional platform for books, media, events and new opportunities.";
+const SOCIAL_TITLE = "Custom Author Websites & Lead Generation | Zarrar";
 
 export const metadata = {
   title: { absolute: TITLE },
@@ -106,7 +106,7 @@ const jsonLd = graph([
       "Author website development, lead generation, cold email outreach and social media management for authors and writers.",
     url: url(ROUTES.authors),
     serviceType: ["Author website development", "Lead generation for authors", "Cold email outreach for authors", "Social media management for authors"],
-    areaServed: "Worldwide",
+    areaServed: TARGET_MARKETS,
     audience: { "@type": "Audience", audienceType: "Authors and writers" },
     provider: { "@id": ORG_ID },
     hasOfferCatalog: {
@@ -129,24 +129,6 @@ const jsonLd = graph([
       "@type": "Offer",
       name: e.name,
       description: `${e.body} Includes: ${e.includes.join("; ")}.`,
-    })),
-  },
-  /* FAQPage: the /authors FAQ section already shows real, visible
-     Q&A copy (FAQS, rendered in Authors.jsx) — this just describes
-     that same on-page content to search engines so it's eligible
-     for an FAQ rich result. Google only honors this when the
-     questions/answers are genuinely visible on the page, which they
-     are here, so no content had to be invented for it. */
-  {
-    "@type": "FAQPage",
-    "@id": `${url(ROUTES.authors)}#faq`,
-    mainEntity: FAQS.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: f.a,
-      },
     })),
   },
 ]);

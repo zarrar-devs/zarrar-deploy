@@ -16,9 +16,9 @@ import {
   WEBSITE_ID,
 } from "@/lib/site";
 
-const TITLE = "Contact Zarrar | Web, Lead Generation & Outreach";
+const TITLE = "Contact Zarrar | Web Development & Lead Generation";
 const DESCRIPTION =
-  "Talk to Zarrar about website development, lead generation, cold email outreach or social media management for your business.";
+  "Talk to Zarrar about web development, lead generation, cold email outreach or social media management for founders, speakers, coaches, authors and real estate professionals.";
 
 export const metadata = {
   title: { absolute: TITLE },

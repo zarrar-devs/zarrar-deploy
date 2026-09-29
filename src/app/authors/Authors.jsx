@@ -496,11 +496,11 @@ function Authors() {
         <section className="hero" id="top">
           <div className="hero-copy">
             <h1 className="hero-heading">
-              <span className="hero-l1">Give your book a home</span>{" "}
+              <span className="hero-l1">Author website design</span>{" "}
               <span className="hero-l2">that keeps working after launch.</span>
             </h1>
             <p className="hero-sub">
-              We build your author website, research relevant contacts for lead generation, run targeted cold email outreach where appropriate, and manage the social media that keeps your books, writing and professional profile visible between releases.
+              We build your author website, research relevant contacts for lead generation, run targeted cold email outreach where appropriate, and manage the social media that keeps your books, writing and professional profile visible between releases. Zarrar works remotely across the US, UK and Europe.
             </p>
             <div className="hero-actions">
               <a className="btn btn-solid magnetic" href="#editions">See the editions</a>
@@ -700,6 +700,8 @@ function Authors() {
           <p className="closing-links">
             <span className="closing-alt">Not an author? <a href="/#who-we-are">See who else we work with</a></span>
             <span className="closing-alt"><a href={ROUTES.speakers}>See our page for speakers</a></span>
+            <span className="closing-alt"><a href="/web-development">Author website development</a></span>
+            <span className="closing-alt"><a href="/lead-generation">Lead generation for authors</a></span>
           </p>
         </section>
       </main>
