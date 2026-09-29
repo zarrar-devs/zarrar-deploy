@@ -7,6 +7,7 @@ import {
   LOCALE,
   ROUTES,
   ROBOTS,
+  TARGET_MARKETS,
   url,
   organizationSchema,
   websiteSchema,
