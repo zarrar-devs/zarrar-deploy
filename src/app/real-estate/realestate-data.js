@@ -14,17 +14,18 @@
    - Property-feed terminology is kept platform-neutral so the page can serve agents across multiple markets.
    ============================================================= */
 
-import { SITE_URL, CONTACT_EMAIL as SHARED_CONTACT_EMAIL, organizationSchema, websiteSchema, ORG_ID, WEBSITE_ID, TARGET_MARKETS } from "@/lib/site";
+import { SITE_URL, CONTACT_EMAIL as SHARED_CONTACT_EMAIL, organizationSchema, websiteSchema, breadcrumbSchema, faqSchema, ORG_ID, WEBSITE_ID, TARGET_MARKETS } from "@/lib/site";
 
 export const SITE = SITE_URL;
 export const PAGE_PATH = "/real-estate";
 export const PAGE_URL = `${SITE}${PAGE_PATH}`;
 export const CONTACT_EMAIL = SHARED_CONTACT_EMAIL;
 
-export const PAGE_TITLE = "Real Estate Website Design & Lead Generation | Zarrar";
+export const PAGE_TITLE = "Lead Generation for Real Estate Agents + Websites | Zarrar";
+export const SOCIAL_TITLE = "Real Estate Lead Generation & Agent Websites | Zarrar";
 /* keep under ~160 characters so Google doesn't cut it off */
 export const PAGE_DESCRIPTION =
-  "Real estate website design, local SEO and lead generation for agents who want more direct buyer and seller enquiries beyond portal profiles.";
+  "Lead generation for real estate agents: a local-SEO website, buyer and seller enquiries, outreach to expired listings and FSBOs, and social media.";
 
 /* Search patterns buyers and sellers actually type. */
 export const SEARCH_TERMS = [
@@ -199,7 +200,10 @@ export function buildJsonLd() {
         inLanguage: "en",
         isPartOf: { "@id": WEBSITE_ID },
         about: { "@id": `${PAGE_URL}#service` },
+        breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },
       },
+      breadcrumbSchema(PAGE_PATH, "Lead Generation for Real Estate Agents"),
+      faqSchema(PAGE_PATH, FAQS),
       {
         "@type": "Service",
         "@id": `${PAGE_URL}#service`,
@@ -227,6 +231,6 @@ export function buildJsonLd() {
           ],
         },
       },
-    ],
+    ].filter(Boolean),
   };
 }

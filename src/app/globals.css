@@ -9,7 +9,7 @@
   --skeleton-strong: #dedcd5;
   --line: rgba(20, 20, 18, 0.16);   /* dashed grid lines on light bg */
   --line-dark: rgba(255, 255, 255, 0.22); /* dashed grid lines on dark bg */
-  --accent: #bf4f2c;       /* terracotta CTA */
+  --accent: #d01c12;       /* logo red (focus rings) */
   --accent-ink: #fff5ef;
 
   /* ---- type ----
@@ -40,7 +40,28 @@ body {
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   overflow-x: hidden;
+}
+
+/* "clip" stops sideways scroll WITHOUT making <body> a scroll container,
+   so position: sticky headers keep working. Browsers that don't know
+   "clip" keep the hidden fallback above. */
+@supports (overflow: clip) {
+  body {
+    overflow-x: clip;
+  }
+}
+
+#main-content:focus {
+  outline: none;
+}
+
+/* Visible keyboard focus everywhere that doesn't define its own. */
+:where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
 #root {
@@ -85,6 +106,7 @@ body {
   position: relative;
   width: 100%;
   min-height: 100vh;
+  min-height: 100svh; /* phones: don't jump when the URL bar hides/shows */
   padding: calc(var(--edge) * 3.2) var(--edge) var(--edge);
   display: grid;
   grid-template-columns: minmax(190px, 300px) 1fr minmax(180px, 300px);
@@ -158,6 +180,34 @@ body {
   transform: translateY(0);
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+/* ============================================================
+   Brand wordmark — identical on every page. Values are the landing
+   page's .hero__mark. Colour inherits from the page's nav; override
+   with --brand-mark-color only if a nav background needs it.
+   ============================================================ */
+.brand-mark {
+  display: inline-block;
+  flex: none;
+  margin: 0;
+  font-family: var(--font-brand), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.05rem;
+  line-height: 1.2;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-decoration: none;
+  color: var(--brand-mark-color, inherit);
+}
+
+.brand-mark:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+  border-radius: 2px;
 }
 
 .seo-breadcrumb{position:relative;z-index:20;display:flex;gap:8px;align-items:center;padding:14px 5vw;font:500 12px/1.2 var(--font-inter),sans-serif;color:#666}.seo-breadcrumb a{color:inherit;text-decoration:none}.seo-breadcrumb a:hover{color:#111}

@@ -21,7 +21,9 @@
   width: 100%;
   max-width: 480px;
   max-height: 90vh;
+  max-height: 90dvh;
   overflow-y: auto;
+  overscroll-behavior: contain;
   background: #ffffff;
   color: #0a0a0a;
   border-radius: 28px;

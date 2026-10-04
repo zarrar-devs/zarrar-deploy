@@ -90,7 +90,7 @@ const bodyFont = Space_Grotesk({
 // the old copy said "email campaigns" and "branding", neither of
 // which is a service this agency sells.
 const SUB_COPY =
-  "Zarrar builds custom websites and lead-generation systems for founders, speakers, coaches, authors and real estate professionals. We work remotely across the US, UK and Europe, connecting web development, cold email outreach and social media when you need the full system.";
+  "Zarrar builds custom websites and lead-generation systems for entrepreneurs and CEOs, speakers, authors, coaches and real estate agents. We work remotely across the US, UK and Europe, connecting web development, cold email outreach and social media when you need the full system.";
 
 // Stable reference on purpose — see ScrambleHeadline's setup effect for
 // why. Never inline this array literal directly into <ScrambleHeadline lines={...}/>.
@@ -111,11 +111,11 @@ const HEADLINE_LINES = ["Websites that explain your offer.", "Lead generation th
 // Labels are descriptive on purpose (anchor text is an SEO signal, and
 // "For Speakers" alone doesn't say what you build). hrefs unchanged.
 const BUILD_FOR_OPTIONS = [
-  { label: "Websites & outreach for speakers", href: "/speakers" },
-  { label: "Websites, local SEO & leads for real estate agents", href: "/real-estate" },
-  { label: "Websites, outreach & social media for authors", href: "/authors" },
-  { label: "Websites, lead generation & social media for coaches", href: "/coaches" },
-  { label: "Websites, lead generation & outreach for founders", href: "/entrepreneurs" },
+  { label: "Websites & lead generation for speakers", href: "/speakers" },
+  { label: "Lead generation & websites for real estate agents", href: "/real-estate" },
+  { label: "Websites & outreach for authors", href: "/authors" },
+  { label: "Websites & lead generation for coaches", href: "/coaches" },
+  { label: "Websites & lead generation for entrepreneurs & CEOs", href: "/entrepreneurs" },
 ];
 
 const DROPDOWN_ID = "who-we-serve-menu";
@@ -538,6 +538,7 @@ const Hero = forwardRef(function Hero({ revealed = true }, ref) {
           font-weight: 700;
           font-size: 1.05rem;
           letter-spacing: 0.03em;
+          text-transform: uppercase;
           color: inherit;
           text-decoration: none;
           white-space: nowrap;
@@ -1053,8 +1054,8 @@ const Hero = forwardRef(function Hero({ revealed = true }, ref) {
       `}</style>
 
       <header className="hero__nav">
-        <Link href="/" className="hero__mark" ref={navMarkRef} aria-label="ZARRAR — home">
-          ZARRAR
+        <Link href="/" className="hero__mark" ref={navMarkRef} aria-label="Zarrar — home">
+          Zarrar
         </Link>
         <nav className="hero__links" aria-label="Primary">
           <TransitionLink

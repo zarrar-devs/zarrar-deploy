@@ -1,9 +1,10 @@
-import { Archivo, Inter_Tight } from "next/font/google";
 import Speakers from "./Speakers";
+import { archivo, interTight } from "@/lib/persona-fonts";
 import {
   PAGE_DESCRIPTION,
   PAGE_PATH,
   PAGE_TITLE,
+  SOCIAL_TITLE,
   SITE,
   buildJsonLd,
 } from "./speakers-data";
@@ -12,24 +13,9 @@ import { ROBOTS } from "@/lib/site";
 /* Metadata must live in a server file, so it sits here and the
    interactive component stays "use client".
 
-   Fonts are self-hosted through next/font: no render-blocking request to
-   Google, automatic preload, and a size-matched fallback so the huge hero
-   heading doesn't jump when the webfont lands (better LCP and CLS). */
+   Fonts live in src/lib/persona-fonts.js (shared by every persona page):
+   self-hosted through next/font, no render-blocking request to Google. */
 
-const archivo = Archivo({
-  subsets: ["latin"],
-  axes: ["wdth"], // variable weight is included; this adds the width axis
-  display: "swap",
-  variable: "--font-archivo",
-});
-
-const interTight = Inter_Tight({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter-tight",
-});
-
-const SOCIAL_TITLE = "Speaker Website Design & Lead Generation | Zarrar";
 
 export const metadata = {
   metadataBase: new URL(SITE),

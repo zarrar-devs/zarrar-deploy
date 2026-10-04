@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { BRAND } from "./site";
+import { BRAND_RED } from "./og-mark";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -31,7 +32,7 @@ export function renderServiceOgImage(service) {
             {service.description}
           </div>
         </div>
-        <div style={{ display: "flex", fontSize: 25, color: "#bf4f2c" }}>
+        <div style={{ display: "flex", fontSize: 25, color: BRAND_RED }}>
           Zarrar · {service.eyebrow.replace(/-/g, " ")}
         </div>
       </div>

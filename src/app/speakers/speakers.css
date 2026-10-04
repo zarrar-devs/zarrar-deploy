@@ -91,8 +91,7 @@ html.lenis body { height: auto; }
 .service-card h3,
 .case-step h3,
 .plan-name,
-.closing h2,
-.logo {
+.closing h2 {
   font-family: var(--f-display);
   font-weight: 900;
   text-transform: uppercase;
@@ -188,15 +187,6 @@ html.lenis body { height: auto; }
   background: color-mix(in srgb, var(--bone) 88%, transparent);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-}
-
-.logo {
-  font-variation-settings: 'wdth' 88, 'wght' 900;
-  font-size: 1.05rem;
-  letter-spacing: -0.035em;
-  color: var(--ink);
-  text-decoration: none;
-  flex: none;
 }
 
 .nav-links { display: flex; gap: clamp(0.85rem, 2.4vw, 2rem); }

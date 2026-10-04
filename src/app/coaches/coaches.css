@@ -73,8 +73,7 @@
   .coaches-page .problem-item h3,
   .coaches-page .case-step h3,
   .coaches-page .plan-name,
-  .coaches-page .closing h2,
-  .coaches-page .logo {
+  .coaches-page .closing h2 {
     font-family: var(--display);
     font-weight: 900;
     text-transform: uppercase;
@@ -202,15 +201,6 @@
     padding: 0.85rem var(--gut);
     background: color-mix(in srgb, var(--bone) 88%, transparent);
     backdrop-filter: blur(10px);
-  }
-
-  .coaches-page .logo {
-    font-variation-settings: 'wdth' 88, 'wght' 900;
-    font-size: 1rem;
-    letter-spacing: -0.035em;
-    color: var(--ink);
-    text-decoration: none;
-    flex: none;
   }
 
   .coaches-page .nav-links { display: flex; gap: clamp(0.85rem, 2.4vw, 2rem); }

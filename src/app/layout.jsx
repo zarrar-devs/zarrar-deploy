@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { brandFont } from "@/lib/brand-font";
 import PageTransition from "../components/PageTransition";
 import SiteFooter from "../components/SiteFooter/SiteFooter";
 import {
@@ -46,7 +47,10 @@ export const metadata = {
 
   formatDetection: { telephone: false, address: false, email: false },
 
-  alternates: { canonical: "/" },
+  /* No site-wide canonical here on purpose. A canonical in the root
+     layout is inherited by any page that forgets to set its own and
+     tells Google "this page is a copy of the homepage". Every real
+     page sets its own canonical in its own metadata. */
 
   openGraph: {
     type: "website",
@@ -94,13 +98,15 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${brandFont.variable}`}>
       <body>
         <a href="#main-content" className="skip-link">
           Skip to content
         </a>
         <PageTransition>
-          <div id="main-content">{children}</div>
+          <div id="main-content" tabIndex={-1}>
+            {children}
+          </div>
           {/* Server-rendered links to every page — see SiteFooter.jsx */}
           <SiteFooter />
         </PageTransition>

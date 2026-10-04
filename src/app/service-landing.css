@@ -10,6 +10,10 @@
   margin: 0 auto;
 }
 
+.serviceBrandBar {
+  margin-bottom: clamp(22px, 3.5vw, 36px);
+}
+
 .serviceBreadcrumbs {
   display: flex;
   flex-wrap: wrap;

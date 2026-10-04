@@ -575,15 +575,38 @@
 }
 
 /* =======================================================================
-  Stage 3 — marquee banner, then a redesigned closing CTA panel,
-  accent to black
+  Stage 3 — marquee banner, then a redesigned closing CTA panel.
+
+  This stage now flips light in lock-step with the philosophy panel
+  above it (same ScrollTrigger callback, same duration and ease — see
+  the quoteRef trigger in WhyChooseUs.jsx), so the two read as one
+  continuous light block and no black strip sits between them. Like
+  Stage 1, every colour is a --stage3-* custom property and the JS only
+  tweens that one set of variables.
+
+  The values declared on .marqueeSection below are the LIGHT state,
+  because that is the philosophy panel's own resting colour (white) —
+  so no-JS and reduced-motion visitors on desktop see the same colour
+  on both panels. Phones keep the philosophy panel dark (see the
+  max-width: 767.98px block), so that block flips these vars dark too.
+  The footer is a separate component and is not touched.
   ======================================================================= */
 
 .marqueeSection {
+  --stage3-bg: #ffffff;
+  --stage3-fg: #0a0a0a;
+  --stage3-border: rgba(10, 10, 10, 0.14);
+  --stage3-dot: #0a0a0a;
+  --stage3-glow: rgba(10, 10, 10, 0.05);
+  /* Start Project button inverts with the stage: black pill on white,
+    white pill on black. */
+  --stage3-btn-bg: #0a0a0a;
+  --stage3-btn-fg: #ffffff;
+  --stage3-btn-glow: rgba(10, 10, 10, 0.32);
+
   position: relative;
-  /* Settled/no-JS state: final resting color of this stage. */
-  background-color: var(--color-ink);
-  color: #ffffff;
+  background-color: var(--stage3-bg);
+  color: var(--stage3-fg);
   /* Top was clamp(48px, 8vw, 96px) — combined with .quoteStage's own
     bottom padding above, that's what stacked into the visible gap
     between the CTA button and the marquee line. Bottom was up to
@@ -626,7 +649,7 @@
 }
 
 .marqueeDot {
-  color: var(--color-accent);
+  color: var(--stage3-dot);
   font-size: 0.4em;
 }
 
@@ -653,8 +676,9 @@
   width: min(620px, 92vw);
   height: min(620px, 92vw);
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle, var(--color-accent) 0%, transparent 68%);
-  opacity: 0.18;
+  /* Alpha lives in --stage3-glow (was a fixed opacity: 0.18) so the glow
+    can be a soft white on black and a faint grey on white. */
+  background: radial-gradient(circle, var(--stage3-glow) 0%, transparent 68%);
   filter: blur(50px);
   pointer-events: none;
   z-index: 0;
@@ -701,8 +725,8 @@
   list-style: none;
   margin: 0 0 clamp(36px, 5vw, 52px);
   padding: clamp(18px, 2.4vw, 24px) 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  border-top: 1px solid var(--stage3-border);
+  border-bottom: 1px solid var(--stage3-border);
 }
 
 .marqueeServiceItem {
@@ -772,8 +796,8 @@
   display: inline-flex;
   align-items: center;
   gap: clamp(7px, 1.6vw, 12px);
-  background-color: var(--color-accent);
-  color: var(--color-ink);
+  background-color: var(--stage3-btn-bg);
+  color: var(--stage3-btn-fg);
   text-decoration: none;
   border-radius: 999px;
   /* Same fix as the icon size above: lower vw coefficients so the pill
@@ -784,11 +808,9 @@
   font-family: var(--font-sans);
   font-weight: 700;
   font-size: clamp(0.8rem, 1.6vw, 0.95rem);
-  /* These shadows are hand-matched to --color-accent above (they can't
-    reference the variable directly inside rgba()) — if you change the
-    accent color again, update these three rgba() values to match, or
-    the hover glow will go back to being the old lime green. */
-  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  /* Hover glow colour comes from --stage3-btn-glow, which flips with
+    the stage (soft white on black, soft black on white). */
+  box-shadow: 0 0 0 0 transparent;
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
     box-shadow 0.45s ease;
 }
@@ -796,16 +818,16 @@
 .ctaButton:hover,
 .ctaButton:focus-visible {
   transform: translateY(-3px);
-  box-shadow: 0 16px 36px -12px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 16px 36px -12px var(--stage3-btn-glow);
 }
 
 .ctaButton:active {
   transform: translateY(-1px) scale(0.96);
-  box-shadow: 0 8px 20px -10px rgba(255, 255, 255, 0.32);
+  box-shadow: 0 8px 20px -10px var(--stage3-btn-glow);
 }
 
 .ctaButton:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--stage3-fg);
   outline-offset: 3px;
 }
 
@@ -822,7 +844,7 @@
   height: var(--cta-icon-size);
   margin-top: calc(var(--cta-icon-size) / -2);
   border-radius: 50%;
-  background-color: var(--color-ink);
+  background-color: var(--stage3-btn-fg);
   transform: scale(1);
   transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
   pointer-events: none;
@@ -880,7 +902,7 @@
 
 .ctaButton:hover .ctaButtonLabel,
 .ctaButton:focus-visible .ctaButtonLabel {
-  color: var(--color-accent);
+  color: var(--stage3-btn-bg);
 }
 
 .ctaButtonIcon {
@@ -893,8 +915,8 @@
   width: var(--cta-icon-size);
   height: var(--cta-icon-size);
   border-radius: 50%;
-  background-color: var(--color-ink);
-  color: var(--color-accent);
+  background-color: var(--stage3-btn-fg);
+  color: var(--stage3-btn-bg);
   transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -1218,6 +1240,17 @@
 
   .marqueeSection {
     padding-bottom: 64px;
+    /* The philosophy panel is forced dark on phones (see .quoteStage
+      above) and its colour-snap is skipped, so Stage 3 stays dark too —
+      the original phone look. */
+    --stage3-bg: #0a0a0a;
+    --stage3-fg: #ffffff;
+    --stage3-border: rgba(255, 255, 255, 0.14);
+    --stage3-dot: #ffffff;
+    --stage3-glow: rgba(255, 255, 255, 0.18);
+    --stage3-btn-bg: #ffffff;
+    --stage3-btn-fg: #0a0a0a;
+    --stage3-btn-glow: rgba(255, 255, 255, 0.4);
   }
 
   .marqueeViewport {

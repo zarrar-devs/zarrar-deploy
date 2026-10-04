@@ -33,6 +33,9 @@
    along with the submission — see openContact() below.
    ============================================================= */
 
+import BrandMark from "@/components/BrandMark";
+import Link from "next/link";
+import PersonaLinks from "@/components/PersonaLinks";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -456,10 +459,9 @@ function Authors() {
 
   return (
     <div className="authors-page" ref={root}>
-      <a className="skip-link" href="#main">Skip to content</a>
 
       <header className="nav">
-        <a className="logo" href="/">Zarrar</a>
+        <BrandMark />
         <nav
           className={`nav-links${menuOpen ? " is-open" : ""}`}
           id="primary-navigation"
@@ -496,7 +498,7 @@ function Authors() {
         <section className="hero" id="top">
           <div className="hero-copy">
             <h1 className="hero-heading">
-              <span className="hero-l1">Author website design</span>{" "}
+              <span className="hero-l1">Website for authors</span>{" "}
               <span className="hero-l2">that keeps working after launch.</span>
             </h1>
             <p className="hero-sub">
@@ -698,10 +700,11 @@ function Authors() {
             Say hello
           </a>
           <p className="closing-links">
-            <span className="closing-alt">Not an author? <a href="/#who-we-are">See who else we work with</a></span>
-            <span className="closing-alt"><a href={ROUTES.speakers}>See our page for speakers</a></span>
-            <span className="closing-alt"><a href="/web-development">Author website development</a></span>
-            <span className="closing-alt"><a href="/lead-generation">Lead generation for authors</a></span>
+            <span className="closing-alt">Not an author? <Link href="/#who-we-are">See who else we work with</Link></span>
+            <span className="closing-alt"><Link href="/web-development">Author website development</Link></span>
+            <span className="closing-alt"><Link href="/lead-generation">Lead generation for authors</Link></span>
+            <span className="closing-alt"><Link href="/cold-email-outreach">Cold email outreach for authors</Link></span>
+            <PersonaLinks className="closing-alt" exclude={ROUTES.authors} />
           </p>
         </section>
       </main>
@@ -710,6 +713,7 @@ function Authors() {
         isOpen={isContactOpen}
         onClose={() => setIsContactOpen(false)}
         plan={selectedPlan}
+        defaultRole="author"
       />
     </div>
   );

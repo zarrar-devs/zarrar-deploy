@@ -19,7 +19,7 @@ export default function ContactProvider({ children }) {
   return (
     <ContactContext.Provider value={openContact}>
       {children}
-      <ContactModal isOpen={isOpen} onClose={closeContact} plan={plan} />
+      <ContactModal isOpen={isOpen} onClose={closeContact} plan={plan} defaultRole="brand-owner" />
     </ContactContext.Provider>
   );
 }

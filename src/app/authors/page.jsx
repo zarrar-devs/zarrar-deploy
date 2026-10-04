@@ -1,7 +1,7 @@
 import { Fraunces, Inter } from "next/font/google";
 import Link from "next/link";
 import Authors from "./Authors";
-import { CHAPTERS, EDITIONS } from "./authors-data";
+import { CHAPTERS, EDITIONS, FAQS } from "./authors-data";
 import {
   BRAND,
   LOCALE,
@@ -12,6 +12,7 @@ import {
   organizationSchema,
   websiteSchema,
   breadcrumbSchema,
+  faqSchema,
   graph,
   safeJsonLd,
   ORG_ID,
@@ -50,10 +51,10 @@ const body = Inter({
   variable: "--font-authors-body",
 });
 
-const TITLE = "Author Website Design & Lead Generation | Zarrar";
+const TITLE = "Website for Authors & Lead Generation | Zarrar";
 const DESCRIPTION =
-  "Custom author website design, lead generation and outreach for authors who want a professional platform for books, media, events and new opportunities.";
-const SOCIAL_TITLE = "Custom Author Websites & Lead Generation | Zarrar";
+  "A website for authors and writers, with lead generation and outreach to agents, press and event hosts, plus social media management. Built SEO-ready.";
+const SOCIAL_TITLE = "Custom Author Websites, Lead Generation & Outreach | Zarrar";
 
 export const metadata = {
   title: { absolute: TITLE },
@@ -98,7 +99,8 @@ const jsonLd = graph([
     breadcrumb: { "@id": `${url(ROUTES.authors)}#breadcrumb` },
     inLanguage: "en",
   },
-  breadcrumbSchema(ROUTES.authors, "For Authors"),
+  breadcrumbSchema(ROUTES.authors, "Website for Authors"),
+  faqSchema(ROUTES.authors, FAQS),
   {
     "@type": "Service",
     "@id": `${url(ROUTES.authors)}#service`,
@@ -141,7 +143,7 @@ export default function AuthorsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
       />
-      <nav className="seo-breadcrumb" aria-label="Breadcrumb"><Link href="/">Home</Link><span aria-hidden="true">/</span><span>Authors</span></nav>
+      <nav className="seo-breadcrumb" aria-label="Breadcrumb"><Link href="/">Home</Link><span aria-hidden="true">/</span><span aria-current="page">Website for Authors</span></nav>
       <Authors />
     </div>
   );

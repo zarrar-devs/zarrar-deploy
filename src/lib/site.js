@@ -35,6 +35,7 @@ export const ROUTES = {
   home: "/",
   services: "/services",
   contact: "/contact",
+  about: "/about",
   speakers: "/speakers",
   realEstate: "/real-estate",
   authors: "/authors",
@@ -89,17 +90,17 @@ export const SERVICES = [
    cross-links between persona pages, so a page can never link to a
    route that doesn't exist. */
 export const PERSONAS = [
-  { label: "Speakers", href: ROUTES.speakers },
-  { label: "Real Estate Agents", href: ROUTES.realEstate },
-  { label: "Authors & Writers", href: ROUTES.authors },
-  { label: "Coaches", href: ROUTES.coaches },
-  { label: "Founders & CEOs", href: ROUTES.entrepreneurs },
+  { label: "Speakers", anchor: "Website for Speakers", href: ROUTES.speakers },
+  { label: "Real Estate Agents", anchor: "Lead Generation for Real Estate Agents", href: ROUTES.realEstate },
+  { label: "Authors & Writers", anchor: "Website for Authors", href: ROUTES.authors },
+  { label: "Coaches", anchor: "Website for Coaches", href: ROUTES.coaches },
+  { label: "Entrepreneurs & CEOs", anchor: "Website for Entrepreneurs & CEOs", href: ROUTES.entrepreneurs },
 ];
 
 /* Reused verbatim in Organization schema on every page so the
    entity description Google sees is identical site-wide. */
 export const ORG_DESCRIPTION =
-  "Zarrar is a remote digital agency providing website development, lead generation, cold email outreach and social media management for founders, speakers, coaches, authors, real estate agents and service businesses.";
+  "Zarrar is a remote digital agency providing website development, lead generation, cold email outreach and social media management for entrepreneurs, CEOs, speakers, coaches, authors, real estate agents and service businesses.";
 
 export const TARGET_MARKETS = ["United States", "United Kingdom", "Europe"];
 
@@ -110,7 +111,7 @@ export const TARGET_MARKETS = ["United States", "United Kingdom", "Europe"];
    primary markets without stuffing a list of keywords. */
 export const HOME_TITLE = "Web Development & Lead Generation Agency | Zarrar";
 export const HOME_DESCRIPTION =
-  "Custom web development and lead generation for founders, speakers, coaches, authors and real estate professionals across the US, UK and Europe.";
+  "Websites and lead generation for speakers, authors, coaches, entrepreneurs, CEOs and real estate agents across the US, UK and Europe.";
 
 /* The Organization node. Given a stable @id so every page's JSON-LD
    can reference the same entity instead of declaring a duplicate
@@ -191,6 +192,38 @@ export function breadcrumbSchema(path, label) {
     ],
   };
 }
+
+
+/* FAQPage node. Every persona and service page already shows its FAQ
+   as real on-page text; this exposes the same Q&A to search engines
+   and AI answer engines. Pass the SAME array the page renders so the
+   markup can never drift from what visitors read.
+   Accepts either [{q, a}] objects or [question, answer] pairs. */
+export function faqSchema(path, faqs = []) {
+  const items = faqs
+    .map((f) => (Array.isArray(f) ? { q: f[0], a: f[1] } : f))
+    .filter((f) => f && f.q && f.a);
+  if (!items.length) return null;
+  return {
+    "@type": "FAQPage",
+    "@id": `${url(path)}#faq`,
+    url: url(path),
+    inLanguage: "en",
+    mainEntity: items.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+}
+
+/* "LEAD GENERATION" -> "Lead Generation" (breadcrumb names shown in
+   results should not be shouty). */
+export const titleCase = (str = "") =>
+  str
+    .toLowerCase()
+    .replace(/-/g, " ")
+    .replace(/\b([a-z])/g, (m) => m.toUpperCase());
 
 
 /* Wraps nodes into one @graph — one <script> tag per page instead of

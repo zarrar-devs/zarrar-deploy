@@ -245,6 +245,30 @@ const STAGE1_LIGHT_VARS = {
   "--stage1-border-soft": "rgba(10, 10, 10, 0.1)",
 };
 
+// Stage 3 (marquee + closing CTA) flips in sync with the philosophy panel.
+// Same --stage3-* variables the CSS module declares (light is its default).
+const STAGE3_LIGHT_VARS = {
+  "--stage3-bg": "#ffffff",
+  "--stage3-fg": "#0a0a0a",
+  "--stage3-border": "rgba(10, 10, 10, 0.14)",
+  "--stage3-dot": "#0a0a0a",
+  "--stage3-glow": "rgba(10, 10, 10, 0.05)",
+  "--stage3-btn-bg": "#0a0a0a",
+  "--stage3-btn-fg": "#ffffff",
+  "--stage3-btn-glow": "rgba(10, 10, 10, 0.32)",
+};
+
+const STAGE3_DARK_VARS = {
+  "--stage3-bg": "#0a0a0a",
+  "--stage3-fg": "#ffffff",
+  "--stage3-border": "rgba(255, 255, 255, 0.14)",
+  "--stage3-dot": "#ffffff",
+  "--stage3-glow": "rgba(255, 255, 255, 0.18)",
+  "--stage3-btn-bg": "#ffffff",
+  "--stage3-btn-fg": "#0a0a0a",
+  "--stage3-btn-glow": "rgba(255, 255, 255, 0.4)",
+};
+
 const STAGE1_DARK_VARS = {
   "--stage1-bg": "#0a0a0a",
   "--stage1-fg": "#ffffff",
@@ -369,51 +393,51 @@ export default function WhyChooseUs() {
         }
       );
 
-      // Only the philosophy panel (quoteStage) snaps color on scroll — it
-      // starts black, then snaps to the light --color-accent once it's in
-      // view (see .quoteStage's CSS comment for its settled state).
+      // The philosophy panel (quoteStage) starts black, then snaps to the
+      // light --color-accent once it's in view. The closing stage below it
+      // (marqueeSection: marquee banner + CTA) now snaps in the SAME
+      // callback with the same duration and ease, so the two flip together
+      // and read as one light block. The footer is a separate component
+      // and is deliberately left alone.
       //
-      // BUG FIX: this used to run the exact same tween on
-      // marqueeSectionRef.current as well, which meant the closing CTA
-      // panel (Stage 3) — meant to stay solid black per its own CSS —
-      // was being force-switched to the bright accent color the instant
-      // the philosophy panel scrolled into view, and it never switched
-      // back. That's the "green then black" flash reported on the live
-      // page. Stage 3 now keeps the color its own stylesheet already
-      // gives it and is never touched here.
+      // History: this used to tween marqueeSectionRef to the accent with a
+      // raw backgroundColor and never reverted it, which is what produced
+      // the old "green then black" flash. That is fixed here by driving
+      // Stage 3 through its own --stage3-* variables and reverting them in
+      // onLeaveBack, exactly like the philosophy panel.
       //
-      // MOBILE FIX: on phones the browser's address bar hides/shows while
-      // scrolling, which shrinks/grows the viewport height mid-scroll.
-      // That fires the debounced resize handler below -> ScrollTrigger.
-      // refresh(), which re-measures this trigger's "top ±10%" start point
-      // against the new height and can re-fire onEnter/onLeaveBack while
-      // the user is still mid-scroll — that's the black/white flash on
-      // phones. So on phones we skip this whole animation and just leave
-      // the panel at its static CSS resting color (see .quoteStage);
-      // desktop keeps the snap exactly as before.
+      // MOBILE: on phones the browser's address bar hides/shows while
+      // scrolling, which resizes the viewport and re-fires this trigger
+      // mid-scroll (black/white flash). So phones skip the whole animation
+      // and both panels stay on their static dark CSS look (.quoteStage and
+      // .marqueeSection in the max-width: 767.98px block); desktop keeps the
+      // snap.
       if (!getIsMobile()) {
         gsap.set(quoteRef.current, {
           backgroundColor: "#0a0a0a",
           color: "#ffffff",
         });
+        gsap.set(marqueeSectionRef.current, STAGE3_DARK_VARS);
+
+        const snapPanels = (toLight) => {
+          gsap.to(quoteRef.current, {
+            backgroundColor: toLight ? "var(--color-accent)" : "#0a0a0a",
+            color: toLight ? "var(--color-ink)" : "#ffffff",
+            duration: SNAP_DURATION,
+            ease: SNAP_EASE,
+          });
+          gsap.to(marqueeSectionRef.current, {
+            ...(toLight ? STAGE3_LIGHT_VARS : STAGE3_DARK_VARS),
+            duration: SNAP_DURATION,
+            ease: SNAP_EASE,
+          });
+        };
 
         ScrollTrigger.create({
           trigger: quoteRef.current,
           start: "top 10%",
-          onEnter: () =>
-            gsap.to(quoteRef.current, {
-              backgroundColor: "var(--color-accent)",
-              color: "var(--color-ink)",
-              duration: SNAP_DURATION,
-              ease: SNAP_EASE,
-            }),
-          onLeaveBack: () =>
-            gsap.to(quoteRef.current, {
-              backgroundColor: "#0a0a0a",
-              color: "#ffffff",
-              duration: SNAP_DURATION,
-              ease: SNAP_EASE,
-            }),
+          onEnter: () => snapPanels(true),
+          onLeaveBack: () => snapPanels(false),
         });
       }
 

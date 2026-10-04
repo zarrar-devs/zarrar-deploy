@@ -27,6 +27,8 @@
      a real mailto: link, not a scroll-to-contact link.
    ============================================================= */
 
+import BrandMark from "@/components/BrandMark";
+import PersonaLinks from "@/components/PersonaLinks";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import gsap from "gsap";
@@ -529,14 +531,8 @@ function RealEstate() {
 
   return (
     <div className="realestate-page" ref={root}>
-      <a className="skip-link" href="#main">
-        Skip to content
-      </a>
-
       <header className="nav">
-        <Link className="logo" href="/">
-          Zarrar
-        </Link>
+        <BrandMark />
 
         <nav
           id="site-sections"
@@ -583,7 +579,7 @@ function RealEstate() {
           </p>
 
           <h1 className="hero-heading" id="hero-title">
-            Real estate website design, local SEO and lead generation that make it easier to contact you.
+            Lead generation for real estate agents, with a local-SEO website that makes it easy to contact you.
           </h1>
 
           <div className="hero-rule" aria-hidden="true" />
@@ -789,6 +785,9 @@ function RealEstate() {
             <Link href="/lead-generation">Lead generation for real estate agents</Link> · {" "}
             <Link href="/cold-email-outreach">Cold email outreach for real estate agents</Link>
           </p>
+          <p className="closing-alt">
+            <PersonaLinks exclude="/real-estate" />
+          </p>
         </section>
       </main>
 
@@ -796,6 +795,7 @@ function RealEstate() {
         isOpen={contactOpen}
         onClose={() => setContactOpen(false)}
         plan={contactPlan}
+        defaultRole="real-estate-agent"
       />
     </div>
   );

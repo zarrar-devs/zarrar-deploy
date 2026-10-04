@@ -51,6 +51,7 @@
      to.
    ============================================================= */
 
+import BrandMark from "@/components/BrandMark";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import gsap from "gsap";
@@ -557,9 +558,7 @@ function Services({ faqs = [] }) {
         </nav>
 
         <header className="nav">
-          <a className="logo" href="/">
-            ZARRAR
-          </a>
+          <BrandMark />
 
           <nav
             className="nav-links"

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import BrandMark from "@/components/BrandMark";
 import { BRAND, PERSONAS, ROUTES } from "@/lib/site";
 
 /* Custom 404. Next.js already sends a real 404 status; this page just
@@ -21,11 +22,12 @@ const wrap = {
   color: "#0b0b0c",
   fontFamily: "var(--font-body, system-ui, sans-serif)",
 };
-const link = { color: "#bf4f2c", textDecoration: "underline", textUnderlineOffset: 4 };
+const link = { color: "#d01c12", textDecoration: "underline", textUnderlineOffset: 4 };
 
 export default function NotFound() {
   return (
     <main style={wrap}>
+      <BrandMark style={{ alignSelf: "flex-start" }} />
       <p style={{ margin: 0, letterSpacing: "0.12em", textTransform: "uppercase", fontSize: 13, opacity: 0.6 }}>
         Error 404
       </p>

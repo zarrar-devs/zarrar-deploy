@@ -53,7 +53,7 @@ export default function SiteFooter() {
           <ul className={styles.list}>
             {PERSONAS.map((p) => (
               <li key={p.href}>
-                <Link href={p.href}>{p.label}</Link>
+                <Link href={p.href}>{p.anchor || p.label}</Link>
               </li>
             ))}
           </ul>
@@ -64,6 +64,9 @@ export default function SiteFooter() {
           <ul className={styles.list}>
             <li>
               <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+            </li>
+            <li>
+              <Link href={ROUTES.about}>About the founder</Link>
             </li>
             <li>
               <Link href={ROUTES.contact}>Contact Zarrar</Link>

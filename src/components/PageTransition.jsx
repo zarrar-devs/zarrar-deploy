@@ -60,12 +60,20 @@ function lockScroll(lock) {
   document.documentElement.style.overflow = lock ? "hidden" : "";
 }
 
+/* "/services?x=1#plans" -> "/services": only the path decides whether
+   the route actually changes underneath the curtain. */
+function pathOnly(href) {
+  const clean = href.split("#")[0].split("?")[0];
+  return clean || "/";
+}
+
 export default function PageTransition({ children, mark = "ZARRAR" }) {
   const overlayRef = useRef(null);
   const sheenRef = useRef(null);
   const markRef = useRef(null);
   const isAnimating = useRef(false);
   const prevPathname = useRef(null);
+  const failsafe = useRef(null);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -78,6 +86,7 @@ export default function PageTransition({ children, mark = "ZARRAR" }) {
   useLayoutEffect(() => {
     if (prevPathname.current === pathname) return;
     prevPathname.current = pathname;
+    clearTimeout(failsafe.current);
 
     window.scrollTo(0, 0);
 
@@ -98,7 +107,16 @@ export default function PageTransition({ children, mark = "ZARRAR" }) {
 
   const navigate = useCallback(
     (href) => {
-      if (isAnimating.current || href === pathname) return;
+      if (isAnimating.current) return;
+
+      /* Same page (e.g. "/#who-we-are" while on "/"): the pathname will
+         never change, so the reveal effect would never run and the
+         curtain would stay closed forever. Let the router handle it
+         without covering the screen. */
+      if (pathOnly(href) === pathname) {
+        router.push(href);
+        return;
+      }
 
       if (prefersReducedMotion()) {
         router.push(href);
@@ -114,6 +132,20 @@ export default function PageTransition({ children, mark = "ZARRAR" }) {
           onComplete: () => {
             router.push(href);
             isAnimating.current = false;
+
+            /* Failsafe: if the navigation fails or never lands (offline,
+               chunk error), open the curtain and unlock scrolling rather
+               than leaving the visitor staring at a black screen. */
+            clearTimeout(failsafe.current);
+            failsafe.current = setTimeout(() => {
+              const bars = overlayRef.current?.querySelectorAll(".page-transition-bar");
+              if (!bars) return;
+              gsap
+                .timeline({ onComplete: () => lockScroll(false) })
+                .to(markRef.current, { autoAlpha: 0, duration: 0.2 })
+                .to(bars, { scaleY: 0, duration: 0.5, ease: "power3.inOut" }, 0)
+                .set(overlayRef.current, { pointerEvents: "none" });
+            }, 6000);
           },
         })
         .set(overlayRef.current, { pointerEvents: "auto" })
@@ -134,6 +166,8 @@ export default function PageTransition({ children, mark = "ZARRAR" }) {
     },
     [router, pathname]
   );
+
+  useLayoutEffect(() => () => clearTimeout(failsafe.current), []);
 
   return (
     <TransitionContext.Provider value={{ navigate }}>

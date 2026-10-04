@@ -3,10 +3,10 @@ import { ROUTES } from "./site";
 export const SERVICE_PAGES = {
   webDevelopment: {
     path: ROUTES.webDevelopment,
-    title: "Website Development for Founders & Personal Brands | Zarrar",
+    title: "Website Development for Speakers, Authors & CEOs | Zarrar",
     description:
       "Custom website development for founders, speakers, coaches, authors and real estate professionals who need a credible, conversion-focused online presence.",
-    socialTitle: "Website Development for Founders & Personal Brands | Zarrar",
+    socialTitle: "Website Development for Speakers, Authors & CEOs | Zarrar",
     eyebrow: "WEB DEVELOPMENT",
     h1: "Website development for founders, speakers and service businesses that need to look credible and convert attention into enquiries.",
     intro:
@@ -65,10 +65,10 @@ export const SERVICE_PAGES = {
 
   leadGeneration: {
     path: ROUTES.leadGeneration,
-    title: "Lead Generation for Founders, Speakers & Coaches | Zarrar",
+    title: "Lead Generation for Real Estate Agents & CEOs | Zarrar",
     description:
-      "Targeted lead generation built around your ideal customers, with prospect research, qualification, segmentation and a focused pipeline ready for outreach or sales follow-up.",
-    socialTitle: "Lead Generation for Founders & Service Businesses | Zarrar",
+      "Lead generation for real estate agents, CEOs, speakers and authors: prospect research, qualification and a focused pipeline ready for outreach.",
+    socialTitle: "Lead Generation for Real Estate Agents, CEOs & Speakers | Zarrar",
     eyebrow: "LEAD GENERATION",
     h1: "Lead generation built around the people most likely to need, book or buy what you sell.",
     intro:
@@ -126,10 +126,10 @@ export const SERVICE_PAGES = {
 
   coldEmail: {
     path: ROUTES.coldEmail,
-    title: "Cold Email Outreach for Founders & Speakers | Zarrar",
+    title: "Cold Email Outreach for Speakers, Authors & CEOs | Zarrar",
     description:
-      "Cold email outreach for founders, speakers, coaches, authors, real estate agents and service businesses, covering targeting, sending setup, campaign copy and follow-up.",
-    socialTitle: "Cold Email Outreach for Founders & Speakers | Zarrar",
+      "Cold email outreach for CEOs, speakers, authors, coaches and real estate agents: targeting, sending setup, campaign copy and follow-up.",
+    socialTitle: "Cold Email Outreach for Speakers, Authors & CEOs | Zarrar",
     eyebrow: "COLD EMAIL OUTREACH",
     h1: "Cold email outreach for a relevant audience, a clear offer and a credible sending system.",
     intro:
@@ -187,10 +187,10 @@ export const SERVICE_PAGES = {
 
   socialMedia: {
     path: ROUTES.socialMedia,
-    title: "Social Media Management for Personal Brands | Zarrar",
+    title: "Social Media Management for Speakers & CEOs | Zarrar",
     description:
       "Social media management for founders, speakers, coaches, authors and personal brands, covering content planning, publishing, profile optimisation and replies.",
-    socialTitle: "Social Media Management for Personal Brands | Zarrar",
+    socialTitle: "Social Media Management for Speakers, Authors & CEOs | Zarrar",
     eyebrow: "SOCIAL MEDIA MANAGEMENT",
     h1: "Social media management that turns your expertise into a consistent business presence.",
     intro:

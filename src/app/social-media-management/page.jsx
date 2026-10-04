@@ -7,6 +7,8 @@ import {
   TARGET_MARKETS,
   WEBSITE_ID,
   breadcrumbSchema,
+  faqSchema,
+  titleCase,
   graph,
   organizationSchema,
   safeJsonLd,
@@ -34,7 +36,8 @@ const jsonLd = graph([
     breadcrumb: { "@id": `${SITE_URL}${service.path}#breadcrumb` },
     inLanguage: "en",
   },
-  breadcrumbSchema(service.path, service.eyebrow.replace(/-/g, " ")),
+  breadcrumbSchema(service.path, titleCase(service.eyebrow)),
+  faqSchema(service.path, service.faqs),
   {
     "@type": "Service",
     "@id": `${SITE_URL}${service.path}#service`,

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import BrandMark from "@/components/BrandMark";
 import {
   BRAND,
   CONTACT_EMAIL,
@@ -71,6 +72,9 @@ export default function ContactPage() {
   return (
     <main className="contact-page" style={{ maxWidth: 920, margin: "0 auto", padding: "clamp(48px, 8vw, 110px) 24px" }}>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }} />
+      <header style={{ marginBottom: 32 }}>
+        <BrandMark />
+      </header>
       <nav aria-label="Breadcrumb" style={{ marginBottom: 48 }}>
         <Link href="/">Home</Link><span aria-hidden="true"> / </span><span>Contact</span>
       </nav>

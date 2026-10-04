@@ -88,8 +88,7 @@ html.lenis body { height: auto; }
 .card-title,
 .chapter-title,
 .edition-name,
-.closing h2,
-.logo {
+.closing h2 {
   font-family: var(--font-authors-display), Georgia, 'Times New Roman', serif;
   margin: 0;
 }
@@ -222,16 +221,6 @@ html.lenis body { height: auto; }
   background: color-mix(in srgb, var(--paper) 88%, transparent);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--rule);
-}
-
-.logo {
-  font-style: italic;
-  font-weight: 600;
-  font-size: 1.15rem;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-  text-decoration: none;
-  flex: none;
 }
 
 .nav-links { display: flex; gap: clamp(0.85rem, 2.2vw, 2rem); }

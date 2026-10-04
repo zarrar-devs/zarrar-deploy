@@ -12,17 +12,18 @@
      each one matches how you actually work.
    ============================================================= */
 
-import { SITE_URL, CONTACT_EMAIL as SHARED_CONTACT_EMAIL, organizationSchema, websiteSchema, ORG_ID, WEBSITE_ID, TARGET_MARKETS } from "@/lib/site";
+import { SITE_URL, CONTACT_EMAIL as SHARED_CONTACT_EMAIL, organizationSchema, websiteSchema, breadcrumbSchema, faqSchema, ORG_ID, WEBSITE_ID, TARGET_MARKETS } from "@/lib/site";
 
 export const SITE = SITE_URL;
 export const PAGE_PATH = "/speakers";
 export const PAGE_URL = `${SITE}${PAGE_PATH}`;
 export const CONTACT_EMAIL = SHARED_CONTACT_EMAIL;
 
-export const PAGE_TITLE = "Speaker Website Design & Lead Generation | Zarrar";
+export const PAGE_TITLE = "Website for Speakers & Event Lead Generation | Zarrar";
+export const SOCIAL_TITLE = "Website for Speakers, Lead Generation & Outreach | Zarrar";
 /* keep under ~160 characters so Google doesn't cut it off */
 export const PAGE_DESCRIPTION =
-  "Custom speaker website design, lead generation and cold email outreach for keynote speakers seeking relevant event organisers and booking opportunities.";
+  "A website for speakers built for event organisers, plus lead generation and cold email outreach to conferences, summits and corporate events.";
 
 /* Real past engagements only. Leave empty and the strip is hidden. */
 export const AS_SEEN_AT = [];
@@ -200,7 +201,10 @@ export function buildJsonLd() {
         inLanguage: "en",
         isPartOf: { "@id": WEBSITE_ID },
         about: { "@id": `${PAGE_URL}#service` },
+        breadcrumb: { "@id": `${PAGE_URL}#breadcrumb` },
       },
+      breadcrumbSchema(PAGE_PATH, "Website for Speakers"),
+      faqSchema(PAGE_PATH, FAQS),
       {
         "@type": "Service",
         "@id": `${PAGE_URL}#service`,
@@ -227,6 +231,6 @@ export function buildJsonLd() {
           ],
         },
       },
-    ],
+    ].filter(Boolean),
   };
 }

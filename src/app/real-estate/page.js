@@ -1,37 +1,18 @@
-import { Archivo, Inter_Tight } from "next/font/google";
 import RealEstate from "./RealEstate";
+import { archivo, interTight } from "@/lib/persona-fonts";
+import { ROBOTS } from "@/lib/site";
 import {
   PAGE_DESCRIPTION,
   PAGE_PATH,
   PAGE_TITLE,
+  SOCIAL_TITLE,
   SITE,
   buildJsonLd,
 } from "./realestate-data";
 
 /* Metadata must live in a server file, so it sits here and the
-   interactive component stays "use client".
-
-   Fonts are self-hosted through next/font: no render-blocking request to
-   Google, automatic preload, and a size-matched fallback so the hero
-   heading doesn't jump when the webfont lands (better LCP and CLS).
-   If you'd rather not repeat this on every persona page, move these two
-   calls into a shared fonts.js and import the objects from there. */
-
-const archivo = Archivo({
-  subsets: ["latin"],
-  axes: ["wdth"], // variable weight is included; this adds the width axis
-  display: "swap",
-  variable: "--font-archivo",
-});
-
-const interTight = Inter_Tight({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter-tight",
-});
-
-const SOCIAL_TITLE =
-  "Real Estate Website Design & Lead Generation | Zarrar";
+   interactive component stays "use client". Fonts are shared with the
+   other persona pages from src/lib/persona-fonts.js. */
 
 export const metadata = {
   metadataBase: new URL(SITE),
@@ -53,7 +34,7 @@ export const metadata = {
     title: SOCIAL_TITLE,
     description: PAGE_DESCRIPTION,
   },
-  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
+  robots: ROBOTS,
 };
 
 export const viewport = {

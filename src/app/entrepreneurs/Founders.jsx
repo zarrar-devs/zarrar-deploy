@@ -60,6 +60,7 @@
      of how tall either column ends up being.
    ============================================================= */
 
+import BrandMark from "@/components/BrandMark";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import gsap from "gsap";
@@ -430,12 +431,11 @@ function Founders() {
 
   return (
     <div className="founders-page" ref={root}>
-      <a className="fd-skip" href="#main">Skip to content</a>
 
       <header className="fd-header" data-open={menuOpen}>
         <div className="fd-nav-shell" ref={shellRef}>
           <div className="fd-nav">
-            <Link className="fd-logo fd-display" href="/">{BRAND}</Link>
+            <BrandMark className="fd-logo" />
 
             <nav className="fd-nav-links" aria-label="Sections">
               {NAV_LINKS.map((l) => (
@@ -494,7 +494,7 @@ function Founders() {
               <nav className="fd-crumbs" aria-label="Breadcrumb">
                 <ol>
                   <li><Link href="/">Home</Link></li>
-                  <li><span aria-current="page">Founders &amp; CEOs</span></li>
+                  <li><span aria-current="page">Website for Entrepreneurs &amp; CEOs</span></li>
                 </ol>
               </nav>
 
@@ -800,6 +800,7 @@ function Founders() {
         isOpen={contactOpen}
         onClose={() => setContactOpen(false)}
         plan={contactPlan}
+        defaultRole="ceo-founder"
       />
     </div>
   );

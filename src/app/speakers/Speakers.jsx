@@ -22,6 +22,8 @@
      it's a real mailto: link, not a scroll-to-contact link.
    ============================================================= */
 
+import BrandMark from "@/components/BrandMark";
+import PersonaLinks from "@/components/PersonaLinks";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import gsap from "gsap";
@@ -519,14 +521,8 @@ function Speakers() {
 
   return (
     <div className="speakers-page" ref={root}>
-      <a className="skip-link" href="#main">
-        Skip to content
-      </a>
-
       <header className="nav">
-        <Link className="logo" href="/">
-          Zarrar
-        </Link>
+        <BrandMark />
 
         <nav
           id="site-sections"
@@ -573,7 +569,7 @@ function Speakers() {
           </p>
 
           <h1 className="hero-heading" id="hero-title">
-            <span className="hero-line">Speaker website design</span>{" "}
+            <span className="hero-line">Website for speakers</span>{" "}
             <span className="hero-line">built for organisers.</span>{" "}
             <span className="hero-line hero-line--accent">Reach the right</span>{" "}
             <span className="hero-line hero-line--accent">event teams.</span>
@@ -773,6 +769,9 @@ function Speakers() {
             <Link href="/lead-generation">Lead generation for speakers</Link> · {" "}
             <Link href="/cold-email-outreach">Cold email outreach for speakers</Link>
           </p>
+          <p className="closing-alt">
+            <PersonaLinks exclude="/speakers" />
+          </p>
         </section>
       </main>
 
@@ -780,6 +779,7 @@ function Speakers() {
         isOpen={contactOpen}
         onClose={() => setContactOpen(false)}
         plan={contactPlan}
+        defaultRole="speaker"
       />
     </div>
   );

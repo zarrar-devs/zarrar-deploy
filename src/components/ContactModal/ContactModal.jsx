@@ -18,6 +18,25 @@ function IconMic(props) {
   );
 }
 
+function IconBook(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M12 6c-2-1.6-5-2.2-8-1.8v13c3-.4 6 .2 8 1.8 2-1.6 5-2.2 8-1.8v-13c-3-.4-6 .2-8 1.8z" />
+      <path d="M12 6v13" />
+    </svg>
+  );
+}
+
+function IconHome(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <path d="M3 11l9-7 9 7" />
+      <path d="M5 10v10h14V10" />
+      <path d="M10 20v-6h4v6" />
+    </svg>
+  );
+}
+
 function IconStore(props) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -92,10 +111,15 @@ function IconAlert(props) {
 }
 
 // Step 1 — "who is filling this out".
+// These mirror the audiences the site targets, so every persona page's
+// visitor sees themselves in the list. Persona pages pass `defaultRole`
+// (one of these ids) so the first question is already answered.
 const ROLE_OPTIONS = [
   { id: "speaker", label: "Speaker", icon: IconMic },
-  { id: "brand-owner", label: "Brand Owner", icon: IconStore },
-  { id: "ceo-founder", label: "CEO / Founder", icon: IconBriefcase },
+  { id: "author", label: "Author", icon: IconBook },
+  { id: "ceo-founder", label: "CEO / Entrepreneur", icon: IconBriefcase },
+  { id: "real-estate-agent", label: "Real Estate Agent", icon: IconHome },
+  { id: "brand-owner", label: "Brand Owner / Coach", icon: IconStore },
   { id: "other", label: "Other", icon: IconSparkle },
 ];
 
@@ -130,9 +154,10 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/xdeorbky";
  * null) for CTAs that aren't tied to a specific plan, like a generic
  * "Contact" link — those submissions just won't include a plan.
  */
-export default function ContactModal({ isOpen, onClose, plan = null }) {
-  const [step, setStep] = useState(1);
-  const [role, setRole] = useState(null);
+export default function ContactModal({ isOpen, onClose, plan = null, defaultRole = null }) {
+  const validDefault = ROLE_OPTIONS.some((o) => o.id === defaultRole) ? defaultRole : null;
+  const [step, setStep] = useState(validDefault ? 2 : 1);
+  const [role, setRole] = useState(validDefault);
   const [need, setNeed] = useState(null);
   const [details, setDetails] = useState(INITIAL_DETAILS);
   const [submitting, setSubmitting] = useState(false);
@@ -150,8 +175,8 @@ export default function ContactModal({ isOpen, onClose, plan = null }) {
   useEffect(() => {
     if (isOpen) return;
     const timeout = setTimeout(() => {
-      setStep(1);
-      setRole(null);
+      setStep(validDefault ? 2 : 1);
+      setRole(validDefault);
       setNeed(null);
       setDetails(INITIAL_DETAILS);
       setSubmitting(false);
@@ -159,7 +184,7 @@ export default function ContactModal({ isOpen, onClose, plan = null }) {
       setError("");
     }, 300);
     return () => clearTimeout(timeout);
-  }, [isOpen]);
+  }, [isOpen, validDefault]);
 
   useEffect(() => {
     onCloseRef.current = onClose;
@@ -239,6 +264,14 @@ export default function ContactModal({ isOpen, onClose, plan = null }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Honeypot: real visitors never see or fill this field. Bots do, so
+    // pretend it worked and send nothing.
+    if (new FormData(e.currentTarget).get("_gotcha")) {
+      setSubmitted(true);
+      return;
+    }
+
     if (!details.name.trim() || !details.email.trim() || !details.message.trim()) {
       setError("Please fill in all fields.");
       return;
@@ -344,6 +377,7 @@ export default function ContactModal({ isOpen, onClose, plan = null }) {
             <div
               className={styles.progressTrack}
               role="progressbar"
+              aria-label="Form progress"
               aria-valuenow={step}
               aria-valuemin={1}
               aria-valuemax={TOTAL_STEPS}
@@ -372,7 +406,7 @@ export default function ContactModal({ isOpen, onClose, plan = null }) {
               </svg>
             </div>
             <h3 id="contact-modal-heading" className={styles.successHeading}>
-              Thank you, {details.name.split(" ")[0]}!
+              Thank you{details.name.trim() ? `, ${details.name.trim().split(" ")[0]}` : ""}!
             </h3>
             <p className={styles.successText}>
               Our team will be in touch with you shortly.
@@ -454,11 +488,23 @@ export default function ContactModal({ isOpen, onClose, plan = null }) {
                   We&rsquo;ll use this to get back to you.
                 </p>
 
+                <input
+                  type="text"
+                  name="_gotcha"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+                />
+
                 <label className={styles.field}>
                   <span className={styles.fieldLabel}>Name</span>
                   <input
                     ref={nameInputRef}
                     type="text"
+                    name="name"
+                    autoComplete="name"
+                    maxLength={120}
                     className={styles.fieldInput}
                     value={details.name}
                     onChange={(e) => setDetails((d) => ({ ...d, name: e.target.value }))}
@@ -471,6 +517,10 @@ export default function ContactModal({ isOpen, onClose, plan = null }) {
                   <span className={styles.fieldLabel}>Email</span>
                   <input
                     type="email"
+                    name="email"
+                    autoComplete="email"
+                    inputMode="email"
+                    maxLength={200}
                     className={styles.fieldInput}
                     value={details.email}
                     onChange={(e) => setDetails((d) => ({ ...d, email: e.target.value }))}
@@ -485,6 +535,8 @@ export default function ContactModal({ isOpen, onClose, plan = null }) {
                     className={styles.fieldTextarea}
                     value={details.message}
                     onChange={(e) => setDetails((d) => ({ ...d, message: e.target.value }))}
+                    name="message"
+                    maxLength={4000}
                     placeholder="Tell us a bit about your project"
                     rows={4}
                     required

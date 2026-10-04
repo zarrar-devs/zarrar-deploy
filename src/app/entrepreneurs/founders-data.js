@@ -14,7 +14,7 @@
 // fixed too — it built PAGE_URL as "/entrepreneurs", a route that
 // does not exist (the folder is /entrepreneurs), so the canonical
 // and every JSON-LD @id on this page pointed at a 404.
-import { ORG_ID, ROUTES, SITE_URL, WEBSITE_ID, TARGET_MARKETS, organizationSchema, websiteSchema } from "@/lib/site";
+import { ORG_ID, ROUTES, SITE_URL, WEBSITE_ID, TARGET_MARKETS, organizationSchema, websiteSchema, faqSchema } from "@/lib/site";
 export const SITE = SITE_URL;
 export const PAGE_URL = `${SITE}${ROUTES.entrepreneurs}`;
 export const BRAND = "Zarrar";
@@ -24,12 +24,12 @@ export const AUDIENCE_TYPE = "Founders, entrepreneurs and CEOs";
 
 export const SEO = {
   /* <= 60 chars so it isn't truncated in results */
-  title: "Founder Website Design & Lead Generation | Zarrar",
+  title: "Website for Entrepreneurs & CEOs + Lead Generation | Zarrar",
   /* <= 155 chars */
   description:
-    "Founder website design, lead generation and outreach for CEOs and entrepreneurs who want a credible personal presence and a focused business pipeline.",
-  ogTitle: "Founder Website Design & Lead Generation | Zarrar",
-  h1: "Founder website design that matches the business you're building.",
+    "A website for entrepreneurs and CEOs, plus lead generation, cold email outreach and social media to build a credible presence and a focused pipeline.",
+  ogTitle: "Website for Entrepreneurs & CEOs, Lead Generation & Outreach | Zarrar",
+  h1: "A website for entrepreneurs and CEOs that matches the business you're building.",
   /* Update when you materially change the page (used in sitemap.js) */
   lastModified: "2026-09-28",
 };
@@ -330,9 +330,10 @@ export function buildJsonLd() {
         "@id": crumbId,
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Home", item: SITE },
-          { "@type": "ListItem", position: 2, name: "Founders & CEOs", item: PAGE_URL },
+          { "@type": "ListItem", position: 2, name: "Website for Entrepreneurs & CEOs", item: PAGE_URL },
         ],
       },
+      faqSchema(ROUTES.entrepreneurs, FAQS),
       {
         "@type": "Service",
         "@id": serviceId,
@@ -369,7 +370,7 @@ export function buildJsonLd() {
           },
         ],
       },
-    ],
+    ].filter(Boolean),
   };
 }
 

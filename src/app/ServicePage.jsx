@@ -1,5 +1,6 @@
 import Link from "next/link";
-import ContactModalLink from "@/components/ContactModalLink"; // path adjust karo
+import ContactModalLink from "@/components/ContactModalLink";
+import BrandMark from "@/components/BrandMark";
 import { SERVICE_PAGE_LIST } from "@/lib/service-pages";
 import { CONTACT_EMAIL, PERSONAS, ROUTES } from "@/lib/site";
 import "./service-landing.css";
@@ -10,28 +11,28 @@ const AUDIENCE_ANCHOR_LABELS = {
     [ROUTES.realEstate]: "Real estate website development",
     [ROUTES.authors]: "Author website development",
     [ROUTES.coaches]: "Coach website development",
-    [ROUTES.entrepreneurs]: "Founder website development",
+    [ROUTES.entrepreneurs]: "Website development for entrepreneurs & CEOs",
   },
   [ROUTES.leadGeneration]: {
     [ROUTES.speakers]: "Lead generation for speakers",
     [ROUTES.realEstate]: "Lead generation for real estate agents",
     [ROUTES.authors]: "Lead generation for authors",
     [ROUTES.coaches]: "Lead generation for coaches",
-    [ROUTES.entrepreneurs]: "Lead generation for founders",
+    [ROUTES.entrepreneurs]: "Lead generation for entrepreneurs & CEOs",
   },
   [ROUTES.coldEmail]: {
     [ROUTES.speakers]: "Cold email outreach for speakers",
     [ROUTES.realEstate]: "Cold email outreach for real estate agents",
     [ROUTES.authors]: "Cold email outreach for authors",
     [ROUTES.coaches]: "Cold email outreach for coaches",
-    [ROUTES.entrepreneurs]: "Cold email outreach for founders",
+    [ROUTES.entrepreneurs]: "Cold email outreach for entrepreneurs & CEOs",
   },
   [ROUTES.socialMedia]: {
     [ROUTES.speakers]: "Social media management for speakers",
     [ROUTES.realEstate]: "Social media management for real estate agents",
     [ROUTES.authors]: "Social media management for authors",
     [ROUTES.coaches]: "Social media management for coaches",
-    [ROUTES.entrepreneurs]: "Social media management for founders",
+    [ROUTES.entrepreneurs]: "Social media management for entrepreneurs & CEOs",
   },
 };
 
@@ -42,6 +43,10 @@ export default function ServicePage({ service }) {
   return (
     <main className="servicePage">
       <div className="serviceWrap">
+        <header className="serviceBrandBar">
+          <BrandMark />
+        </header>
+
         <nav className="serviceBreadcrumbs" aria-label="Breadcrumb">
           <Link href={ROUTES.home}>Home</Link>
           <span aria-hidden="true">/</span>

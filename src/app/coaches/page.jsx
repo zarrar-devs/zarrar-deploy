@@ -25,28 +25,16 @@
    Keep the service claims below aligned with what Zarrar actually delivers.
    ============================================================= */
 
+import BrandMark from "@/components/BrandMark";
 import { Fragment } from "react";
 import Link from "next/link";
-import { Archivo, Inter_Tight } from "next/font/google";
+import { archivo, interTight } from "@/lib/persona-fonts";
 import CoachesMotion from "./CoachesMotion";
 import ContactProvider from "./ContactProvider";
 import ContactTriggerLink from "./ContactTriggerLink";
 import "./coaches.css";
 
-/* Self-hosted fonts (no render-blocking @import from Google).
-   If your root layout already loads these, delete this block and
-   the two variables on the root <div> below. */
-const archivo = Archivo({
-  subsets: ["latin"],
-  axes: ["wdth"],
-  variable: "--font-archivo",
-  display: "swap",
-});
-const interTight = Inter_Tight({
-  subsets: ["latin"],
-  variable: "--font-inter-tight",
-  display: "swap",
-});
+/* Fonts are shared with the other persona pages — see src/lib/persona-fonts.js */
 
 /* =====================  PERSONA-SPECIFIC  ===================== */
 
@@ -56,6 +44,7 @@ import {
   CONTACT_EMAIL,
   organizationSchema,
   websiteSchema,
+  faqSchema,
   TARGET_MARKETS,
   ROBOTS,
 } from "@/lib/site";
@@ -71,10 +60,10 @@ const CONTACT_HREF = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
 
 // Title ≈ 60 chars, description ≈ 155 chars: what Google shows before truncating.
 // Primary keyword leads the title (front-loading helps both CTR and relevance).
-const PAGE_TITLE = "Coach Website Design & Lead Generation | Zarrar";
+const PAGE_TITLE = "Website for Coaches & Lead Generation | Zarrar";
 const PAGE_DESC =
-  "Custom coaching websites and targeted lead generation for coaches who need a clear offer, credible online presence and a repeatable path to enquiries.";
-const SOCIAL_TITLE = "Custom Coach Websites & Lead Generation | Zarrar";
+  "A website for coaches with lead generation, cold email outreach and social media management that turn a clear offer into steady discovery-call enquiries.";
+const SOCIAL_TITLE = "Custom Coach Websites, Lead Generation & Outreach | Zarrar";
 // Next.js auto-detects app/coaches/opengraph-image.(jpg|png|gif) and
 // twitter-image.(jpg|png|gif) and injects them into the metadata below —
 // add those files (1200×630) instead of hardcoding an `images` array here,
@@ -355,9 +344,10 @@ const JSON_LD = {
       "@id": CRUMBS_ID,
       itemListElement: [
         { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-        { "@type": "ListItem", position: 2, name: "For coaches", item: PAGE_URL },
+        { "@type": "ListItem", position: 2, name: "Website for Coaches", item: PAGE_URL },
       ],
     },
+    faqSchema(ROUTES.coaches, FAQS),
     {
       "@type": "Service",
       "@id": SERVICE_ID,
@@ -414,7 +404,7 @@ function Breadcrumb() {
     <nav className="breadcrumb" aria-label="Breadcrumb">
       <ol>
         <li><Link href="/">Home</Link></li>
-        <li aria-current="page">For coaches</li>
+        <li aria-current="page">Website for Coaches</li>
       </ol>
     </nav>
   );
@@ -448,10 +438,8 @@ export default function ForCoachesPage() {
       <CoachesMotion />
 
       <ContactProvider>
-        <a className="skip-link" href="#main">Skip to content</a>
-
         <header className="nav">
-          <Link className="logo" href="/">Zarrar</Link>
+          <BrandMark />
           <nav className="nav-links" aria-label="On this page">
             <a href="#problem">THE PROBLEM</a>
             <a href="#services">SERVICES</a>
@@ -467,7 +455,7 @@ export default function ForCoachesPage() {
 
           <section className="hero" id="top">
             <h1 className="hero-heading">
-              <span className="hero-l1">Coach website design</span>{" "}
+              <span className="hero-l1">Website for coaches</span>{" "}
               <span className="hero-l2">that turns expertise into enquiries.</span>
             </h1>
 
