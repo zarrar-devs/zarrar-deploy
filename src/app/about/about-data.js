@@ -24,7 +24,7 @@
    ============================================================= */
 
 export const FOUNDER = {
-  name: "Hugh D.",
+  name: "Alexandra Boos",
   title: "Founder & CEO",
   photo: null,
   story: [],
