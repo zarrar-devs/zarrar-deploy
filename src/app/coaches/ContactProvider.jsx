@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, useCallback, useState } from "react";
-// ⚠️ Adjust this path to wherever ContactModal.jsx actually lives in your project
 import ContactModal from "@/components/ContactModal/ContactModal";
 export const ContactContext = createContext(() => {});
 
@@ -19,7 +18,7 @@ export default function ContactProvider({ children }) {
   return (
     <ContactContext.Provider value={openContact}>
       {children}
-      <ContactModal isOpen={isOpen} onClose={closeContact} plan={plan} defaultRole="brand-owner" />
+      <ContactModal isOpen={isOpen} onClose={closeContact} plan={plan} defaultRole="coach" />
     </ContactContext.Provider>
   );
 }

@@ -157,3 +157,26 @@
     transition: none;
   }
 }
+
+/* Phone polish: same 20px gutter as the rest of the landing page,
+   readable column headings and 44px tap rows (was 18px / 0.7rem / 40px).
+   Appended last so it wins over the 520px block above. */
+@media (max-width: 520px) {
+  .footer {
+    padding-inline: 20px;
+  }
+
+  .heading {
+    font-size: 0.78rem;
+    color: rgba(242, 238, 227, 0.62);
+  }
+
+  .list a {
+    min-height: 44px;
+  }
+
+  .bottom {
+    font-size: 0.85rem;
+    color: rgba(242, 238, 227, 0.62);
+  }
+}

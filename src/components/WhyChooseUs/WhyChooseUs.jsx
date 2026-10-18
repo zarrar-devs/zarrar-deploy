@@ -7,7 +7,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./WhyChooseUs.module.css";
 import ContactModal from "../ContactModal/ContactModal";
-import { CONTACT_EMAIL as SITE_CONTACT_EMAIL, ROUTES } from "@/lib/site";
+import { CONTACT_EMAIL as SITE_CONTACT_EMAIL, PERSONAS, ROUTES } from "@/lib/site";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -115,10 +115,30 @@ const CHIP_DEFS = {
 };
 
 const CTA_SERVICES = [
-  { id: "web", label: "Web development" },
-  { id: "leads", label: "Lead generation" },
-  { id: "outreach", label: "Cold email outreach" },
-  { id: "social", label: "Social media management" },
+  {
+    id: "web",
+    label: "Web development",
+    summary: "A custom site built around your offer.",
+    href: ROUTES.webDevelopment,
+  },
+  {
+    id: "leads",
+    label: "Lead generation",
+    summary: "Research focused on the right prospects.",
+    href: ROUTES.leadGeneration,
+  },
+  {
+    id: "outreach",
+    label: "Cold email outreach",
+    summary: "Personalised campaigns and follow-up.",
+    href: ROUTES.coldEmail,
+  },
+  {
+    id: "social",
+    label: "Social media management",
+    summary: "Keep your expertise visible consistently.",
+    href: ROUTES.socialMedia,
+  },
 ];
 
 function Chip({ id }) {
@@ -471,8 +491,9 @@ export default function WhyChooseUs() {
         [
           `.${styles.marqueeHeading}`,
           `.${styles.marqueeSub}`,
-          `.${styles.marqueeServices}`,
           `.${styles.marqueeCtaActions}`,
+          `.${styles.ctaServicePanel}`,
+          `.${styles.ctaAudienceStrip}`,
         ],
         {
           opacity: 0,
@@ -732,9 +753,9 @@ export default function WhyChooseUs() {
     // a second set of headings) to the page outline.
     const GroupTag = duplicate ? "div" : "ol";
     const ItemTag = duplicate ? "div" : "li";
-    // Nested one level under the "How we work" h3 above, not a sibling
-    // h3 — each step is a subsection of that heading, not of the page.
-    const Title = duplicate ? "p" : "h4";
+    // "How we work" is an h2 now, so each step is an h3 under it (the
+    // heading outline never skips a level).
+    const Title = duplicate ? "p" : "h3";
 
     return (
       <GroupTag
@@ -790,23 +811,34 @@ export default function WhyChooseUs() {
               className={styles.statement}
             >
               {STATEMENT_TOKENS.map((tok, i) => {
-                let chipContent = tok.text;
-
+                /* Chip labels ("social media management") used to be ONE
+                   atomic inline-block, so on a phone the whole phrase
+                   jumped to the next line as a unit and left lone words
+                   like "use" stranded. Now every word is its own mask,
+                   so lines fill naturally; only the LAST word stays glued
+                   to its icon (chipGroupTail is nowrap). The animation
+                   still targets .word, so nothing else changes. */
                 if (tok.chip) {
-                  // Only the trailing word stays permanently glued to the
-                  // icon (via .chipGroupTail, always nowrap) — the rest of
-                  // a multi-word label (e.g. "social media ") is free to
-                  // wrap normally on narrow screens. See the CSS module
-                  // for why the icon can otherwise end up orphaned alone
-                  // on its own line.
                   const { lead, tail } = splitTrailingWord(tok.text);
-                  chipContent = (
-                    <span className={styles.chipGroup}>
-                      {lead}
-                      <span className={styles.chipGroupTail}>
-                        {tail}
-                        <Chip id={tok.chip} />
-                      </span>
+                  const leadWords = lead.trim() ? lead.trim().split(" ") : [];
+
+                  return (
+                    <span key={i}>
+                      {leadWords.map((w, wi) => (
+                        <Fragment key={wi}>
+                          <span className={styles.wordMask}>
+                            <span className={styles.word}>{w}</span>
+                          </span>{" "}
+                        </Fragment>
+                      ))}
+                      <span className={styles.wordMask}>
+                        <span className={styles.word}>
+                          <span className={styles.chipGroupTail}>
+                            {tail}
+                            <Chip id={tok.chip} />
+                          </span>
+                        </span>
+                      </span>{" "}
                     </span>
                   );
                 }
@@ -814,7 +846,7 @@ export default function WhyChooseUs() {
                 return (
                   <span key={i}>
                     <span className={styles.wordMask}>
-                      <span className={styles.word}>{chipContent}</span>
+                      <span className={styles.word}>{tok.text}</span>
                     </span>{" "}
                   </span>
                 );
@@ -824,9 +856,9 @@ export default function WhyChooseUs() {
 
           <div className={styles.stepsSection}>
             <div className={styles.stepsHeader}>
-              <h3 ref={stepsLabelRef} className={styles.stepsLabel}>
+              <h2 ref={stepsLabelRef} className={styles.stepsLabel}>
                 How we work
-              </h3>
+              </h2>
 
               <div className={styles.stepsControls}>
                 <button
@@ -883,7 +915,7 @@ export default function WhyChooseUs() {
 
       <div ref={quoteRef} className={styles.quoteStage}>
         <div className={styles.quoteInner}>
-          <h3 className={styles.quoteLabel}>Our philosophy</h3>
+          <h2 className={styles.quoteLabel}>Our philosophy</h2>
 
           <p ref={quoteTextRef} className={styles.quoteText}>
             {/* The {" "} matters: without a real space between the
@@ -945,50 +977,89 @@ export default function WhyChooseUs() {
         <div className={styles.marqueeCtaContent}>
           <div className={styles.marqueeCtaGlow} aria-hidden="true" />
 
-          <h3 className={styles.marqueeHeading}>
-            Need a clearer online presence and a better way to reach prospects?
-          </h3>
-          <p className={styles.marqueeSub}>
-            We connect web development, lead generation, cold email outreach and social media management so the channels support each other.
-          </p>
-
-          <ul className={styles.marqueeServices}>
-            {CTA_SERVICES.map((service) => (
-              <li key={service.id} className={styles.marqueeServiceItem}>
-                <span
-                  className={styles.marqueeServiceIcon}
-                  style={{ backgroundColor: CHIP_DEFS[service.id].bg }}
-                  aria-hidden="true"
-                >
-                  {CHIP_DEFS[service.id].icon}
+          <div className={styles.ctaLayout}>
+            <div className={styles.ctaMain}>
+              <p className={styles.ctaEyebrow}>
+                <span className={styles.ctaEyebrowDot} aria-hidden="true" />
+                A connected growth system
+              </p>
+              <h2 className={styles.marqueeHeading}>
+                Make your online presence work harder.
+                <span className={styles.ctaHeadingAccent}>
+                  Start the right conversations.
                 </span>
-                {service.label}
-              </li>
-            ))}
-          </ul>
+              </h2>
+              <p className={styles.marqueeSub}>
+                Custom websites, researched prospect lists, personalised cold email outreach and social media management for founders, speakers, coaches, authors and real-estate professionals across the US, UK and Europe.
+              </p>
 
-          <nav className={styles.marqueeCtaLinks} aria-label="Explore Zarrar services">
-            <Link href={ROUTES.webDevelopment}>Web development</Link>
-            <Link href={ROUTES.leadGeneration}>Lead generation</Link>
-            <Link href={ROUTES.coldEmail}>Cold email outreach</Link>
-            <Link href={ROUTES.socialMedia}>Social media management</Link>
-          </nav>
+              <div className={styles.marqueeCtaActions}>
+                <button
+                  type="button"
+                  className={styles.ctaButton}
+                  onClick={() => setIsContactOpen(true)}
+                >
+                  <span className={styles.ctaButtonFill} aria-hidden="true" />
+                  <span className={styles.ctaButtonLabel}>Start a project</span>
+                  <span className={styles.ctaButtonIcon} aria-hidden="true">
+                    <ArrowIcon />
+                  </span>
+                </button>
+                <a href={`mailto:${CONTACT_EMAIL}`} className={styles.marqueeContactLink}>
+                  {CONTACT_EMAIL}
+                </a>
+              </div>
+            </div>
 
-          <div style={{marginTop: '20px'}} className={styles.marqueeCtaActions}>
-            <button
-              type="button"
-              className={styles.ctaButton}
-              onClick={() => setIsContactOpen(true)}
-            >
-              <span className={styles.ctaButtonFill} aria-hidden="true" />
-              <span className={styles.ctaButtonLabel}>Start a Project</span>
-              <span className={styles.ctaButtonIcon} aria-hidden="true">
-                <ArrowIcon />
-              </span>
-            </button>
-            <a href={`mailto:${CONTACT_EMAIL}`} className={styles.marqueeContactLink}>
-             {CONTACT_EMAIL}
-            </a>
+            <aside className={styles.ctaServicePanel} aria-labelledby="cta-service-panel-title">
+              <div className={styles.ctaPanelHeader}>
+                <div>
+                  <p className={styles.ctaPanelEyebrow}>Choose your starting point</p>
+                  <h3 id="cta-service-panel-title" className={styles.ctaPanelTitle}>What do you need most?</h3>
+                </div>
+                <span className={styles.ctaPanelIndex} aria-hidden="true">01—04</span>
+              </div>
+
+              <nav className={styles.marqueeCtaLinks} aria-label="Explore Zarrar services">
+                {CTA_SERVICES.map((service) => (
+                  <Link
+                    href={service.href}
+                    key={service.id}
+                    className={styles.ctaServiceLink}
+                  >
+                    <span
+                      className={styles.marqueeServiceIcon}
+                      style={{ backgroundColor: CHIP_DEFS[service.id].bg }}
+                      aria-hidden="true"
+                    >
+                      {CHIP_DEFS[service.id].icon}
+                    </span>
+                    <span className={styles.ctaServiceCopy}>
+                      <span className={styles.ctaServiceTitle}>{service.label}</span>
+                      <span className={styles.ctaServiceSummary}>{service.summary}</span>
+                    </span>
+                    <span className={styles.ctaServiceArrow} aria-hidden="true">
+                      <ArrowIcon />
+                    </span>
+                  </Link>
+                ))}
+              </nav>
+
+              <p className={styles.ctaPanelNote}>
+                Start with one service. Connect the others when they make sense for your goals.
+              </p>
+            </aside>
+          </div>
+
+          <div className={styles.ctaAudienceStrip}>
+            <span className={styles.ctaAudienceEyebrow}>Who we help</span>
+            <nav className={styles.ctaAudienceLinks} aria-label="Explore audiences">
+              {PERSONAS.map((persona) => (
+                <Link href={persona.href} key={persona.href}>
+                  {persona.label}
+                </Link>
+              ))}
+            </nav>
           </div>
         </div>
       </div>

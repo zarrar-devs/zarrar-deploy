@@ -116,10 +116,11 @@ function IconAlert(props) {
 // (one of these ids) so the first question is already answered.
 const ROLE_OPTIONS = [
   { id: "speaker", label: "Speaker", icon: IconMic },
+  { id: "ceo-founder", label: "Founder / CEO", icon: IconBriefcase },
+  { id: "coach", label: "Coach / Consultant", icon: IconSparkle },
   { id: "author", label: "Author", icon: IconBook },
-  { id: "ceo-founder", label: "CEO / Entrepreneur", icon: IconBriefcase },
   { id: "real-estate-agent", label: "Real Estate Agent", icon: IconHome },
-  { id: "brand-owner", label: "Brand Owner / Coach", icon: IconStore },
+  { id: "brand-owner", label: "Brand / Business Owner", icon: IconStore },
   { id: "other", label: "Other", icon: IconSparkle },
 ];
 

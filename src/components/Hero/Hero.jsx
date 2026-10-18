@@ -12,9 +12,13 @@ import {
 import Link from "next/link";
 import { Fraunces, Space_Mono, Space_Grotesk } from "next/font/google";
 import gsap from "gsap";
-import TransitionLink from "../TransitionLink"; 
+import TransitionLink from "../TransitionLink";
+import ContactModalLink from "../ContactModalLink";
 
 /**
+ * Hero — v13 (mobile pass: left-aligned phone layout, full-width headline,
+ * 44px tap targets, hero CTAs on phone/tablet. Desktop + animations untouched.)
+ *
  * Hero — v12
  *
  * What changed vs v11 (COPY + SEO only — design, layout, fonts and
@@ -597,13 +601,6 @@ const Hero = forwardRef(function Hero({ revealed = true }, ref) {
           outline-offset: 3px;
         }
         @media (max-width: 480px) {
-          .hero__link {
-            padding: 0.4em 0.58em;
-            font-size: 0.64rem;
-          }
-          .hero__links {
-            gap: 6px;
-          }
           .hero__dropdown-trigger {
             gap: 0.4em;
           }
@@ -624,14 +621,23 @@ const Hero = forwardRef(function Hero({ revealed = true }, ref) {
             display: inline;
           }
         }
-        @media (max-width: 360px) {
-          .hero__link {
-            padding: 0.36em 0.5em;
-            font-size: 0.6rem;
-          }
-          .hero__links {
-            gap: 5px;
-          }
+        /* "About" — the quiet third link: no fill, underline on hover.
+           Hidden on small phones where the nav only has room for two
+           pills (About stays reachable from the founder band and the
+           footer there). */
+        .hero__link--ghost {
+          background: transparent;
+          color: var(--ink);
+        }
+        .hero__link--ghost:hover {
+          box-shadow: inset 0 -2px 0 var(--ink);
+        }
+        .hero__link--ghost:focus-visible {
+          outline: 2px solid var(--ink);
+          outline-offset: 2px;
+        }
+        @media (max-width: 560px) {
+          .hero__link--ghost { display: none; }
         }
 
         /* Who-We-Serve dropdown — same stamp-block trigger as Services,
@@ -967,89 +973,176 @@ const Hero = forwardRef(function Hero({ revealed = true }, ref) {
           will-change: transform, opacity, filter;
         }
 
+        /* Hero CTAs — shown on phones and tablets only. The nav on a
+           phone is just two small links, so the first screen had no
+           clear next step. Desktop is deliberately unchanged: remove
+           the display:none below to show these there too. */
+        .hero__cta {
+          display: none;
+          animation: heroCtaIn 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.5s both;
+        }
+        @keyframes heroCtaIn {
+          from { opacity: 0; transform: translateY(14px); }
+        }
+        .hero__btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 48px;
+          padding: 0 22px;
+          border-radius: 10px;
+          font-family: var(--font-stamp);
+          font-weight: 700;
+          font-size: 0.86rem;
+          letter-spacing: -0.01em;
+          text-decoration: none;
+          text-align: center;
+          cursor: pointer;
+          -webkit-tap-highlight-color: transparent;
+          transition: background 0.22s ease, color 0.22s ease,
+            box-shadow 0.22s ease, transform 0.2s ease;
+        }
+        .hero__btn:active { transform: scale(0.97); }
+        .hero__btn--solid { background: var(--ink); color: var(--paper); }
+        .hero__btn--outline {
+          background: var(--paper);
+          color: var(--ink);
+          box-shadow: inset 0 0 0 1.5px var(--ink);
+        }
+        .hero__btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+        @media (hover: hover) {
+          .hero__btn--solid:hover {
+            background: var(--paper);
+            color: var(--ink);
+            box-shadow: inset 0 0 0 1.5px var(--ink);
+          }
+          .hero__btn--outline:hover {
+            background: var(--ink);
+            color: var(--paper);
+            box-shadow: none;
+          }
+        }
+
+        /* Tablet (641-900px): same centered layout as desktop, with CTAs */
+        @media (max-width: 900px) {
+          .hero__cta {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 28px;
+          }
+        }
+
+        /* ---------- Phone (<= 640px) ----------
+           Why this block was rewritten: the headline was capped at
+           max-width: 11ch while the words are huge and centered, so it
+           broke into 1-2 words per line and ended up a tall, ragged,
+           centered stack that didn't line up with anything. Now the
+           whole hero is one left-aligned column that uses the full
+           width, on the same 20px gutter every other section uses. */
         @media (max-width: 640px) {
           .hero {
             min-height: auto;
-            padding-top: 18px;
-            padding-bottom: 22px;
+            padding: calc(12px + env(safe-area-inset-top, 0px)) 20px 20px;
           }
 
-        .hero__nav {
-    align-items: center;
-  }
+          .hero__nav {
+            padding-bottom: 12px;
+            gap: 10px;
+          }
 
-  .hero__mark {
-    display: inline-flex;
-    align-items: center;
-    height: 40px;
-    line-height: 1;
-    transform: translateY(1px);
-  }
+          .hero__mark {
+            display: inline-flex;
+            align-items: center;
+            min-height: 44px;
+            line-height: 1;
+          }
 
           .hero__links {
-            gap: 6px;
+            gap: 8px;
           }
 
           .hero__link {
-            min-height: 40px;
-            padding: 0 10px;
-            font-size: 0.72rem;
+            min-height: 44px;
+            padding: 0 14px;
+            font-size: 0.76rem;
           }
 
           .hero__dropdown-panel {
             right: 0;
-            width: min(300px, calc(100vw - 28px));
+            width: min(320px, calc(100vw - 40px));
+          }
+
+          .hero__dropdown-item a {
+            min-height: 48px;
           }
 
           .hero__stage {
-            padding: 26px 10px 0;
+            align-items: flex-start;
+            justify-content: flex-start;
+            padding: 28px 0 0;
           }
 
           .hero__content {
+            align-items: flex-start;
+            text-align: left;
             width: 100%;
-            max-width: 680px;
+            max-width: none;
+            margin: 0;
+          }
+
+          .hero__eyes {
+            display: none;
           }
 
           .hero__headline {
-            max-width: 11ch;
-            font-size: clamp(2.45rem, 11.5vw, 4.4rem);
-            line-height: 1.02;
+            max-width: none;
+            font-size: clamp(2.15rem, 9.6vw, 3.1rem);
+            line-height: 1.1;
+            letter-spacing: -0.025em;
+            text-wrap: balance;
           }
 
+          /* calmer stamped words: smaller tilt, tighter box */
+          .scramble-word--boxed {
+            padding: 0.03em 0.26em;
+            border-radius: 6px;
+          }
+          .scramble-word--boxed-solid { transform: rotate(-0.8deg); }
+          .scramble-word--boxed-outline { transform: rotate(0.8deg); }
+
           .hero__sub {
-            max-width: 32ch;
-            margin-top: 18px;
-            font-size: 0.98rem;
-            line-height: 1.58;
+            max-width: 34ch;
+            margin: 22px 0 0;
+            font-size: 1rem;
+            line-height: 1.6;
+          }
+          .hero__sub, .hero__sub .word-inner {
+            color: #55555a;
+          }
+
+          .hero__cta {
+            flex-direction: column;
+            flex-wrap: nowrap;
+            align-items: stretch;
+            justify-content: flex-start;
+            width: 100%;
+            margin-top: 28px;
           }
         }
 
-        @media (max-width: 380px) {
-          .hero__nav {
-            align-items: flex-start;
-          }
-
-          .hero__links {
-            max-width: 66%;
-          }
-
-          .hero__link {
-            min-height: 38px;
-            padding-inline: 8px;
-            font-size: 0.68rem;
-          }
-
-          .hero__headline {
-            font-size: 2.3rem;
-          }
-
-          .hero__sub {
-            font-size: 0.94rem;
-          }
+        @media (max-width: 360px) {
+          .hero { padding-inline: 16px; }
+          .hero__link { padding: 0 11px; font-size: 0.72rem; }
+          .hero__headline { font-size: 2.05rem; }
+          .hero__sub { font-size: 0.95rem; }
         }
 
         @media (prefers-reduced-motion: reduce) {
           .scramble-char { transition: none; }
+          .hero__cta { animation: none; }
+          .hero__btn { transition: none; }
         }
       `}</style>
 
@@ -1058,6 +1151,14 @@ const Hero = forwardRef(function Hero({ revealed = true }, ref) {
           Zarrar
         </Link>
         <nav className="hero__links" aria-label="Primary">
+          <TransitionLink
+            href="/about"
+            className="hero__link hero__link--ghost"
+            ref={(el) => (navLinksRef.current[2] = el)}
+          >
+            About
+          </TransitionLink>
+
           <TransitionLink
             href="/services"
             className="hero__link hero__link--outline"
@@ -1156,6 +1257,15 @@ const Hero = forwardRef(function Hero({ revealed = true }, ref) {
             </span>
             <span className="sr-only">{SUB_COPY}</span>
           </p>
+
+          <div className="hero__cta">
+            <ContactModalLink href="/contact" className="hero__btn hero__btn--solid">
+              Start a project
+            </ContactModalLink>
+            <TransitionLink href="/services" className="hero__btn hero__btn--outline">
+              See our services
+            </TransitionLink>
+          </div>
         </div>
       </div>
     </section>

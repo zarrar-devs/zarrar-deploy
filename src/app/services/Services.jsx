@@ -3,52 +3,27 @@
 /* =============================================================
    Zarrar — /services
    -------------------------------------------------------------
-   Contact modal
-   - Nav "Contact", each service card's CTA, and each plan's
-     "Start with…" used to be <a href="#contact"> anchors that
-     jumped to the closing section.
-   - They're now plain <button> elements with no href — they open
-     the contact modal directly instead of scrolling.
-   - The closing section's own "Say hello" button is untouched —
-     it's a real mailto: link, not a scroll-to-contact link.
-
-   Data source
-   - SERVICES and PLANS used to be defined and exported right
-     here. page.jsx (a server component) imported them from this
-     file to build the Service/Offer JSON-LD — but this file is
-     "use client", and a server component importing an export
-     from a "use client" file gets a client-reference object, not
-     the real array (no .map()). That's what threw
-     "SERVICES.map is not a function".
-   - Fix: SERVICES/PLANS now live in ./services-data.js, a plain
-     (non "use client") file, same as RealEstate.jsx/Founders.jsx
-     pull from realestate-data.js/founders-data.js. Icons are
-     stored there as a string key and mapped to the real icon
-     component below, in ICONS.
-
-   Breadcrumb
-   - "Home / Services" renders here, as the first thing inside
-     .services-page, so it shares --bone/--ink and the nav's own
-     left gutter. page.jsx must NOT render its own copy of this —
-     it only renders <Services/> — otherwise the breadcrumb either
-     shows up twice, or (if only page.jsx renders it) paints on the
-     page's plain white background instead of --bone, producing a
-     visible colour seam above the nav.
-
-   Service cards
-   - The card footer used to be two stacked pill buttons of equal
-     visual weight ("Learn about X" + the card's own CTA), which
-     read as cluttered. Redesigned into one clear hierarchy: a
-     solid dark CTA button (the actual conversion action) next to
-     a plain "Learn more →" text link (the lower-commitment,
-     read-more action) — same two destinations as before, just no
-     longer competing for attention. Added a numbered index
-     (01/02/03…) and an icon "badge" at the top of each card. Card
-     DOM still has exactly 4 direct children (top row / heading /
-     body / actions), which is what Services.css's subgrid rule
-     relies on to line up every card's heading/body/actions at the
-     same height regardless of how many lines its own title wraps
-     to.
+   What changed in this pass
+   - Hero load sequence is CSS keyframes now (no flash of visible
+     text before JS hides it, works without JS). GSAP only handles
+     scroll-driven motion, which happens below the fold.
+   - Phones: no Lenis smooth-scroll (native momentum scrolling is
+     better on touch), no text-scrub, no scrubbed parallax. Reveals
+     are one cheap ScrollTrigger.batch. Desktop keeps the extras.
+   - Lenis is now also removed from gsap.ticker on unmount (it used
+     to leak) and in-page links go through lenis.scrollTo when it's
+     running, so the sticky nav offset is respected.
+   - New "How it works" section explaining lead generation +
+     personalised outreach, with small illustrations per step. On
+     phones the four steps are a swipeable snap row.
+   - Service cards: numbered index removed (the services aren't a
+     sequence); each card now carries a short "stage" label instead.
+     Lead generation gets its own icon (it shared one with cold
+     email). Card DOM still has exactly 4 direct children, which is
+     what the subgrid rule in Services.css relies on.
+   - Contact modal wiring is unchanged: every CTA is a <button>
+     calling openContact(); closing section also keeps a mailto.
+   - "Home / Services" breadcrumb stays inside .services-page.
    ============================================================= */
 
 import BrandMark from "@/components/BrandMark";
@@ -58,7 +33,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import ContactModal from "@/components/ContactModal/ContactModal";
-import { SERVICES, PLANS } from "./services-data";
+import { ROUTES, CONTACT_EMAIL } from "@/lib/site";
+import { SERVICES, PLANS, FLOW } from "./services-data";
 import "./Services.css";
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -66,7 +42,7 @@ gsap.registerPlugin(ScrollTrigger, SplitText);
 const useIsoLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
-/* ---------------- Icons (decorative — hidden from AT) ---------------- */
+/* ---------------- Icons (decorative, hidden from AT) ---------------- */
 
 const stroke = {
   fill: "none",
@@ -83,6 +59,16 @@ function WebIcon() {
       <line className="draw" x1="4" y1="17" x2="44" y2="17" />
       <path className="draw" d="M19 25l-5 5 5 5" />
       <path className="draw" d="M29 25l5 5-5 5" />
+    </svg>
+  );
+}
+
+function LeadsIcon() {
+  return (
+    <svg viewBox="0 0 48 48" {...stroke}>
+      <circle className="draw" cx="20" cy="20" r="11" />
+      <path className="draw" d="M28 28l13 13" />
+      <path className="draw" d="M15 18h10M15 23h6" />
     </svg>
   );
 }
@@ -109,18 +95,16 @@ function SocialIcon() {
   );
 }
 
-/* string key (from services-data.js) -> actual icon element */
 const ICONS = {
   web: <WebIcon />,
+  leads: <LeadsIcon />,
   outreach: <OutreachIcon />,
   social: <SocialIcon />,
 };
 
-/* small arrow used in the "Learn more" text-link — decorative,
-   the link's own text already says everything a reader needs */
 function ArrowIcon() {
   return (
-    <svg className="service-learn-more-arrow" viewBox="0 0 16 16" aria-hidden="true">
+    <svg className="arrow-icon" viewBox="0 0 16 16" aria-hidden="true">
       <path
         d="M3 8h9M8 3l5 5-5 5"
         fill="none"
@@ -133,6 +117,51 @@ function ArrowIcon() {
   );
 }
 
+/* Tiny illustrations for the "How it works" steps. Decorative: the
+   step's heading and sentence already say everything. */
+function FlowMock({ type }) {
+  if (type === "criteria") {
+    return (
+      <div className="mock mock-chips">
+        <span>Role: Head of Events</span>
+        <span>Industry: Conferences</span>
+        <span>Region: UK &amp; EU</span>
+        <span>Signal: Booking speakers</span>
+      </div>
+    );
+  }
+
+  if (type === "list") {
+    return (
+      <ul className="mock mock-list">
+        <li><i className="ok" />Head of Events<span>Fits</span></li>
+        <li><i className="ok" />Founder<span>Fits</span></li>
+        <li className="no"><i className="x" />Intern<span>Excluded</span></li>
+      </ul>
+    );
+  }
+
+  if (type === "email") {
+    return (
+      <div className="mock mock-mail">
+        <p className="mock-subject">Idea for your 2027 leadership track</p>
+        <p>
+          Hi <mark>Maya</mark>, I saw <mark>Northwind Summit</mark> is adding a
+          leadership track&hellip;
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <ul className="mock mock-seq">
+      <li><b style={{ "--w": "100%" }} />First email</li>
+      <li><b style={{ "--w": "72%" }} />Follow-up</li>
+      <li><b style={{ "--w": "48%" }} />Reply handled</li>
+    </ul>
+  );
+}
+
 /* ---------------- Component ---------------- */
 
 function Services({ faqs = [] }) {
@@ -140,33 +169,35 @@ function Services({ faqs = [] }) {
   const [contactOpen, setContactOpen] = useState(false);
   const [contactPlan, setContactPlan] = useState(null);
 
-  // Opens the contact modal. Pass a plan name (e.g. "Growth") when the
-  // click came from a specific plan's CTA, or leave it out for a
-  // generic contact click (nav, service cards).
+  // Pass a plan name (e.g. "Growth") from a plan's CTA, or nothing for a
+  // generic contact click (nav, hero, service cards, closing).
   const openContact = (plan = null) => {
     setContactPlan(plan);
     setContactOpen(true);
   };
 
   useIsoLayoutEffect(() => {
-    const splits = [];
     let lenis;
+    let lenisTick;
+    let cancelled = false;
+    const el = root.current;
 
-    /* optional smooth scroll — skipped silently if lenis isn't installed */
+    /* ---- optional smooth scroll: desktop pointer devices only ---- */
     const startSmooth = async () => {
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const touch = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+      if (reduce || touch) return;
 
       try {
         const { default: Lenis } = await import("lenis");
+        if (cancelled) return;
 
-        lenis = new Lenis({
-          duration: 1.1,
-          smoothWheel: true,
-        });
+        lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+        document.documentElement.classList.add("has-lenis");
 
         lenis.on("scroll", ScrollTrigger.update);
-
-        gsap.ticker.add((t) => lenis.raf(t * 1000));
+        lenisTick = (t) => lenis.raf(t * 1000);
+        gsap.ticker.add(lenisTick);
         gsap.ticker.lagSmoothing(0);
       } catch {
         /* native scroll is fine */
@@ -175,608 +206,401 @@ function Services({ faqs = [] }) {
 
     startSmooth();
 
-    const ctx = gsap.context((self) => {
-      const q = self.selector;
+    /* in-page links: let Lenis do the scrolling (keeps the sticky-nav
+       offset); without Lenis the browser + CSS scroll-margin handle it */
+    const onAnchorClick = (e) => {
+      const a = e.target.closest?.('a[href^="#"]');
+      if (!a || !lenis) return;
+      const target = document.querySelector(a.getAttribute("href"));
+      if (!target) return;
+      e.preventDefault();
+      const navH = el.querySelector(".nav")?.offsetHeight || 80;
+      lenis.scrollTo(target, { offset: -navH });
+    };
+    el.addEventListener("click", onAnchorClick);
 
-      /* ---- lightweight heading reveal ---- */
-      const headingIn = (el, opts = {}) => {
-        if (!el) return gsap.timeline();
-
-        return gsap.from(el, {
-          yPercent: 30,
-          opacity: 0,
-          duration: 0.7,
-          ease: "power3.out",
-          scrollTrigger: opts.trigger
-            ? {
-                trigger: opts.trigger,
-                start: opts.start || "top 85%",
-                once: true,
-              }
-            : undefined,
-        });
-      };
-
-      const linesIn = (el, opts = {}) => {
-        if (!el) return gsap.timeline();
-
-        const split = SplitText.create(el, {
-          type: "lines",
-          linesClass: "line",
-          mask: "lines",
-          aria: "auto",
-        });
-
-        splits.push(split);
-
-        return gsap.from(split.lines, {
-          yPercent: 110,
-          duration: 0.9,
-          ease: "power4.out",
-          stagger: 0.07,
-          scrollTrigger: opts.trigger
-            ? {
-                trigger: opts.trigger,
-                start: opts.start || "top 85%",
-                once: true,
-              }
-            : undefined,
-        });
-      };
-
-      const drawIcon = (svg, trigger) => {
-        if (!svg) return;
-
-        const strokes = svg.querySelectorAll(".draw");
-
-        strokes.forEach((s) => {
-          const len = s.getTotalLength ? s.getTotalLength() : 200;
-
-          gsap.set(s, {
-            strokeDasharray: len,
-            strokeDashoffset: len,
-          });
-        });
-
-        gsap.to(strokes, {
-          strokeDashoffset: 0,
-          duration: 1,
-          ease: "power2.out",
-          stagger: 0.06,
-          scrollTrigger: {
-            trigger,
-            start: "top 80%",
-            once: true,
-          },
-        });
-      };
-
+    const ctx = gsap.context(() => {
+      const q = gsap.utils.selector(el);
       const mm = gsap.matchMedia();
 
-      /* ================= reduced motion ================= */
-
-      mm.add("(prefers-reduced-motion: reduce)", () => {
-        gsap.set(q(".hero-rule"), {
-          scaleX: 1,
-        });
-      });
-
-      /* ================= everything else ================= */
-
       mm.add(
-        "(prefers-reduced-motion: no-preference)",
+        {
+          motion: "(prefers-reduced-motion: no-preference)",
+          desktop: "(min-width: 900px)",
+          fine: "(hover: hover) and (pointer: fine)",
+        },
         (mctx) => {
-          const { isDesktop } = mctx.conditions || {};
+          const { motion, desktop, fine } = mctx.conditions;
+          if (!motion) return;
 
-          /* ---- load sequence ---- */
-
-          gsap
-            .timeline({
-              defaults: {
-                ease: "expo.out",
-              },
-            })
-            .from(q(".logo, .nav-links a, .nav-cta"), {
-              yPercent: -160,
-              opacity: 0,
-              duration: 0.75,
-              stagger: 0.05,
-            })
-            .add(headingIn(q(".hero-l1")[0]), 0.06)
-            .add(headingIn(q(".hero-l2")[0]), 0.2)
-            .add(linesIn(q(".hero-sub")[0]), 0.42)
-            .from(
-              q(".hero-actions > *"),
-              {
-                y: 24,
-                opacity: 0,
-                duration: 0.75,
-                stagger: 0.08,
-              },
-              0.55
-            )
-            .to(
-              q(".hero-rule"),
-              {
-                scaleX: 1,
-                duration: 1.1,
-                ease: "power3.inOut",
-              },
-              0.35
-            );
-
-          /* ---- scroll progress ---- */
-
+          /* ---- nav scroll progress ---- */
           gsap.to(q(".nav-progress span"), {
             scaleX: 1,
             ease: "none",
             scrollTrigger: {
-              trigger: root.current,
+              trigger: el,
               start: "top top",
               end: "bottom bottom",
               scrub: 0.3,
             },
           });
 
-          /* ---- hero drifts away as you leave it ---- */
+          /* ---- everything else: one cheap batched reveal ---- */
+          const items = q(".reveal");
+          // Prepare the start state before a card enters view; this prevents
+          // the visible -> hidden -> visible snap on first scroll entry.
+          gsap.set(items, { opacity: 0, y: 28 });
 
-          gsap.to(q(".hero-heading"), {
-            yPercent: -14,
-            opacity: 0.25,
-            ease: "none",
-            scrollTrigger: {
-              trigger: q(".hero")[0],
-              start: "top top",
-              end: "bottom top",
-              scrub: 0.6,
-            },
-          });
-
-          /* ---- section heads ---- */
-
-          q(".section-head").forEach((head) => {
-            headingIn(head.querySelector("h2"), {
-              trigger: head,
-              start: "top 82%",
-            });
-
-            linesIn(head.querySelector("p"), {
-              trigger: head,
-              start: "top 80%",
-            });
-          });
-
-          /* ---- the statement: words light up on scrub ---- */
-
-          const stmt = q(".statement p")[0];
-
-          if (stmt) {
-            const split = SplitText.create(stmt, {
-              type: "words",
-              wordsClass: "word",
-              aria: "auto",
-            });
-
-            splits.push(split);
-
-            gsap.fromTo(
-              split.words,
-              {
-                opacity: 0.16,
-              },
-              {
+          ScrollTrigger.batch(items, {
+            start: "top 90%",
+            once: true,
+            onEnter: (batch) =>
+              gsap.to(batch, {
                 opacity: 1,
-                ease: "none",
-                stagger: 0.35,
-                scrollTrigger: {
-                  trigger: q(".statement")[0],
-                  start: "top 78%",
-                  end: "bottom 62%",
-                  scrub: 0.4,
-                },
-              }
-            );
-          }
-
-          /* ---- service cards ---- */
-
-          const cards = q(".service-card");
-
-          gsap.from(cards, {
-            y: 60,
-            opacity: 0,
-            duration: 1,
-            ease: "expo.out",
-            stagger: 0.09,
-            scrollTrigger: {
-              trigger: q(".services-grid")[0],
-              start: "top 80%",
-              once: true,
-            },
+                y: 0,
+                duration: 0.8,
+                ease: "power3.out",
+                stagger: 0.08,
+                overwrite: true,
+                /* hand transform/opacity back to CSS so card hover
+                   lift keeps working */
+                clearProps: "opacity,transform",
+              }),
           });
 
-          cards.forEach((card) => {
-            headingIn(card.querySelector("h3"), {
-              trigger: card,
-              start: "top 82%",
+          /* ---- service icons draw themselves ---- */
+          q(".service-card").forEach((card) => {
+            const strokes = card.querySelectorAll(".draw");
+            strokes.forEach((s) => {
+              const len = s.getTotalLength ? s.getTotalLength() : 200;
+              gsap.set(s, { strokeDasharray: len, strokeDashoffset: len });
             });
-
-            drawIcon(card.querySelector("svg"), card);
+            gsap.to(strokes, {
+              strokeDashoffset: 0,
+              duration: 1,
+              ease: "power2.out",
+              stagger: 0.06,
+              scrollTrigger: { trigger: card, start: "top 85%", once: true },
+            });
           });
 
-          /* ---- plans land tilted in 3D, then settle ---- */
-
-          gsap.set(q(".plans-grid"), {
-            perspective: 1400,
-          });
-
-          gsap.from(q(".plan"), {
-            y: 88,
-            rotateX: -13,
-            opacity: 0,
-            transformOrigin: "50% 0%",
-            duration: 1.1,
-            ease: "expo.out",
-            stagger: 0.09,
-            scrollTrigger: {
-              trigger: q(".plans-grid")[0],
-              start: "top 78%",
-              once: true,
-            },
-          });
-
-          q(".plan").forEach((plan) => {
-            gsap.from(plan.querySelectorAll(".plan-includes li"), {
-              y: 14,
-              opacity: 0,
-              duration: 0.55,
+          /* ---- flow: the little bars fill as the step lands ---- */
+          q(".mock-seq b").forEach((bar) => {
+            gsap.from(bar, {
+              scaleX: 0,
+              transformOrigin: "0 50%",
+              duration: 0.9,
               ease: "power3.out",
-              stagger: 0.05,
-              scrollTrigger: {
-                trigger: plan,
-                start: "top 72%",
-                once: true,
-              },
+              scrollTrigger: { trigger: bar, start: "top 90%", once: true },
             });
           });
 
-          /* desktop-only: the featured plan lifts as it passes */
-
-          if (isDesktop) {
-            gsap.to(q(".plan.is-featured"), {
-              y: -34,
+          if (desktop) {
+            /* hero drifts away as you leave it */
+            gsap.to(q(".hero-heading"), {
+              yPercent: -12,
+              opacity: 0.25,
               ease: "none",
               scrollTrigger: {
-                trigger: q(".plans-grid")[0],
-                start: "top bottom",
+                trigger: q(".hero")[0],
+                start: "top top",
                 end: "bottom top",
-                scrub: 1,
+                scrub: 0.6,
               },
             });
-          }
 
-          /* ---- closing ---- */
+            /* the statement: words light up as you scroll */
+            const stmt = q(".statement p")[0];
+            if (stmt) {
+              const split = SplitText.create(stmt, {
+                type: "words",
+                wordsClass: "word",
+                aria: "auto",
+              });
 
-          const close = q(".closing")[0];
-
-          if (close) {
-            gsap
-              .timeline({
-                scrollTrigger: {
-                  trigger: close,
-                  start: "top 82%",
-                  once: true,
-                },
-              })
-              .add(headingIn(close.querySelector("h2")))
-              .from(
-                close.querySelector(".btn"),
+              gsap.fromTo(
+                split.words,
+                { opacity: 0.16 },
                 {
-                  y: 28,
-                  opacity: 0,
-                  duration: 0.65,
-                  ease: "back.out(1.6)",
-                },
-                "-=0.45"
+                  opacity: 1,
+                  ease: "none",
+                  stagger: 0.35,
+                  scrollTrigger: {
+                    trigger: q(".statement")[0],
+                    start: "top 78%",
+                    end: "bottom 62%",
+                    scrub: 0.4,
+                  },
+                }
               );
+            }
           }
-        },
-        {
-          isDesktop: "(min-width: 900px)",
+
+          /* ---- magnetic buttons: mouse only ---- */
+          if (fine) {
+            const cleanups = [];
+
+            q(".magnetic").forEach((m) => {
+              const xTo = gsap.quickTo(m, "x", { duration: 0.5, ease: "power3" });
+              const yTo = gsap.quickTo(m, "y", { duration: 0.5, ease: "power3" });
+
+              const move = (e) => {
+                const r = m.getBoundingClientRect();
+                xTo((e.clientX - (r.left + r.width / 2)) * 0.28);
+                yTo((e.clientY - (r.top + r.height / 2)) * 0.4);
+              };
+              const leave = () => {
+                xTo(0);
+                yTo(0);
+              };
+
+              m.addEventListener("pointermove", move);
+              m.addEventListener("pointerleave", leave);
+              cleanups.push(() => {
+                m.removeEventListener("pointermove", move);
+                m.removeEventListener("pointerleave", leave);
+              });
+            });
+
+            return () => cleanups.forEach((fn) => fn());
+          }
         }
       );
+    }, el);
 
-      /* ---- magnetic buttons ---- */
-
-      mm.add("(hover: hover) and (pointer: fine)", () => {
-        const cleanups = [];
-
-        q(".magnetic").forEach((el) => {
-          const xTo = gsap.quickTo(el, "x", {
-            duration: 0.5,
-            ease: "power3",
-          });
-
-          const yTo = gsap.quickTo(el, "y", {
-            duration: 0.5,
-            ease: "power3",
-          });
-
-          const move = (e) => {
-            const r = el.getBoundingClientRect();
-
-            xTo(
-              (e.clientX - (r.left + r.width / 2)) * 0.28
-            );
-
-            yTo(
-              (e.clientY - (r.top + r.height / 2)) * 0.42
-            );
-          };
-
-          const leave = () => {
-            xTo(0);
-            yTo(0);
-          };
-
-          el.addEventListener("pointermove", move);
-          el.addEventListener("pointerleave", leave);
-
-          cleanups.push(() => {
-            el.removeEventListener("pointermove", move);
-            el.removeEventListener("pointerleave", leave);
-          });
-        });
-
-        return () => cleanups.forEach((fn) => fn());
-      });
-
-      return () => mm.revert();
-    }, root);
-
-    /* webfonts change metrics — re-measure line splits once they land */
-
-    if (typeof document !== "undefined" && document.fonts?.ready) {
-      document.fonts.ready.then(() => ScrollTrigger.refresh());
+    /* webfonts change metrics: re-measure triggers once they land */
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(() => !cancelled && ScrollTrigger.refresh());
     }
 
     return () => {
+      cancelled = true;
+      el.removeEventListener("click", onAnchorClick);
+      if (lenisTick) gsap.ticker.remove(lenisTick);
       lenis?.destroy();
-      splits.forEach((s) => s.revert());
+      document.documentElement.classList.remove("has-lenis");
       ctx.revert();
     };
   }, []);
 
   return (
-    <>
-      <div className="services-page" ref={root}>
+    <div className="services-page" ref={root}>
+      <nav className="seo-breadcrumb" aria-label="Breadcrumb">
+        <Link href="/">Home</Link>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Services</span>
+      </nav>
 
-        <nav className="seo-breadcrumb" aria-label="Breadcrumb">
-          <Link href="/">Home</Link>
-          <span aria-hidden="true">/</span>
-          <span>Services</span>
+      <header className="nav">
+        <BrandMark />
+
+        <nav className="nav-links" aria-label="Sections">
+          <a href="#services">Services</a>
+          <a href="#how">How it works</a>
+          <a href="#plans">Plans</a>
+          <a href="#faq">FAQ</a>
         </nav>
 
-        <header className="nav">
-          <BrandMark />
+        <button type="button" className="nav-cta magnetic" onClick={() => openContact()}>
+          Contact
+        </button>
 
-          <nav
-            className="nav-links"
-            aria-label="Sections"
-          >
-            <a href="#services">SERVICES</a>
-            <a href="#plans">PLANS</a>
-            <a href="#faq">FAQ</a>
-          </nav>
+        <div className="nav-progress" aria-hidden="true">
+          <span />
+        </div>
+      </header>
 
-          <button
-            type="button"
-            className="nav-cta magnetic"
-            onClick={() => openContact()}
-          >
-            Contact
-          </button>
+      <main>
+        {/* ---------------- Hero ---------------- */}
+        <section className="hero" id="top">
+          <h1 className="hero-heading">
+            <span className="hero-l1">Web development, lead generation</span>
+            <span className="hero-l2">and personalised outreach.</span>
+          </h1>
 
-          <div
-            className="nav-progress"
-            aria-hidden="true"
-          >
-            <span />
-          </div>
-        </header>
+          <div className="hero-rule" aria-hidden="true" />
 
-        <main>
-          <section className="hero" id="top">
-            <h1 className="hero-heading">
-              <span className="hero-l1">
-                Website development.
-              </span>
-
-              <span className="hero-l2">
-                Lead generation, outreach &amp; social media.
-              </span>
-            </h1>
-
-            <div
-              className="hero-rule"
-              aria-hidden="true"
-            />
-
-            <div className="hero-foot">
+          <div className="hero-foot">
+            <div className="hero-copy">
               <p className="hero-sub">
-                Website development, lead generation, cold email outreach and social media management for founders, speakers, coaches, authors and real estate agents — built to make your offer clearer and your next step easier.
+                We build your website, research the prospects who should hear from you, and run
+                personalised cold email outreach to start sales conversations. Social media
+                management keeps your expertise visible in between.
               </p>
-
-              <div className="hero-actions">
-                <a
-                  className="btn btn-solid magnetic"
-                  href="#plans"
-                >
-                  See the plans
-                </a>
-
-                <a
-                  className="btn btn-ghost"
-                  href="#services"
-                >
-                  What Zarrar does
-                </a>
-
-                <Link
-                  className="btn btn-ghost"
-                  href="/contact"
-                >
-                  Contact Zarrar
-                </Link>
-              </div>
+              <p className="hero-meta">
+                For founders, speakers, coaches, authors and real estate agents. Remote team,
+                clients across the US, UK and Europe.
+              </p>
             </div>
-          </section>
 
-          <section
-            className="statement"
-            aria-label="What we believe"
-          >
-            <p>
-              Your website explains the offer. Lead generation finds the right prospects.
-              Outreach starts the conversation. Social media keeps your expertise visible.
+            <div className="hero-actions">
+              <button
+                type="button"
+                className="btn btn-solid magnetic"
+                onClick={() => openContact()}
+              >
+                Discuss your project
+              </button>
+              <a className="btn btn-outline" href="#how">
+                See how it works
+              </a>
+              <a className="btn btn-ghost" href="#plans">
+                View plans
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section className="statement" aria-label="What we believe">
+          <p>
+            Your website explains the offer. Lead generation finds the right prospects.
+            Outreach starts the conversation. Social media keeps your expertise visible.
+          </p>
+        </section>
+
+        {/* ---------------- Services ---------------- */}
+        <section className="services" id="services" aria-labelledby="services-title">
+          <div className="section-head">
+            <h2 id="services-title" className="reveal">What Zarrar does</h2>
+            <p className="reveal">
+              Website development, lead generation, cold email outreach and social media
+              management. Start with the service you need most, or connect them into one system.
             </p>
-          </section>
+          </div>
 
-          <section
-            className="services"
-            id="services"
-            aria-labelledby="services-title"
-          >
-            <div className="section-head">
-              <h2 id="services-title">
-                What Zarrar does
-              </h2>
+          <div className="services-grid">
+            {SERVICES.map((s) => (
+              <article className="service-card reveal" id={s.id} key={s.id}>
+                <div className="service-card-top">
+                  <span className="service-icon" aria-hidden="true">
+                    {ICONS[s.icon]}
+                  </span>
+                  <span className="service-stage">{s.stage}</span>
+                </div>
 
-              <p>
-                Website development, lead generation, cold email outreach and social media management. Start with the service you need most, or connect them into one system.
-              </p>
-            </div>
+                <h3>{s.title}</h3>
 
-            <div className="services-grid">
-              {SERVICES.map((s, i) => (
-                <article
-                  className="service-card"
-                  id={s.id}
-                  key={s.id}
-                >
-                  <div className="service-card-top">
-                    <span className="service-icon" aria-hidden="true">
-                      {ICONS[s.icon]}
-                    </span>
+                <p>{s.body}</p>
 
-                    <span className="service-index" aria-hidden="true">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                  </div>
-
-                  <h3>{s.title}</h3>
-
-                  <p>{s.body}</p>
-
-                  <div className="service-card-actions">
-                    <button
-                      type="button"
-                      className="btn btn-solid service-cta"
-                      onClick={() => openContact()}
-                    >
-                      {s.cta}
-                    </button>
-
-                    <Link href={s.href} className="service-learn-more">
-                      Learn more
-                      <ArrowIcon />
-                    </Link>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          <section
-            className="plans"
-            id="plans"
-            aria-labelledby="plans-title"
-          >
-            <div className="section-head">
-              <h2 id="plans-title">
-                Choose the level of support that fits your business
-              </h2>
-
-              <p>
-                Start with the foundation you need today, then add social media,
-                lead generation or outreach when the business is ready for it.
-              </p>
-            </div>
-
-            <div className="plans-grid">
-              {PLANS.map((p) => (
-                <article
-                  className={`plan${
-                    p.featured
-                      ? " is-featured"
-                      : ""
-                  }`}
-                  key={p.id}
-                >
-                  {p.featured && (
-                    <span className="plan-flag">
-                      Most complete
-                    </span>
-                  )}
-
-                  <h3 className="plan-name">
-                    {p.name}
-                  </h3>
-
-                  <p className="plan-line">
-                    {p.line}
-                  </p>
-
-                  <p className="plan-body">
-                    {p.body}
-                  </p>
-
-                  <ul className="plan-includes">
-                    {p.includes.map((item) => (
-                      <li key={item}>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-
+                <div className="service-card-actions">
                   <button
                     type="button"
-                    className={`btn ${
-                      p.featured
-                        ? "btn-acid"
-                        : "btn-outline"
-                    }`}
-                    onClick={() => openContact(p.name)}
+                    className="btn btn-solid service-cta"
+                    onClick={() => openContact()}
                   >
-                    Start with {p.name}
+                    {s.cta}
                   </button>
-                </article>
-              ))}
-            </div>
-          </section>
 
-          {/* ------------------------------------------------------
-              FAQ — added for SEO. Real questions people type before
-              hiring an agency, keeping the FAQ content clear and useful
-              page.jsx (legitimate only because these answers are
-              visible on the page). Native <details>/<summary>: no
-              JS needed, keyboard-accessible for free.
-              ------------------------------------------------------ */}
-          {faqs.length > 0 && (
-            <section className="faq" id="faq" aria-labelledby="faq-title">
-              <div className="section-head">
-                <h2 id="faq-title">Questions about web development, lead generation, outreach and social media</h2>
-                <p>Not sure which service fits? Tell us what you are trying to achieve and we will explain the simplest place to start.</p>
+                  <Link href={s.href} className="service-learn-more">
+                    Learn more
+                    <ArrowIcon />
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* ---------------- How it works ---------------- */}
+        <section className="flow" id="how" aria-labelledby="flow-title">
+          <div className="section-head">
+            <h2 id="flow-title" className="reveal">
+              How lead generation and cold email outreach work together
+            </h2>
+            <p className="reveal">
+              Most cold email fails because of the list, not the email. So we research first, write
+              to each segment second, and send carefully third.
+            </p>
+          </div>
+
+          <ol className="flow-track">
+            {FLOW.map((step, i) => (
+              <li className="flow-card reveal" key={step.id}>
+                <div className="flow-top">
+                  <span className="flow-num" aria-hidden="true">{i + 1}</span>
+                  <span className="flow-tag">{step.tag}</span>
+                </div>
+                <div className="flow-mock" aria-hidden="true">
+                  <FlowMock type={step.mock} />
+                </div>
+                <h3>{step.title}</h3>
+                <p>{step.body}</p>
+              </li>
+            ))}
+          </ol>
+
+          <p className="flow-swipe" aria-hidden="true">Swipe to see every step</p>
+
+          <div className="flow-links">
+            <Link href={ROUTES.leadGeneration} className="service-learn-more">
+              More on lead generation
+              <ArrowIcon />
+            </Link>
+            <Link href={ROUTES.coldEmail} className="service-learn-more">
+              More on cold email outreach
+              <ArrowIcon />
+            </Link>
+          </div>
+        </section>
+
+        {/* ---------------- Plans ---------------- */}
+        <section className="plans" id="plans" aria-labelledby="plans-title">
+          <div className="section-head">
+            <h2 id="plans-title" className="reveal">
+              Choose the level of support that fits your business
+            </h2>
+            <p className="reveal">
+              Start with the foundation you need today, then add social media, lead generation or
+              outreach when the business is ready for it.
+            </p>
+          </div>
+
+          <div className="plans-grid">
+            {PLANS.map((p) => (
+              <article
+                className={`plan reveal${p.featured ? " is-featured" : ""}`}
+                key={p.id}
+              >
+                {p.featured && <span className="plan-flag">Most complete</span>}
+
+                <h3 className="plan-name">{p.name}</h3>
+                <p className="plan-line">{p.line}</p>
+                <p className="plan-body">{p.body}</p>
+
+                <ul className="plan-includes">
+                  {p.includes.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+
+                <button
+                  type="button"
+                  className={`btn ${p.featured ? "btn-acid" : "btn-outline"}`}
+                  onClick={() => openContact(p.name)}
+                >
+                  Start with {p.name}
+                </button>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* ---------------- FAQ ----------------
+            Real questions people ask before hiring. Same array feeds
+            the FAQPage schema in page.jsx. Native <details>: no JS,
+            keyboard accessible. */}
+        {faqs.length > 0 && (
+          <section className="faq" id="faq" aria-labelledby="faq-title">
+            <div className="faq-layout">
+              <div className="faq-head">
+                <h2 id="faq-title" className="reveal">
+                  Questions about web development, lead generation and outreach
+                </h2>
+                <p className="reveal">
+                  Straight answers, including whether cold email is still worth doing. Not sure
+                  which service fits? Tell us what you want to achieve and we will point you to the
+                  simplest place to start.
+                </p>
               </div>
 
               <div className="faq-list">
@@ -792,34 +616,37 @@ function Services({ faqs = [] }) {
                   </details>
                 ))}
               </div>
-            </section>
-          )}
-
-          <section
-            className="closing"
-            id="contact"
-            aria-labelledby="contact-title"
-          >
-            <h2 id="contact-title">
-              Tell us what you need help with.
-            </h2>
-
-            <a
-              className="btn btn-solid btn-lg magnetic"
-              href="mailto:hello@zarrar.co"
-            >
-              Say hello
-            </a>
+            </div>
           </section>
-        </main>
+        )}
 
-        <ContactModal
-          isOpen={contactOpen}
-          onClose={() => setContactOpen(false)}
-          plan={contactPlan}
-        />
-      </div>
-    </>
+        {/* ---------------- Closing ---------------- */}
+        <section className="closing" id="contact" aria-labelledby="contact-title">
+          <div className="closing-inner">
+            <h2 id="contact-title" className="reveal">Tell us what you need help with.</h2>
+
+            <div className="closing-actions reveal">
+              <button
+                type="button"
+                className="btn btn-acid btn-lg magnetic"
+                onClick={() => openContact()}
+              >
+                Start a project
+              </button>
+              <a className="btn btn-light btn-lg" href={`mailto:${CONTACT_EMAIL}`}>
+                Email {CONTACT_EMAIL}
+              </a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <ContactModal
+        isOpen={contactOpen}
+        onClose={() => setContactOpen(false)}
+        plan={contactPlan}
+      />
+    </div>
   );
 }
 

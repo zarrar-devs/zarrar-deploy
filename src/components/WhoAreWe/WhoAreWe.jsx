@@ -781,7 +781,7 @@ export default function WhoAreWe() {
                stamped in a solid mono block, mirroring the hero's headline
                construction. ---------- */}
           <h2 id="who-we-are-heading" className="waw-heading waw-intro">
-            <span className="waw-sr-only">Who are we?</span>
+            <span className="waw-sr-only">Who is Zarrar? A web development, lead generation and outreach team</span>
             <span aria-hidden="true">
               <span className="waw-highlight" ref={highlightRef}>
                 <span className="waw-highlight-text">Who</span>
